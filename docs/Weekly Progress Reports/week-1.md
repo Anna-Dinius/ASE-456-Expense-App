@@ -17,7 +17,7 @@ title: Weekly Progress Reports (Team Project)
 
 ## Progress Summary
 
-- Chose project
+- Chose project & AI option
 - Decided on features
 - Defined requirements as user stories
 - Set milestones
@@ -26,7 +26,11 @@ title: Weekly Progress Reports (Team Project)
 
 ## Project Chosen
 
-The expense/budgeting app
+- The expense/budgeting app
+
+## AI Option
+
+- Assisted (#2)
 
 ---
 
