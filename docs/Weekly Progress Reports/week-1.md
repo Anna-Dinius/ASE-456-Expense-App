@@ -72,3 +72,34 @@ Cody
    - Log in & log out of profile
 
 ---
+
+## Milestones (1/3)
+
+Dillon
+
+- Week 2: Specifying frequency, start date, & end date for a scheduled/recurring payment & scheduled/recurring payment modification
+- Week 3: Complete the functionality begun in Week 2
+- Week 4: Automatically logging & displaying scheduled/recurring payments
+- Week 5: Complete the functionality begun in Week 4
+
+---
+
+## Milestones (2/3)
+
+Jeff
+
+- Week 2: `Category` model design, & update `Transaction` model
+- Week 3: `Category` model implementation, default categories, category dropdown, & category association with transactions
+- Week 4: category display in `TransactionList`, category creation, & tests
+- Week 5: category modification, category deletion, UI refinement, & code cleanup
+
+---
+
+## Milestones (3/3)
+
+Cody
+
+- Week 2: database setup & implementation, transaction & user profile model designs
+- Week 3: user profile creation & editing
+- Week 4: profile summary & tests
+- Week 5: profile deletion, bug fixing, & polishing
