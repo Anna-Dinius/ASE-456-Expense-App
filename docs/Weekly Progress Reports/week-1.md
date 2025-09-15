@@ -7,7 +7,7 @@ title: Weekly Progress Reports (Team Project) - Pocket Protectors
 
 # Week 1 Progress Report
 
-## (9/7/25-9/14/25)
+## (9/7 - 9/14)
 
 > Team: Pocket Protectors
 >
