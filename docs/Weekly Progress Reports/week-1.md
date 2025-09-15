@@ -17,10 +17,30 @@ title: Weekly Progress Reports (Team Project)
 
 ## Progress Summary
 
+- Set team rules
 - Chose project & AI option
 - Decided on features
 - Defined requirements as user stories
 - Set milestones
+
+---
+
+## Team Rules (1/2)
+
+- Be on time to meetings
+- Follow good SWE practices (e.g. KISS - Keep It Stupid and Simple)
+- Start early and finish early
+- No surprises - have good, consistent communication
+  - Respond to all team communication ASAP (max. 24 hours)
+
+---
+
+## Team Rules (2/2)
+
+- Be professional - no emotions
+- Commit code to GitHub regularly
+- No force pushing into repo
+- Ask for help and feedback when needed
 
 ---
 
