@@ -2,12 +2,15 @@ import 'package:p5_expense/theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
+
 
 import 'package:p5_expense/view/new_transaction.dart';
 import 'package:p5_expense/view/transaction_list.dart';
 import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/model/transaction.dart';
 
+const TEST_USER_ID = 'quldUwy6wtd5LCKLE2Uc';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate) {
+  Future<void> _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) async {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
@@ -59,6 +62,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       _userTransactions.add(newTx);
+    });
+
+    await firestore.FirebaseFirestore.instance
+        .collection('users')
+        .doc(TEST_USER_ID)
+        .collection('transactions')
+        .add({
+      'title': txTitle,
+      'amount': txAmount,
+      'date': chosenDate
     });
   }
 
