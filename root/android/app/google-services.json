@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087007365730",
+    "project_id": "ase-456-team-project",
+    "storage_bucket": "ase-456-team-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087007365730:android:6f4e64c25b4edbd6240f3b",
+        "android_client_info": {
+          "package_name": "com.example.p5_expense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-a3fCww2BX1GrUuWM8w67oIKcI-MWqho"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

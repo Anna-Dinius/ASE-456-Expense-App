@@ -1,12 +1,21 @@
 import 'package:p5_expense/theme/main_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'package:p5_expense/view/new_transaction.dart';
 import 'package:p5_expense/view/transaction_list.dart';
 import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/model/transaction.dart';
 
-void main() => runApp(MyApp());
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
