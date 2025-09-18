@@ -10,4 +10,13 @@ class Transaction {
     required this.amount,
     required this.date,
   });
+
+  factory Transaction.fromMap(Map<String, dynamic> data, String documentId) {
+    return Transaction(
+      id: documentId,
+      title: data['title'],
+      amount: (data['amount']),
+      date: (data['date']).toDate()
+    );
+  }
 }

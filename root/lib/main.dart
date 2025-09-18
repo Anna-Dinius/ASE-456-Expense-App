@@ -38,7 +38,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [];
+  List<Transaction> _userTransactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTransactions();
+  }
+
+  Future<void> loadTransactions() async {
+    final transactions = await getAllTransactions(TEST_USER_ID);
+    setState(() {
+      _userTransactions = transactions;
+    });
+  }
+
 
   // APIs
   List<Transaction> get _recentTransactions {
@@ -53,12 +67,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _addNewTransaction(
       String txTitle, double txAmount, DateTime chosenDate) async {
+
     final txId = firestore.FirebaseFirestore.instance.collection('users').doc(TEST_USER_ID).collection('transactions').doc().id;
-    final newTx = Transaction(
+   
+   final newTx = Transaction(
+      id: txId,
       title: txTitle,
       amount: txAmount,
       date: chosenDate,
-      id: txId,
     );
 
     setState(() {
@@ -98,6 +114,19 @@ class _MyHomePageState extends State<MyHomePage> {
         .doc(id)
         .delete();
   }
+
+Future<List<Transaction>> getAllTransactions(String userId) async {
+  final transactions = await firestore.FirebaseFirestore.instance
+      .collection('users')
+      .doc(userId)
+      .collection('transactions')
+      .get();
+
+  return transactions.docs
+      .map((doc) => Transaction.fromMap(doc.data(), doc.id))
+      .toList();
+}
+
 
   @override
   Widget build(BuildContext context) {
