@@ -53,11 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _addNewTransaction(
       String txTitle, double txAmount, DateTime chosenDate) async {
+    final txId = firestore.FirebaseFirestore.instance.collection('users').doc(TEST_USER_ID).collection('transactions').doc().id;
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
       date: chosenDate,
-      id: DateTime.now().toString(),
+      id: txId,
     );
 
     setState(() {
@@ -68,7 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
         .collection('users')
         .doc(TEST_USER_ID)
         .collection('transactions')
-        .add({
+        .doc(newTx.id)
+        .set({
       'title': txTitle,
       'amount': txAmount,
       'date': chosenDate
@@ -88,6 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _userTransactions.removeWhere((tx) => tx.id == id);
     });
+
+    firestore.FirebaseFirestore.instance
+        .collection('users')
+        .doc(TEST_USER_ID)
+        .collection('transactions')
+        .doc(id)
+        .delete();
   }
 
   @override
