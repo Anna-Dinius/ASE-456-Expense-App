@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:p5_expense/model/category.dart'; // NEW: Import Category model for dropdown
 
+/// Widget for adding new expense transactions
+/// This form allows users to enter transaction details and select a category
 class NewTransaction extends StatefulWidget {
+  // Function to call when the user submits the form
   final Function addTx;
 
-  NewTransaction(this.addTx);
+  // NEW: List of available categories for the user to choose from
+  final List<Category> categories;
+
+  NewTransaction(this.addTx, this.categories);
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
+  // Controllers for the text input fields
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  // The date the user selected for this transaction
   DateTime _selectedDate = DateTime.now();
+
+  // NEW: The category the user selected for this transaction
+  // It's nullable (?) because the user might not have selected one yet
+  Category? _selectedCategory;
 
   String getNow() {
     final DateTime now = DateTime.now();
@@ -23,23 +36,43 @@ class _NewTransactionState extends State<NewTransaction> {
     return formatted;
   }
 
+  /// Validates and submits the form data
+  /// This method is called when the user taps "Add Transaction"
   void _submitData() {
-    if (_amountController.text.isEmpty) {
-      return;
-    }
+    // Get the values from the text fields
     final enteredTitle = _titleController.text;
-    final enteredAmount = double.parse(_amountController.text);
+    final enteredAmountText = _amountController.text;
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
-      return;
+    // Validate that all required fields are filled
+    if (enteredTitle.isEmpty ||
+        enteredAmountText.isEmpty ||
+        _selectedCategory == null) {
+      return; // Don't submit if any validation fails
     }
 
+    // Try to parse the amount, return if invalid
+    double? enteredAmount;
+    try {
+      enteredAmount = double.parse(enteredAmountText);
+    } catch (e) {
+      return; // Invalid number format
+    }
+
+    // Check if amount is positive
+    if (enteredAmount <= 0) {
+      return; // Amount must be positive
+    }
+
+    // Call the parent's addTx function with all the form data
+    // NEW: Include the selected category ID
     widget.addTx(
       enteredTitle,
       enteredAmount,
       _selectedDate,
+      _selectedCategory!.id, // Use ! to tell Dart we know it's not null
     );
 
+    // Close the modal and return to the main screen
     Navigator.of(context).pop();
   }
 
@@ -80,6 +113,50 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submitData(),
             ),
+            // NEW: Category Selection Dropdown
+            // This allows users to choose which category their expense belongs to
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: DropdownButtonFormField<Category>(
+                      value: _selectedCategory, // Currently selected category
+                      decoration: InputDecoration(
+                        labelText: 'Category',
+                        border: OutlineInputBorder(),
+                      ),
+                      // Create dropdown items from the available categories
+                      items: widget.categories.map((Category category) {
+                        return DropdownMenuItem<Category>(
+                          value: category,
+                          child: Row(
+                            children: [
+                              // Show the category's icon with its color
+                              Icon(
+                                category.icon,
+                                color: category.color,
+                                size: 20,
+                              ),
+                              SizedBox(width: 8), // Small spacing
+                              Text(category.title), // Show the category name
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      // Called when user selects a different category
+                      onChanged: (Category? newValue) {
+                        setState(() {
+                          _selectedCategory =
+                              newValue; // Update the selected category
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Date Selection
             Container(
               height: 70,
               child: Row(
