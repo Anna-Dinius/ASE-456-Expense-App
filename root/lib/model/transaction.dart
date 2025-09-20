@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Represents a single expense transaction
 /// This class stores all the information about one expense entry
 class Transaction {
@@ -16,6 +18,10 @@ class Transaction {
   // NEW: Which category this expense belongs to (links to Category.id)
   final String categoryId;
 
+  // NEW: Recurring Payments
+  final bool recurring;
+  final String interval;
+
   /// Constructor for creating a new transaction
   /// All parameters are required to ensure every transaction has complete information
   Transaction({
@@ -24,6 +30,9 @@ class Transaction {
     required this.amount,
     required this.date,
     required this.categoryId, // NEW: Now required to categorize every expense
+    //New: Now required recurring and interval
+    required this.recurring,
+    required this.interval,
   });
 
   /// Creates a copy of this transaction with some fields updated
@@ -38,6 +47,8 @@ class Transaction {
     double? amount,
     DateTime? date,
     String? categoryId,
+    bool? recurring,
+    String? interval,
   }) {
     return Transaction(
       // If a new value is provided, use it; otherwise keep the original value
@@ -46,6 +57,8 @@ class Transaction {
       amount: amount ?? this.amount,
       date: date ?? this.date,
       categoryId: categoryId ?? this.categoryId,
+      recurring: recurring ?? this.recurring,
+      interval: interval ?? this.interval,
     );
   }
 
@@ -60,6 +73,8 @@ class Transaction {
       'amount': amount,
       'date': date.toIso8601String(), // Convert date to string format
       'categoryId': categoryId, // NEW: Include category information
+      'recurring': recurring, // NEW: Include recurring and interval
+      'interval': interval,
     };
   }
 
@@ -75,6 +90,8 @@ class Transaction {
       amount: json['amount'].toDouble(), // Convert back to double
       date: DateTime.parse(json['date']), // Convert string back to DateTime
       categoryId: json['categoryId'], // NEW: Restore category information
+      recurring: json['recurring'], // NEW: Include recurring and interval
+      interval: json['interval'],
     );
   }
 
@@ -88,6 +105,8 @@ class Transaction {
       date: (data['date']).toDate(),
       categoryId: data['categoryId'] ??
           'other', // NEW: Include category, default to 'other'
+      recurring: data['recurring'] ?? false, // NEW: Include recurring and interval
+      interval: data['interval'] ?? ''
     );
   }
 
@@ -99,6 +118,8 @@ class Transaction {
       'amount': amount,
       'date': date,
       'categoryId': categoryId, // NEW: Include category information
+      'recurring': recurring,
+      'interval': interval,
     };
   }
 
@@ -115,7 +136,9 @@ class Transaction {
         other.title == title &&
         other.amount == amount &&
         other.date == date &&
-        other.categoryId == categoryId; // NEW: Also compare category
+        other.categoryId == categoryId && // NEW: Also compare category
+        other.recurring == recurring &&  // NEW: Include recurring and interval
+        other.interval == interval;
   }
 
   /// Generates a unique number for this transaction
@@ -127,13 +150,15 @@ class Transaction {
         title.hashCode ^
         amount.hashCode ^
         date.hashCode ^
-        categoryId.hashCode; // NEW: Include category in hash calculation
+        categoryId.hashCode ^ // NEW: Include category in hash calculation
+        recurring.hashCode ^  // NEW: Include recurring and interval
+        interval.hashCode;
   }
 
   /// Returns a string representation of this transaction
   /// Useful for debugging - shows all the transaction's properties
   @override
   String toString() {
-    return 'Transaction(id: $id, title: $title, amount: $amount, date: $date, categoryId: $categoryId)';
+    return 'Transaction(id: $id, title: $title, amount: $amount, date: $date, categoryId: $categoryId, recurring: $recurring, interval: $interval)';
   }
 }
