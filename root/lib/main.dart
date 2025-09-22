@@ -4,11 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
-
 import 'package:p5_expense/view/new_transaction.dart';
 import 'package:p5_expense/view/transaction_list.dart';
 import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/model/transaction.dart';
+import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 
 const TEST_USER_ID = 'quldUwy6wtd5LCKLE2Uc';
 
@@ -40,6 +40,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Transaction> _userTransactions = [];
 
+  // NEW: List to store all available categories
+  // We start with the default categories, but users can add/edit/delete them later
+  final List<Category> _categories = List.from(DefaultCategories.categories);
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-
   // APIs
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
@@ -65,16 +68,25 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  Future<void> _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate) async {
+  /// Adds a new transaction to the list
+  /// This method is called when the user submits the "Add Transaction" form
+  ///
+  /// NEW: Now requires a categoryId parameter to categorize the expense
+  Future<void> _addNewTransaction(String txTitle, double txAmount,
+      DateTime chosenDate, String categoryId) async {
+    final txId = firestore.FirebaseFirestore.instance
+        .collection('users')
+        .doc(TEST_USER_ID)
+        .collection('transactions')
+        .doc()
+        .id;
 
-    final txId = firestore.FirebaseFirestore.instance.collection('users').doc(TEST_USER_ID).collection('transactions').doc().id;
-   
-   final newTx = Transaction(
+    final newTx = Transaction(
       id: txId,
       title: txTitle,
       amount: txAmount,
       date: chosenDate,
+      categoryId: categoryId, // NEW: Include the selected category
     );
 
     setState(() {
@@ -89,15 +101,20 @@ class _MyHomePageState extends State<MyHomePage> {
         .set({
       'title': txTitle,
       'amount': txAmount,
-      'date': chosenDate
+      'date': chosenDate,
+      'categoryId':
+          categoryId, // NEW: Include category information in Firestore
     });
   }
 
+  /// Shows the "Add Transaction" form in a modal bottom sheet
+  /// This is called when the user taps the "+" button
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
       builder: (_) {
-        return NewTransaction(_addNewTransaction);
+        // NEW: Pass the categories list to the form so users can select from them
+        return NewTransaction(_addNewTransaction, _categories);
       },
     );
   }
@@ -115,18 +132,17 @@ class _MyHomePageState extends State<MyHomePage> {
         .delete();
   }
 
-Future<List<Transaction>> getAllTransactions(String userId) async {
-  final transactions = await firestore.FirebaseFirestore.instance
-      .collection('users')
-      .doc(userId)
-      .collection('transactions')
-      .get();
+  Future<List<Transaction>> getAllTransactions(String userId) async {
+    final transactions = await firestore.FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('transactions')
+        .get();
 
-  return transactions.docs
-      .map((doc) => Transaction.fromMap(doc.data(), doc.id))
-      .toList();
-}
-
+    return transactions.docs
+        .map((doc) => Transaction.fromMap(doc.data(), doc.id))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +164,8 @@ Future<List<Transaction>> getAllTransactions(String userId) async {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransactions, _deleteTransaction),
+            // NEW: Pass the categories list to the transaction list so it can display category info
+            TransactionList(_userTransactions, _deleteTransaction, _categories),
           ],
         ),
       ),
