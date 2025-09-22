@@ -41,10 +41,9 @@ title: Pocket Protectors Week 2 Progress Report
 
 ### Dillon
 
-✅
-✅
-✅
-✅
+✅ Toggle recurring payments & select interval
+✅ Added functionality to `Transactions` (now they store intervals & whether a payment is recurring).
+✅ Feature documentation.
 
 ---
 
@@ -54,16 +53,12 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## Progress
-
----
-
 ## LoC Sumary (1/3)
 
 ### Cody's branch:
 
 - **Total**: 591
-- **Counting rules**: Excludes empty lines and comment-only lines (single-line //, doc ///, and block /_ ... _/). Inline comments on code lines are still counted.
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
 - **Files scanned**: All files under lib and its subdirectories.
 
 ---
@@ -86,7 +81,7 @@ title: Pocket Protectors Week 2 Progress Report
 ### Jeff's branch:
 
 - **Total**: 829
-- **Counting rules**: Excludes empty lines and comment-only lines (single-line //, doc ///, and block /_ ... _/). Inline comments on code lines are still counted.
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
 - **Files scanned**: All files under lib and its subdirectories.
 
 ---
@@ -109,7 +104,7 @@ title: Pocket Protectors Week 2 Progress Report
 ### Dillon's branch:
 
 - **Total**: 858 lines
-- **Counting rules**: Excludes empty lines and comment-only lines (single-line //, doc ///, and block /_ ... _/). Inline comments on code lines are still counted.
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
 - **Files scanned**: All files under lib and its subdirectories.
 
 ---
@@ -127,4 +122,11 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## Burn down rate
+## 🔥 Burndown rate
+
+- 9/10 week 2 goals completed
+  - 90% per week
+  - ~13% per day
+- 9/32 total goals completed
+  - ~28% per week
+  - ~4% per day
