@@ -15,7 +15,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## Goals (1/3)
+## Milestones Completed (1/3)
 
 ### Cody
 
@@ -26,7 +26,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## Goals (2/3)
+## Milestones Completed (2/3)
 
 ### Jeff
 
@@ -37,7 +37,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## Goals (3/3)
+## Milestones Completed (3/3)
 
 ### Dillon
 
@@ -124,9 +124,9 @@ title: Pocket Protectors Week 2 Progress Report
 
 ## 🔥 Burndown rate
 
-- 9/10 week 2 goals completed
+- 9/10 week 2 milestones completed
   - 90% per week
   - ~13% per day
-- 9/32 total goals completed
+- 9/32 Sprint 1 milestones completed
   - ~28% per week
   - ~4% per day
