@@ -53,7 +53,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## LoC Sumary (1/3)
+## LoC Summary (1/3)
 
 ### Cody's branch:
 
@@ -76,7 +76,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## LoC Sumary (2/3)
+## LoC Summary (2/3)
 
 ### Jeff's branch:
 
@@ -99,7 +99,7 @@ title: Pocket Protectors Week 2 Progress Report
 
 ---
 
-## LoC Sumary (3/3)
+## LoC Summary (3/3)
 
 ### Dillon's branch:
 
