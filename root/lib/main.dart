@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ///
   /// NEW: Now requires a categoryId parameter to categorize the expense
   Future<void> _addNewTransaction(String txTitle, double txAmount,
-      DateTime chosenDate, String categoryId) async {
+      DateTime chosenDate, String categoryId, bool recurring, String interval) async {
     final txId = firestore.FirebaseFirestore.instance
         .collection('users')
         .doc(TEST_USER_ID)
@@ -87,6 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
       amount: txAmount,
       date: chosenDate,
       categoryId: categoryId, // NEW: Include the selected category
+      recurring: recurring, //NEW: Include recurring and interval
+      interval: interval,
     );
 
     setState(() {
@@ -104,6 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
       'date': chosenDate,
       'categoryId':
           categoryId, // NEW: Include category information in Firestore
+      'recurring' : recurring,
+      'interval' : interval,
     });
   }
 

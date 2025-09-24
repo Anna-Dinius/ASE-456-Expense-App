@@ -28,6 +28,10 @@ class _NewTransactionState extends State<NewTransaction> {
   // NEW: The category the user selected for this transaction
   // It's nullable (?) because the user might not have selected one yet
   Category? _selectedCategory;
+  
+  //NEW: The user can select recurring payments through a check box, and then select an interval
+  bool _isRecurring = false;
+  String _selectedInterval = 'Daily'; //Set to Daily as default due to DropDownMenu
 
   String getNow() {
     final DateTime now = DateTime.now();
@@ -65,11 +69,14 @@ class _NewTransactionState extends State<NewTransaction> {
 
     // Call the parent's addTx function with all the form data
     // NEW: Include the selected category ID
+    // NEW: Included isRecurring and selectedInterval
     widget.addTx(
       enteredTitle,
       enteredAmount,
       _selectedDate,
       _selectedCategory!.id, // Use ! to tell Dart we know it's not null
+      _isRecurring,
+      _selectedInterval
     );
 
     // Close the modal and return to the main screen
@@ -113,6 +120,32 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submitData(),
             ),
+            //NEW: Recurring Payment Toggle
+            CheckboxListTile( 
+              title: Text('Recurring Payment'),
+              checkColor: Colors.white,
+              value: _isRecurring,
+              onChanged: (bool? value){
+                setState((){
+                  _isRecurring = value!;
+                });
+              }
+            ),
+            //If the user selected recurring payment, they can now select an interval
+            if (_isRecurring)
+              DropdownButton(
+                value: _selectedInterval,
+                items: <String>['Daily', 'Weekly', 'Monthly'].map((String value){
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                    );
+              }).toList(), 
+              onChanged: (String? newValue){
+                setState(() {
+                  _selectedInterval = newValue!;
+                });
+              }),
             // NEW: Category Selection Dropdown
             // This allows users to choose which category their expense belongs to
             Container(
