@@ -99,15 +99,15 @@ class Transaction {
   /// This is used when loading transactions from Firebase Firestore
   factory Transaction.fromMap(Map<String, dynamic> data, String documentId) {
     return Transaction(
-      id: documentId,
-      title: data['title'],
-      amount: (data['amount']).toDouble(),
-      date: (data['date']).toDate(),
-      categoryId: data['categoryId'] ??
-          'other', // NEW: Include category, default to 'other'
-      recurring: data['recurring'] ?? false, // NEW: Include recurring and interval
-      interval: data['interval'] ?? ''
-    );
+        id: documentId,
+        title: data['title'],
+        amount: (data['amount']).toDouble(),
+        date: (data['date']).toDate(),
+        categoryId: data['categoryId'] ??
+            'other', // NEW: Include category, default to 'other'
+        recurring:
+            data['recurring'] ?? false, // NEW: Include recurring and interval
+        interval: data['interval'] ?? '');
   }
 
   /// Converts this transaction to a Map for Firestore storage
@@ -137,7 +137,7 @@ class Transaction {
         other.amount == amount &&
         other.date == date &&
         other.categoryId == categoryId && // NEW: Also compare category
-        other.recurring == recurring &&  // NEW: Include recurring and interval
+        other.recurring == recurring && // NEW: Include recurring and interval
         other.interval == interval;
   }
 
@@ -151,7 +151,7 @@ class Transaction {
         amount.hashCode ^
         date.hashCode ^
         categoryId.hashCode ^ // NEW: Include category in hash calculation
-        recurring.hashCode ^  // NEW: Include recurring and interval
+        recurring.hashCode ^ // NEW: Include recurring and interval
         interval.hashCode;
   }
 
