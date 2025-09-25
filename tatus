@@ -1,0 +1,30 @@
+warning: in the working copy of 'root/lib/model/transaction.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'root/lib/view/new_transaction.dart', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'root/lib/view/transaction_list.dart', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/root/CATEGORIES_FEATURE_WEEK1.md b/root/CATEGORIES_FEATURE_WEEK1.md[m
+[1mindex 7dfa72f..2458a6d 100644[m
+[1m--- a/root/CATEGORIES_FEATURE_WEEK1.md[m
+[1m+++ b/root/CATEGORIES_FEATURE_WEEK1.md[m
+[36m@@ -63,16 +63,6 @@[m [mAdded expense categorization functionality to help users organize their spending[m
+ [m
+ ## 🚀 How to Test[m
+ [m
+[31m-### Running the App[m
+[31m-```bash[m
+[31m-# Navigate to project directory[m
+[31m-cd C:\dev\Expense_App\ASE-456-Expense-App\root[m
+[31m-[m
+[31m-# Run on web browser[m
+[31m-flutter run -d chrome[m
+[31m-```[m
+[31m-[m
+[31m-### Testing Steps[m
+ 1. **Add a new transaction**[m
+    - Tap the "+" button[m
+    - Fill in title and amount[m
+[36m@@ -166,4 +156,4 @@[m [mIf you encounter any issues or have questions about the implementation, refer to[m
+ **Total Lines of Code Added/Modified**: ~200+ lines (excluding comments)[m
+ **Files Created**: 1 new file (`category.dart`)[m
+ **Files Modified**: 4 existing files[m
+[31m-**Breaking Changes**: None - all existing functionality preserved[m
+[41m+[m
