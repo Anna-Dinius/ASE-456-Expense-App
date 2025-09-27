@@ -63,16 +63,6 @@ Added expense categorization functionality to help users organize their spending
 
 ## 🚀 How to Test
 
-### Running the App
-```bash
-# Navigate to project directory
-cd C:\dev\Expense_App\ASE-456-Expense-App\root
-
-# Run on web browser
-flutter run -d chrome
-```
-
-### Testing Steps
 1. **Add a new transaction**
    - Tap the "+" button
    - Fill in title and amount
@@ -166,4 +156,4 @@ If you encounter any issues or have questions about the implementation, refer to
 **Total Lines of Code Added/Modified**: ~200+ lines (excluding comments)
 **Files Created**: 1 new file (`category.dart`)
 **Files Modified**: 4 existing files
-**Breaking Changes**: None - all existing functionality preserved
+

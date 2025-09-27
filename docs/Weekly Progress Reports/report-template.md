@@ -2,7 +2,7 @@
 marp: true
 size: 4:3
 paginate: true
-title: Weekly Progress Report Template (Team Project) - Pocket Protectors
+title: Pocket Protectors Week /# Progress Report
 ---
 
 # Week # Progress Report
