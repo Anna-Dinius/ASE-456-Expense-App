@@ -114,7 +114,9 @@ class _MyHomePageState extends State<MyHomePage> {
       DateTime chosenDate,
       String categoryId,
       bool recurring,
-      String interval) async {
+      String interval,
+      List<DateTime> pastPayments,
+      List<DateTime> futurePayments) async {
     final txId = firestore.FirebaseFirestore.instance
         .collection('users')
         .doc(TEST_USER_ID)
@@ -130,6 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
       categoryId: categoryId, // NEW: Include the selected category
       recurring: recurring, //NEW: Include recurring and interval
       interval: interval,
+      pastPayments: pastPayments,
+      futurePayments: futurePayments,
     );
 
     setState(() {
@@ -149,6 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
           categoryId, // NEW: Include category information in Firestore
       'recurring': recurring,
       'interval': interval,
+      'pastPayments': pastPayments,
+      'futurePayments': futurePayments,
     });
   }
 
