@@ -22,6 +22,11 @@ class Transaction {
   final bool recurring;
   final String interval;
 
+  // These will be used for recurring payments
+  List<DateTime> pastPayments;
+  List<DateTime> futurePayments;
+
+
   /// Constructor for creating a new transaction
   /// All parameters are required to ensure every transaction has complete information
   Transaction({
@@ -33,6 +38,8 @@ class Transaction {
     //New: Now required recurring and interval
     required this.recurring,
     required this.interval,
+    this.pastPayments = const [],
+    this.futurePayments = const [],
   });
 
   /// Creates a copy of this transaction with some fields updated
@@ -49,6 +56,8 @@ class Transaction {
     String? categoryId,
     bool? recurring,
     String? interval,
+    List<DateTime>? pastPayments,
+    List<DateTime>? futurePayments,
   }) {
     return Transaction(
       // If a new value is provided, use it; otherwise keep the original value
@@ -59,6 +68,8 @@ class Transaction {
       categoryId: categoryId ?? this.categoryId,
       recurring: recurring ?? this.recurring,
       interval: interval ?? this.interval,
+      pastPayments: pastPayments ?? this.pastPayments,
+      futurePayments: futurePayments ?? this.futurePayments,
     );
   }
 
@@ -75,6 +86,8 @@ class Transaction {
       'categoryId': categoryId, // NEW: Include category information
       'recurring': recurring, // NEW: Include recurring and interval
       'interval': interval,
+      'pastPayments': pastPayments.map((n) => n.toIso8601String()).toList(), //Convert dates to string format
+      'futurePayments': futurePayments.map((n) => n.toIso8601String()).toList(), //Convert dates to string format
     };
   }
 
@@ -92,6 +105,9 @@ class Transaction {
       categoryId: json['categoryId'], // NEW: Restore category information
       recurring: json['recurring'], // NEW: Include recurring and interval
       interval: json['interval'],
+      //Casting the below fields as Lists if available, otherwise use empty list to parse.
+      pastPayments: (json['pastPayments'] as List<dynamic>? ?? []).map((e) => DateTime.parse(e as String)).toList(),
+      futurePayments: (json['pastPayments'] as List<dynamic>? ?? []).map((e) => DateTime.parse(e as String)).toList(),
     );
   }
 
@@ -106,7 +122,9 @@ class Transaction {
       categoryId: data['categoryId'] ??
           'other', // NEW: Include category, default to 'other'
       recurring: data['recurring'] ?? false, // NEW: Include recurring and interval
-      interval: data['interval'] ?? ''
+      interval: data['interval'] ?? '',
+      pastPayments: data['pastPayments'] ?? [],
+      futurePayments: data['futurePayments'] ?? [],
     );
   }
 
@@ -120,6 +138,8 @@ class Transaction {
       'categoryId': categoryId, // NEW: Include category information
       'recurring': recurring,
       'interval': interval,
+      'pastPayments': pastPayments,
+      'futurePayments': futurePayments,
     };
   }
 
@@ -138,7 +158,9 @@ class Transaction {
         other.date == date &&
         other.categoryId == categoryId && // NEW: Also compare category
         other.recurring == recurring &&  // NEW: Include recurring and interval
-        other.interval == interval;
+        other.interval == interval &&
+        other.pastPayments == pastPayments &&
+        other.futurePayments == futurePayments;
   }
 
   /// Generates a unique number for this transaction
@@ -152,7 +174,9 @@ class Transaction {
         date.hashCode ^
         categoryId.hashCode ^ // NEW: Include category in hash calculation
         recurring.hashCode ^  // NEW: Include recurring and interval
-        interval.hashCode;
+        interval.hashCode ^
+        pastPayments.hashCode ^
+        futurePayments.hashCode;
   }
 
   /// Returns a string representation of this transaction
