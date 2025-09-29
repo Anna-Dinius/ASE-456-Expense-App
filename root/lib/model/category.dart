@@ -97,6 +97,27 @@ class Category {
     return id.hashCode ^ title.hashCode ^ color.hashCode ^ icon.hashCode;
   }
 
+  /// Creates a Category object from Firestore data
+  /// This is used when loading categories from Firebase Firestore
+  factory Category.fromMap(Map<String, dynamic> data, String documentId) {
+    return Category(
+      id: documentId,
+      title: data['title'],
+      color: Color(data['color']), // Convert number back to Color
+      icon: IconData(data['icon'], fontFamily: 'MaterialIcons'),
+    );
+  }
+
+  /// Converts this category to a Map for Firestore storage
+  /// This is used when saving categories to Firebase Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'color': color.toARGB32(), // Convert color to a number
+      'icon': icon.codePoint, // Convert icon to a number
+    };
+  }
+
   /// Returns a string representation of this category
   /// Useful for debugging - shows all the category's properties
   @override

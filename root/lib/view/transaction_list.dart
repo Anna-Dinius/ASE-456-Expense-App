@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import Category model to display category info
+import 'package:p5_expense/view/widgets/category_badge.dart'; // NEW: Import CategoryBadge widget
 
 /// Widget that displays a list of all transactions
 /// Shows each transaction with its category information and allows deletion
@@ -19,14 +20,19 @@ class TransactionList extends StatelessWidget {
   TransactionList(this.transactions, this.deleteTx, this.categories);
 
   /// Helper method to find a category by its ID
-  /// Returns null if no category with that ID is found
-  Category? _getCategoryById(String categoryId) {
+  /// Returns a fallback category if no category with that ID is found
+  Category _getCategoryById(String categoryId) {
     try {
       // Find the first category that matches the given ID
       return categories.firstWhere((category) => category.id == categoryId);
     } catch (e) {
-      // If no category is found, return null
-      return null;
+      // If no category is found, return a fallback category
+      return Category(
+        id: 'other',
+        title: 'Other',
+        color: Colors.grey,
+        icon: Icons.category,
+      );
     }
   }
 
@@ -68,14 +74,10 @@ class TransactionList extends StatelessWidget {
                     // NEW: Show category icon and color in the leading circle
                     leading: CircleAvatar(
                       radius: 30,
-                      backgroundColor: category?.color ??
-                          Colors
-                              .grey, // Use category color or grey if not found
+                      backgroundColor: category.color.withValues(alpha: 0.2),
                       child: Icon(
-                        category?.icon ??
-                            Icons
-                                .category, // Use category icon or default if not found
-                        color: Colors.white,
+                        category.icon,
+                        color: category.color,
                         size: 20,
                       ),
                     ),
@@ -90,29 +92,16 @@ class TransactionList extends StatelessWidget {
                         Text(
                           DateFormat.yMMMd().format(transaction.date),
                         ),
-                        // NEW: Show category badge if category exists
-                        if (category != null)
-                          Container(
-                            margin: EdgeInsets.only(top: 4),
+                        // NEW: Show category badge using CategoryBadge widget
+                        Container(
+                          margin: EdgeInsets.only(top: 4),
+                          child: CategoryBadge(
+                            category: category,
+                            fontSize: 12,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              // Light background color matching the category
-                              color: category.color.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                              // Border with category color
-                              border: Border.all(
-                                  color: category.color.withValues(alpha: 0.3)),
-                            ),
-                            child: Text(
-                              category.title,
-                              style: TextStyle(
-                                color: category.color,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
                           ),
+                        ),
                       ],
                     ),
                     trailing: Row(
