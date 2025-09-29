@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import Category model for dropdown
+import 'package:p5_expense/view/widgets/category_picker.dart'; // NEW: Import CategoryPicker widget
 
 /// Widget for adding new expense transactions
 /// This form allows users to enter transaction details and select a category
@@ -28,6 +29,11 @@ class _NewTransactionState extends State<NewTransaction> {
   // NEW: The category the user selected for this transaction
   // It's nullable (?) because the user might not have selected one yet
   Category? _selectedCategory;
+
+  //NEW: The user can select recurring payments through a check box, and then select an interval
+  bool _isRecurring = false;
+  String _selectedInterval =
+      'Daily'; //Set to Daily as default due to DropDownMenu
 
   String getNow() {
     final DateTime now = DateTime.now();
@@ -65,12 +71,14 @@ class _NewTransactionState extends State<NewTransaction> {
 
     // Call the parent's addTx function with all the form data
     // NEW: Include the selected category ID
+    // NEW: Included isRecurring and selectedInterval
     widget.addTx(
-      enteredTitle,
-      enteredAmount,
-      _selectedDate,
-      _selectedCategory!.id, // Use ! to tell Dart we know it's not null
-    );
+        enteredTitle,
+        enteredAmount,
+        _selectedDate,
+        _selectedCategory!.id, // Use ! to tell Dart we know it's not null
+        _isRecurring,
+        _selectedInterval);
 
     // Close the modal and return to the main screen
     Navigator.of(context).pop();
@@ -113,48 +121,43 @@ class _NewTransactionState extends State<NewTransaction> {
               keyboardType: TextInputType.number,
               onSubmitted: (_) => _submitData(),
             ),
-            // NEW: Category Selection Dropdown
+            //NEW: Recurring Payment Toggle
+            CheckboxListTile(
+                title: Text('Recurring Payment'),
+                checkColor: Colors.white,
+                value: _isRecurring,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _isRecurring = value!;
+                  });
+                }),
+            //If the user selected recurring payment, they can now select an interval
+            if (_isRecurring)
+              DropdownButton(
+                  value: _selectedInterval,
+                  items: <String>['Daily', 'Weekly', 'Monthly']
+                      .map((String value) {
+                    return DropdownMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedInterval = newValue!;
+                    });
+                  }),
+            // NEW: Category Selection using CategoryPicker
             // This allows users to choose which category their expense belongs to
-            Container(
-              height: 70,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: DropdownButtonFormField<Category>(
-                      value: _selectedCategory, // Currently selected category
-                      decoration: InputDecoration(
-                        labelText: 'Category',
-                        border: OutlineInputBorder(),
-                      ),
-                      // Create dropdown items from the available categories
-                      items: widget.categories.map((Category category) {
-                        return DropdownMenuItem<Category>(
-                          value: category,
-                          child: Row(
-                            children: [
-                              // Show the category's icon with its color
-                              Icon(
-                                category.icon,
-                                color: category.color,
-                                size: 20,
-                              ),
-                              SizedBox(width: 8), // Small spacing
-                              Text(category.title), // Show the category name
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                      // Called when user selects a different category
-                      onChanged: (Category? newValue) {
-                        setState(() {
-                          _selectedCategory =
-                              newValue; // Update the selected category
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
+            CategoryPicker(
+              categories: widget.categories,
+              selectedCategory: _selectedCategory,
+              onChanged: (Category? newValue) {
+                setState(() {
+                  _selectedCategory = newValue;
+                });
+              },
+              label: 'Category',
             ),
             // Date Selection
             Container(
