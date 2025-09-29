@@ -2,12 +2,12 @@
 marp: true
 size: 4:3
 paginate: true
-title: Pocket Protectors Week /# Progress Report
+title: Pocket Protectors Week 3 Progress Report
 ---
 
-# Week # Progress Report
+# Week 3 Progress Report
 
-## (M/D/2025 - M/D/2025)
+## (9/22/2025 - 9/28/2025)
 
 > Team: Pocket Protectors
 >
@@ -56,15 +56,15 @@ title: Pocket Protectors Week /# Progress Report
 
 - ## Breakdown:
 
-- `root\lib\firebase_options.dart`: 70
-- `root\lib\main.dart`: 137
-- `root\lib\model\transaction.dart`: 20
-- `root\lib\model\user.dart`: 12
-- `root\lib\theme\main_theme.dart`: 35
-- `root\lib\view\chart.dart`: 57
-- `root\lib\view\chart_bar.dart`: 51
-- `root\lib\view\new_transaction.dart`: 103
-- `root\lib\view\transaction_list.dart`: 67
+  - `root\lib\firebase_options.dart`: 70
+  - `root\lib\main.dart`: 137
+  - `root\lib\model\transaction.dart`: 20
+  - `root\lib\model\user.dart`: 12
+  - `root\lib\theme\main_theme.dart`: 35
+  - `root\lib\view\chart.dart`: 57
+  - `root\lib\view\chart_bar.dart`: 51
+  - `root\lib\view\new_transaction.dart`: 103
+  - `root\lib\view\transaction_list.dart`: 67
 
 ---
 
@@ -78,21 +78,26 @@ title: Pocket Protectors Week /# Progress Report
 
 ---
 
-- ## Breakdown:
+- ## Breakdown (1/2):
 
-- `root\lib\main.dart`: 199
-- `root\lib\model\category.dart`: 121
-- `root\lib\model\transaction.dart`: 108
-- `root\lib\model\user.dart`: 12
-- `root\lib\service\category_service.dart`: 290
-- `root\lib\theme\main_theme.dart`: 35
-- `root\lib\view\chart.dart`: 57
-- `root\lib\view\chart_bar.dart`: 51
-- `root\lib\view\manage_categories.dart`: 579
-- `root\lib\view\new_transaction.dart`: 154
-- `root\lib\view\transaction_list.dart`: 112
-- `root\lib\view\widgets\category_badge.dart`: 79
-- `root\lib\view\widgets\category_picker.dart`: 2751
+  - `root\lib\main.dart`: 199
+  - `root\lib\model\category.dart`: 121
+  - `root\lib\model\transaction.dart`: 108
+  - `root\lib\model\user.dart`: 12
+  - `root\lib\service\category_service.dart`: 290
+  - `root\lib\theme\main_theme.dart`: 35
+  - `root\lib\view\chart.dart`: 57
+  - `root\lib\view\chart_bar.dart`: 51
+  - `root\lib\view\manage_categories.dart`: 579
+
+---
+
+- ## Breakdown (2/2):
+
+  - `root\lib\view\new_transaction.dart`: 154
+  - `root\lib\view\transaction_list.dart`: 112
+  - `root\lib\view\widgets\category_badge.dart`: 79
+  - `root\lib\view\widgets\category_picker.dart`: 2751
 
 ---
 
@@ -108,18 +113,16 @@ title: Pocket Protectors Week /# Progress Report
 
 - ## Breakdown:
 
-Files scanned:
-
-- `root\lib\firebase_options.dart`: 70
-- `root\lib\main.dart`: 155
-- `root\lib\model\category.dart`: 106
-- `root\lib\model\transaction.dart`: 128
-- `root\lib\model\user.dart`: 12
-- `root\lib\theme\main_theme.dart`: 35
-- `root\lib\view\chart.dart`: 57
-- `root\lib\view\chart_bar.dart`: 51
-- `root\lib\view\new_transaction.dart`: 249
-- `root\lib\view\transaction_list.dart`: 121
+  - `root\lib\firebase_options.dart`: 70
+  - `root\lib\main.dart`: 155
+  - `root\lib\model\category.dart`: 106
+  - `root\lib\model\transaction.dart`: 128
+  - `root\lib\model\user.dart`: 12
+  - `root\lib\theme\main_theme.dart`: 35
+  - `root\lib\view\chart.dart`: 57
+  - `root\lib\view\chart_bar.dart`: 51
+  - `root\lib\view\new_transaction.dart`: 249
+  - `root\lib\view\transaction_list.dart`: 121
 
 ---
 
@@ -128,7 +131,7 @@ Files scanned:
 - 6/9 Week 3 milestones completed
   - ~67% total
   - ~9.5% per day
-- 15/32 Sprint 1 milestones completed
-  - ~47% total
-  - ~23% per week
+- 19/32 Sprint 1 milestones completed
+  - ~59% total
+  - ~30% per week
   - ~2% per day
