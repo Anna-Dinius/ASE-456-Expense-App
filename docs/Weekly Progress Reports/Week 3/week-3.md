@@ -35,6 +35,15 @@ title: Pocket Protectors Week /# Progress Report
 
 ---
 
+## Surplus Delivery
+
+✅ Display category name/color in TransactionList
+✅ Add ability for users to create new categories
+✅ Ensure transactions update correctly with categories
+✅ Implement edit/delete for categories
+
+---
+
 ## LoC Summary
 
 ### Cody's branch:
@@ -63,7 +72,7 @@ title: Pocket Protectors Week /# Progress Report
 
 ### Jeff's branch:
 
-- **Total**: 841
+- **Total**: 2156
 - **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
 - **Files scanned**: All files under lib and its subdirectories.
 
@@ -71,15 +80,19 @@ title: Pocket Protectors Week /# Progress Report
 
 - ## Breakdown:
 
-- `root\lib\firebase_options.dart`: 70
-- `root\lib\main.dart`: 147
-- `root\lib\model\category.dart`: 106
-- `root\lib\model\transaction.dart`: 87
+- `root\lib\main.dart`: 199
+- `root\lib\model\category.dart`: 121
+- `root\lib\model\transaction.dart`: 108
+- `root\lib\model\user.dart`: 12
+- `root\lib\service\category_service.dart`: 290
 - `root\lib\theme\main_theme.dart`: 35
 - `root\lib\view\chart.dart`: 57
 - `root\lib\view\chart_bar.dart`: 51
-- `root\lib\view\new_transaction.dart`: 153
-- `root\lib\view\transaction_list.dart`: 121
+- `root\lib\view\manage_categories.dart`: 579
+- `root\lib\view\new_transaction.dart`: 154
+- `root\lib\view\transaction_list.dart`: 112
+- `root\lib\view\widgets\category_badge.dart`: 79
+- `root\lib\view\widgets\category_picker.dart`: 2751
 
 ---
 
@@ -87,7 +100,7 @@ title: Pocket Protectors Week /# Progress Report
 
 ### Dillon's branch:
 
-- **Total**: 894
+- **Total**: 998
 - **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
 - **Files scanned**: All files under lib and its subdirectories.
 
@@ -98,15 +111,15 @@ title: Pocket Protectors Week /# Progress Report
 Files scanned:
 
 - `root\lib\firebase_options.dart`: 70
-- `root\lib\main.dart`: 151
+- `root\lib\main.dart`: 155
 - `root\lib\model\category.dart`: 106
-- `root\lib\model\transaction.dart`: 108
+- `root\lib\model\transaction.dart`: 128
+- `root\lib\model\user.dart`: 12
 - `root\lib\theme\main_theme.dart`: 35
 - `root\lib\view\chart.dart`: 57
 - `root\lib\view\chart_bar.dart`: 51
-- `root\lib\view\new_transaction.dart`: 181
+- `root\lib\view\new_transaction.dart`: 249
 - `root\lib\view\transaction_list.dart`: 121
-- `root\test\widget_test.dart`: 14
 
 ---
 
