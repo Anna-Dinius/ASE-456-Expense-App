@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Represents a single expense transaction
 /// This class stores all the information about one expense entry
@@ -131,8 +132,14 @@ class Transaction {
       recurring:
           data['recurring'] ?? false, // NEW: Include recurring and interval
       interval: data['interval'] ?? '',
-      pastPayments: data['pastPayments'] ?? [],
-      futurePayments: data['futurePayments'] ?? [],
+      pastPayments: (data['pastPayments'] as List<dynamic>?)
+          ?.map((e) => (e as Timestamp).toDate())
+          .toList() 
+        ?? [],
+      futurePayments: (data['futurePayments'] as List<dynamic>?)
+          ?.map((e) => (e as Timestamp).toDate())
+          .toList() 
+        ?? [],
     );
   }
 
