@@ -39,6 +39,9 @@ class _NewTransactionState extends State<NewTransaction> {
   List<DateTime> _pastPayments = [];
   List<DateTime> _futurePayments = [];
 
+  List<DateTime> _pastPayments = [];
+  List<DateTime> _futurePayments = [];
+
   String getNow() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat("yyyy-MM-dd");
@@ -130,6 +133,23 @@ class _NewTransactionState extends State<NewTransaction> {
       }
       setState(() {
         _selectedDate = pickedDate;
+      });
+    });
+    print('...');
+  }
+  void _endDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: _selectedDate,
+      lastDate: DateTime(_selectedDate.year + 5, _selectedDate.month,
+                _selectedDate.day,), //The user can select up to 5 years in the future from today.
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _endDate = pickedDate;
       });
     });
     print('...');

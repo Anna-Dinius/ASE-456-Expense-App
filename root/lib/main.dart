@@ -117,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
       String interval,
       List<DateTime> pastPayments,
       List<DateTime> futurePayments) async {
+
     final txId = firestore.FirebaseFirestore.instance
         .collection('users')
         .doc(TEST_USER_ID)
