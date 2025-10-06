@@ -31,5 +31,5 @@ for fp in sorted(files):
 print('Files scanned:')
 for fp in sorted(counts.keys()):
     rel = os.path.relpath(fp, ROOT)
-    print(f"- {rel}: {counts[fp]}")
+    print(f"- `{rel}`: {counts[fp]}")
 print(f"Total: {total}")

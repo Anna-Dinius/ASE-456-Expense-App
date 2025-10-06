@@ -2,7 +2,7 @@
 marp: true
 size: 4:3
 paginate: true
-title: Weekly Progress Report Template (Team Project) - Pocket Protectors
+title: Pocket Protectors Week /# Progress Report
 ---
 
 # Week # Progress Report
@@ -15,20 +15,56 @@ title: Weekly Progress Report Template (Team Project) - Pocket Protectors
 
 ---
 
-## Progress Summary
+## Milestones Completed
+
+✅
 
 ---
 
-## Goals
+## Carryover Items
 
 ---
 
-## Progress
+## LoC Summary
+
+### Cody's branch:
+
+- **Total**:
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
+- **Files scanned**: All files under lib and its subdirectories.
 
 ---
 
-## LoC
+- ## Breakdown:
 
 ---
 
-## Burn down rate
+## LoC Summary (2/3)
+
+### Jeff's branch:
+
+- **Total**:
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
+- **Files scanned**: All files under lib and its subdirectories.
+
+---
+
+- ## Breakdown:
+
+---
+
+## LoC Summary (3/3)
+
+### Dillon's branch:
+
+- **Total**:
+- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
+- **Files scanned**: All files under lib and its subdirectories.
+
+---
+
+- ## Breakdown:
+
+---
+
+## 🔥 Burn down rate
