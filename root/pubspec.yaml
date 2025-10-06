@@ -12,9 +12,11 @@ dependencies:
     sdk: flutter
   http: ^1.1.0              # ^1.1.0 means >=1.1.0 <2.0.0
   cupertino_icons: ^1.0.6   # ^1.0.6 means >=1.0.6 <2.0.0
-  intl: ^0.18.1
-  firebase_core: ^2.15.1
-  cloud_firestore: ^4.9.1
+  intl: ^0.20.2 
+  firebase_core: ^4.1.0
+  cloud_firestore: ^6.0.1
+  # Auth SDK for email/password sign-up & sign-in
+  firebase_auth: ^6.0.2
 
 dev_dependencies:
   flutter_test:
