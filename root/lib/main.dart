@@ -1,14 +1,13 @@
-import 'package:p5_expense/theme/main_theme.dart';
+import 'theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
-
-import 'package:p5_expense/view/new_transaction.dart';
-import 'package:p5_expense/view/transaction_list.dart';
-import 'package:p5_expense/view/chart.dart';
-import 'package:p5_expense/model/transaction.dart';
+import 'view/new_transaction.dart';
+import 'view/transaction_list.dart';
+import 'view/chart.dart';
+import 'model/transaction.dart';
 
 const TEST_USER_ID = 'quldUwy6wtd5LCKLE2Uc';
 
