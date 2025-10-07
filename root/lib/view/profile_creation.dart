@@ -42,6 +42,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
       );
       final fb_auth.User? user = credential.user;
       if (user != null) {
+        // Update the user's display name in Firebase Auth
+        await user.updateDisplayName(_nameController.text);
         // Create the Firestore user document if missing
         await UserService.createUserIfMissing(
           uid: user.uid,

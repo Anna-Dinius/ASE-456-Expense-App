@@ -1,4 +1,4 @@
-import 'package:p5_expense/theme/main_theme.dart';
+import 'theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
