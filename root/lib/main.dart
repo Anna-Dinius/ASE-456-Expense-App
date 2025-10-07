@@ -74,11 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Load categories and transactions
       await loadCategories();
+      await updateRecurringTransactions(widget.userId);
       await loadTransactions();
     } catch (e) {
       print('Error initializing app: $e');
       // Still try to load data even if initialization fails
       await loadCategories();
+      await updateRecurringTransactions(widget.userId);
       await loadTransactions();
     }
   }
@@ -224,6 +226,61 @@ class _MyHomePageState extends State<MyHomePage> {
     return transactions.docs
         .map((doc) => Transaction.fromMap(doc.data(), doc.id))
         .toList();
+  }
+
+  //NEW: This functions updates the scheduled and current payments of Transactions in the database
+  Future<void> updateRecurringTransactions(userId) async {
+    final today = DateTime.now();
+    try {
+      final snapshot = await firestore.FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('transactions')
+          .get();
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+
+        //1. Safely parse data
+        final currentDate = (data['date'] as firestore.Timestamp).toDate();
+        final List<dynamic> pastPaymentsRaw = data['pastPayments'] ?? [];
+        final List<dynamic> futurePaymentsRaw = data['futurePayments'] ?? [];
+
+        final pastPayments = pastPaymentsRaw
+            .map((e) => (e as firestore.Timestamp).toDate())
+            .toList();
+        final futurePayments = futurePaymentsRaw
+            .map((e) => (e as firestore.Timestamp).toDate())
+            .toList();
+        // 2. Move ALL payments that are due on or before today
+        final duePayments = futurePayments
+            .where(
+              (p) => _isSameDay(p, today) || p.isBefore(today),
+            )
+            .toList();
+        if (duePayments.isNotEmpty) {
+          // Keep the last due payment as the new "current date"
+          final latestDue = duePayments.last;
+
+          // Update lists
+          final updatedPast = List<DateTime>.from(pastPayments)
+            ..addAll(duePayments);
+          final updatedFuture = List<DateTime>.from(futurePayments)
+            ..removeWhere((p) => duePayments.contains(p));
+
+          await doc.reference.update({
+            'date': latestDue,
+            'pastPayments': updatedPast,
+            'futurePayments': updatedFuture,
+          });
+        }
+      }
+    } catch (e) {
+      print('Error updating recurring transactions: $e');
+    }
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   @override
