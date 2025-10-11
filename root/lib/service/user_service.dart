@@ -1,9 +1,11 @@
 // UserService: reads/writes the 'users/{uid}' document in Firestore.
 // Centralizing Firestore logic keeps UI widgets lean and testable.
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   static const String _collection = 'users';
 
   // Read a user's profile document by uid
@@ -41,8 +43,10 @@ class UserService {
 
   // Delete user profile
   static Future<void> deleteUser(String uid) async {
-    await _firestore.collection(_collection).doc(uid).delete();
+    // TODO: Add warning before user does it
+
+    // TODO: Have user reauthenticate themselves before deleting
+
+    await _firebaseAuth.currentUser?.delete();
   }
 }
-
-
