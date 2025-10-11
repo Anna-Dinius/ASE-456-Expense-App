@@ -31,7 +31,10 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
       return;
     }
     // Load current profile values to prefill the form
-    final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
     final data = doc.data();
     if (data != null) {
       _nameController.text = (data['name'] ?? '').toString();
@@ -64,6 +67,21 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     }
   }
 
+  Future<void> _delete() async {
+    final fb_auth.User? user = AuthService.currentUser;
+    if (user == null) return;
+    setState(() => _loading = true);
+
+    try {
+      await UserService.deleteUser(user.uid);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,14 +103,25 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
                     ),
                     TextFormField(
                       controller: _phoneController,
-                      decoration: InputDecoration(labelText: 'Phone Number (optional)'),
+                      decoration:
+                          InputDecoration(labelText: 'Phone Number (optional)'),
                     ),
                     TextFormField(
                       controller: _imageUrlController,
-                      decoration: InputDecoration(labelText: 'Profile Image URL (optional)'),
+                      decoration: InputDecoration(
+                          labelText: 'Profile Image URL (optional)'),
                     ),
+                    // Save Button
                     const SizedBox(height: 16),
                     ElevatedButton(onPressed: _save, child: Text('Save')),
+                    // Delete Button
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                        onPressed: _delete,
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white),
+                        child: Text("Delete")),
                   ],
                 ),
               ),
@@ -100,5 +129,3 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     );
   }
 }
-
-

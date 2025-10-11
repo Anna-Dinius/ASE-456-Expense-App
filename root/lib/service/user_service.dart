@@ -38,6 +38,11 @@ class UserService {
     data['lastUpdatedAt'] = FieldValue.serverTimestamp();
     await _firestore.collection(_collection).doc(uid).update(data);
   }
+
+  // Delete user profile
+  static Future<void> deleteUser(String uid) async {
+    await _firestore.collection(_collection).doc(uid).delete();
+  }
 }
 
 
