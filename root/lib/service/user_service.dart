@@ -2,11 +2,24 @@
 // Centralizing Firestore logic keeps UI widgets lean and testable.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class UserService {
-  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  static FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   static const String _collection = 'users';
+  
+  /// Allows overriding the Firestore instance for testing
+  @visibleForTesting
+  static void useFirestore(FirebaseFirestore firestore) {
+    _firestore = firestore;
+  }
+  
+  /// Allows overriding the Firebase Auth instance for testing
+  @visibleForTesting
+  static void useAuth(FirebaseAuth auth) {
+    _firebaseAuth = auth;
+  }
 
   // Read a user's profile document by uid
   static Future<DocumentSnapshot<Map<String, dynamic>>?> getUser(String uid) async {
@@ -56,14 +69,5 @@ class UserService {
   static Future<void> updateUser(String uid, Map<String, dynamic> data) async {
     data['lastUpdatedAt'] = FieldValue.serverTimestamp();
     await _firestore.collection(_collection).doc(uid).update(data);
-  }
-
-  // Delete user profile
-  static Future<void> deleteUser(String uid) async {
-    // TODO: Add warning before user does it
-
-    // TODO: Have user reauthenticate themselves before deleting
-
-    await _firebaseAuth.currentUser?.delete();
   }
 }
