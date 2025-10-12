@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:p5_expense/service/auth_service.dart';
 import 'package:p5_expense/service/user_service.dart';
-import 'package:p5_expense/view/profile_creation.dart';
 
 class ProfileEditingScreen extends StatefulWidget {
   @override
@@ -100,7 +99,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
                     if (errorText != null) ...[
                       const SizedBox(height: 8),
                       Text(
-                        errorText!,
+                        errorText,
                         style:
                             const TextStyle(color: Colors.red, fontSize: 13.5),
                       ),
@@ -187,23 +186,21 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     final fb_auth.User? user = AuthService.currentUser;
     if (user == null) return;
 
+    setState(() => _loading = true);
     try {
       await UserService.deleteUser(user.uid);
-
-      // Navigating back to sign-in page and removing all previous routes
+      
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => ProfileCreationScreen()),
-          (Route<dynamic> route) => false,
-        );
+        // Simply pop back to the very first screen in the stack
+        // This ensures we don't have any leftover screens or state
+        Navigator.of(context).popUntil((route) => route.isFirst);
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.toString())));
+        setState(() => _loading = false);
       }
-    } finally {
-      if (mounted) setState(() => _loading = false);
     }
   }
 
