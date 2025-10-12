@@ -59,7 +59,7 @@ class ProfileSummaryScreen extends StatelessWidget {
               Text(data['name'] ?? '', style: Theme.of(context).textTheme.headlineSmall),
               Text(data['email'] ?? '', style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 8),
-              Text('Phone: ${data['phoneNumber'] ?? ''}'),
+              Text('Phone: ${(data['phoneNumber'] ?? '').isEmpty ? 'N/A' : data['phoneNumber']}'),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
