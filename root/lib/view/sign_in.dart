@@ -50,6 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: ListView(
             children: [
               TextFormField(
+                key: Key('email-field'),
                 controller: _emailController,
                 decoration: InputDecoration(labelText: 'Email'),
                 keyboardType: TextInputType.emailAddress,
@@ -58,6 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     : null,
               ),
               TextFormField(
+                key: Key('password-field'),
                 controller: _passwordController,
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
