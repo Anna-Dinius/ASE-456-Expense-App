@@ -67,6 +67,29 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     }
   }
 
+  Future<void> _deleteConfirmation() async {
+    Widget cancelButton = TextButton(
+        child: Text("Cancel"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        });
+
+    Widget deleteButton =
+        TextButton(child: Text("Delete"), onPressed: () {_delete();});
+
+    AlertDialog deleteAccountAlertDialog = AlertDialog(
+        title: Text("Are you sure you want to delete account?"),
+        content: Text(
+            "Are you really sure you want to delete your account? This is permanent and your account will be non-recoverable."),
+        actions: [cancelButton, deleteButton]);
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return deleteAccountAlertDialog;
+        });
+  }
+
   Future<void> _delete() async {
     final fb_auth.User? user = AuthService.currentUser;
     if (user == null) return;
@@ -117,7 +140,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
                     // Delete Button
                     const SizedBox(height: 16),
                     ElevatedButton(
-                        onPressed: _delete,
+                        onPressed: _deleteConfirmation,
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white),
