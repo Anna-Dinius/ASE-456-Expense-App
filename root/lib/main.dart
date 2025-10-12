@@ -290,9 +290,12 @@ class AuthGate extends StatelessWidget {
           return ProfileCreationScreen();
         }
         // Ensure user document exists (idempotent)
+        // Don't default to a placeholder name here. If displayName is null we
+        // pass an empty string — the UserService will create the doc and the
+        // profile creation flow will later patch the name when available.
         UserService.createUserIfMissing(
           uid: user.uid,
-          name: user.displayName ?? 'New User',
+          name: user.displayName ?? '',
           email: user.email ?? '',
         );
         return MyHomePage(userId: user.uid);
