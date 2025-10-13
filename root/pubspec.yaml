@@ -4,15 +4,15 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"  # Allow any 3.x version
-  flutter: ">=3.10.0"     # Minimum Flutter version
+  sdk: '>=3.0.0 <4.0.0' # Allow any 3.x version
+  flutter: '>=3.10.0' # Minimum Flutter version
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.1.0              # ^1.1.0 means >=1.1.0 <2.0.0
-  cupertino_icons: ^1.0.6   # ^1.0.6 means >=1.0.6 <2.0.0
-  intl: ^0.20.2 
+  http: ^1.1.0 # ^1.1.0 means >=1.1.0 <2.0.0
+  cupertino_icons: ^1.0.6 # ^1.0.6 means >=1.0.6 <2.0.0
+  intl: ^0.20.2
   firebase_core: ^4.1.0
   cloud_firestore: ^6.0.1
   # Auth SDK for email/password sign-up & sign-in
@@ -23,6 +23,7 @@ dev_dependencies:
     sdk: flutter
   mockito: ^5.4.2
   build_runner: ^2.4.7
+  fake_cloud_firestore: ^4.0.0
 
 flutter:
   uses-material-design: true
