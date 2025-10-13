@@ -113,7 +113,7 @@ class Transaction {
       pastPayments: (json['pastPayments'] as List<dynamic>? ?? [])
           .map((e) => DateTime.parse(e as String))
           .toList(),
-      futurePayments: (json['pastPayments'] as List<dynamic>? ?? [])
+      futurePayments: (json['futurePayments'] as List<dynamic>? ?? [])
           .map((e) => DateTime.parse(e as String))
           .toList(),
     );
