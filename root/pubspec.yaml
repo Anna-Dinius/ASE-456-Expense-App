@@ -24,7 +24,7 @@ dev_dependencies:
   mockito: ^5.4.2
   build_runner: ^2.4.7
   fake_cloud_firestore: ^4.0.0
-  flutter_lints: ^6.0.0
+  flutter_lints: ^5.0.0
   firebase_auth_mocks: ^0.15.1
 
 flutter:
