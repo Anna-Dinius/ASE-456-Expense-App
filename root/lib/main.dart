@@ -1,7 +1,13 @@
-import 'package:p5_expense/theme/main_theme.dart';
+import 'theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+// Added Firebase Auth + our services and profile screens
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:p5_expense/service/auth_service.dart';
+import 'package:p5_expense/service/user_service.dart';
+import 'package:p5_expense/view/profile_creation.dart';
+import 'package:p5_expense/view/profile_summary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
 import 'package:p5_expense/view/new_transaction.dart';
@@ -12,7 +18,7 @@ import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
 
-const TEST_USER_ID = 'quldUwy6wtd5LCKLE2Uc';
+// Removed hardcoded TEST_USER_ID; using FirebaseAuth current user instead
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,12 +35,17 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Personal Expenses',
       theme: mainTheme,
-      home: MyHomePage(),
+      // Show sign-up when signed out, otherwise the main app
+      home: AuthGate(),
     );
   }
 }
 
+// MyHomePage now receives the signed-in user's uid so we can load
+// categories and transactions from their own subcollections.
 class MyHomePage extends StatefulWidget {
+  final String userId;
+  MyHomePage({required this.userId});
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -56,20 +67,20 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _initializeApp() async {
     try {
       // Seed default categories if none exist for this user
-      await CategoryService.seedDefaultCategories(TEST_USER_ID);
+      await CategoryService.seedDefaultCategories(widget.userId);
 
       // Migrate legacy transactions to have categoryId for this user
-      await CategoryService.migrateLegacyTransactions(TEST_USER_ID);
+      await CategoryService.migrateLegacyTransactions(widget.userId);
 
       // Load categories and transactions
       await loadCategories();
-      await updateRecurringTransactions(TEST_USER_ID);
+      await updateRecurringTransactions(widget.userId);
       await loadTransactions();
     } catch (e) {
       print('Error initializing app: $e');
       // Still try to load data even if initialization fails
       await loadCategories();
-      await updateRecurringTransactions(TEST_USER_ID);
+      await updateRecurringTransactions(widget.userId);
       await loadTransactions();
     }
   }
@@ -77,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   /// Loads categories from Firebase for this user
   Future<void> loadCategories() async {
     try {
-      final categories = await CategoryService.getAllCategories(TEST_USER_ID);
+      final categories = await CategoryService.getAllCategories(widget.userId);
       setState(() {
         _categories.clear();
         _categories.addAll(categories);
@@ -88,10 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-
-
   Future<void> loadTransactions() async {
-    final transactions = await getAllTransactions(TEST_USER_ID);
+    final transactions = await getAllTransactions(widget.userId);
     setState(() {
       _userTransactions = transactions;
     });
@@ -123,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<DateTime> futurePayments) async {
     final txId = firestore.FirebaseFirestore.instance
         .collection('users')
-        .doc(TEST_USER_ID)
+        .doc(widget.userId)
         .collection('transactions')
         .doc()
         .id;
@@ -146,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     await firestore.FirebaseFirestore.instance
         .collection('users')
-        .doc(TEST_USER_ID)
+        .doc(widget.userId)
         .collection('transactions')
         .doc(newTx.id)
         .set({
@@ -182,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (_) => ManageCategoriesScreen(
           categories: _categories,
           onCategoriesChanged: refreshCategories,
-          userId: TEST_USER_ID,
+          userId: widget.userId,
         ),
       ),
     );
@@ -195,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     firestore.FirebaseFirestore.instance
         .collection('users')
-        .doc(TEST_USER_ID)
+        .doc(widget.userId)
         .collection('transactions')
         .doc(id)
         .delete();
@@ -206,6 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> refreshCategories() async {
     await loadCategories();
   }
+
   Future<List<Transaction>> getAllTransactions(String userId) async {
     final transactions = await firestore.FirebaseFirestore.instance
         .collection('users')
@@ -217,16 +227,17 @@ class _MyHomePageState extends State<MyHomePage> {
         .map((doc) => Transaction.fromMap(doc.data(), doc.id))
         .toList();
   }
+
   //NEW: This functions updates the scheduled and current payments of Transactions in the database
-  Future<void> updateRecurringTransactions(userId) async{
+  Future<void> updateRecurringTransactions(userId) async {
     final today = DateTime.now();
-    try{
+    try {
       final snapshot = await firestore.FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('transactions')
-        .get();
-      for(final doc in snapshot.docs){
+          .collection('users')
+          .doc(userId)
+          .collection('transactions')
+          .get();
+      for (final doc in snapshot.docs) {
         final data = doc.data();
 
         //1. Safely parse data
@@ -241,15 +252,18 @@ class _MyHomePageState extends State<MyHomePage> {
             .map((e) => (e as firestore.Timestamp).toDate())
             .toList();
         // 2. Move ALL payments that are due on or before today
-        final duePayments = futurePayments.where(
-          (p) => _isSameDay(p, today) || p.isBefore(today),
-        ).toList();
+        final duePayments = futurePayments
+            .where(
+              (p) => _isSameDay(p, today) || p.isBefore(today),
+            )
+            .toList();
         if (duePayments.isNotEmpty) {
           // Keep the last due payment as the new "current date"
           final latestDue = duePayments.last;
 
           // Update lists
-          final updatedPast = List<DateTime>.from(pastPayments)..addAll(duePayments);
+          final updatedPast = List<DateTime>.from(pastPayments)
+            ..addAll(duePayments);
           final updatedFuture = List<DateTime>.from(futurePayments)
             ..removeWhere((p) => duePayments.contains(p));
 
@@ -260,12 +274,13 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         }
       }
-    }catch (e){
+    } catch (e) {
       print('Error updating recurring transactions: $e');
     }
   }
+
   bool _isSameDay(DateTime a, DateTime b) {
-  return a.year == b.year && a.month == b.month && a.day == b.day;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
   @override
@@ -279,6 +294,15 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.category),
             onPressed: () => _showManageCategories(context),
+          ),
+          // Open Profile summary (with debug copy button) for current user
+          IconButton(
+            icon: Icon(Icons.person),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => ProfileSummaryScreen()),
+              );
+            },
           ),
           IconButton(
             icon: Icon(Icons.add),
@@ -302,6 +326,34 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
+    );
+  }
+}
+
+// AuthGate listens to auth changes and decides what to show:
+// - If signed out: show ProfileCreationScreen
+// - If signed in: ensure user doc exists, then show MyHomePage
+class AuthGate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<fb_auth.User?>(
+      stream: AuthService.onAuthStateChanged(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        final user = snapshot.data;
+        if (user == null) {
+          return ProfileCreationScreen();
+        }
+        // Ensure user document exists (idempotent)
+        UserService.createUserIfMissing(
+          uid: user.uid,
+          name: user.displayName ?? 'New User',
+          email: user.email ?? '',
+        );
+        return MyHomePage(userId: user.uid);
+      },
     );
   }
 }
