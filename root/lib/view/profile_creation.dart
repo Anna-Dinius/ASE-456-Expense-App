@@ -44,6 +44,9 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
       if (user != null) {
         // Update the user's display name in Firebase Auth
         await user.updateDisplayName(_nameController.text);
+        // Ensure the local user object is refreshed so AuthGate/readers see the
+        // updated displayName immediately.
+        await user.reload();
         // Create the Firestore user document if missing
         await UserService.createUserIfMissing(
           uid: user.uid,

@@ -3,7 +3,12 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 
 class AuthService {
-  static final fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
+  static fb_auth.FirebaseAuth _auth = fb_auth.FirebaseAuth.instance;
+
+  // For testing - allows injection of mock auth
+  static void useAuth(fb_auth.FirebaseAuth auth) {
+    _auth = auth;
+  }
 
   // Emits the current user whenever sign-in state changes (null when signed out)
   static Stream<fb_auth.User?> onAuthStateChanged() => _auth.authStateChanges();
