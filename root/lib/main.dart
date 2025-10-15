@@ -230,6 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //NEW: This functions updates the scheduled and current payments of Transactions in the database
   Future<void> updateRecurringTransactions(userId) async {
+    debugPrint('updateRecurringTransactions was called.');
     final today = DateTime.now();
     try {
       final snapshot = await firestore.FirebaseFirestore.instance
@@ -257,16 +258,18 @@ class _MyHomePageState extends State<MyHomePage> {
               (p) => _isSameDay(p, today) || p.isBefore(today),
             )
             .toList();
-        if (duePayments.isNotEmpty) {
+        var combinedPayments = pastPayments + duePayments; //necessary to handle an edge case where past payment already contains the currently due payment
+        debugPrint('combinedPayments: $combinedPayments');
+        if (combinedPayments.isNotEmpty) {
           // Keep the last due payment as the new "current date"
-          final latestDue = duePayments.last;
+          final latestDue = combinedPayments.last;
 
           // Update lists
           final updatedPast = List<DateTime>.from(pastPayments)
             ..addAll(duePayments);
           final updatedFuture = List<DateTime>.from(futurePayments)
             ..removeWhere((p) => duePayments.contains(p));
-
+          debugPrint('Latest due: $latestDue');
           await doc.reference.update({
             'date': latestDue,
             'pastPayments': updatedPast,
@@ -275,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
     } catch (e) {
-      print('Error updating recurring transactions: $e');
+      debugPrint('Error updating recurring transactions: $e');
     }
   }
 
