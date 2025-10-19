@@ -18,6 +18,8 @@ import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
 
+import 'package:p5_expense/search_bar_widget.dart';
+
 // Removed hardcoded TEST_USER_ID; using FirebaseAuth current user instead
 
 void main() async {
