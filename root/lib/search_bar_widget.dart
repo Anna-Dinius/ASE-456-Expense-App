@@ -26,14 +26,26 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     super.initState();
     _filteredTransactions = widget.transactions;
   }
+  @override //This handles a bug where the transactions wouldn't show up at the start.
+  void didUpdateWidget(covariant SearchBarWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.transactions != widget.transactions) {
+      setState(() {
+        _filteredTransactions = widget.transactions;
+      });
+    }
+  }
 
   void _filterTransactions(String query) {
     final lowerQuery = query.toLowerCase();
 
     setState(() {
       _filteredTransactions = widget.transactions.where((tx) {
+
         return tx.title.toLowerCase().contains(lowerQuery) ||
-               tx.amount.toString().contains(lowerQuery);
+               tx.amount.toString().contains(lowerQuery) ||
+               widget.categories.firstWhere((category) => category.id == tx.categoryId).title.toLowerCase().contains(lowerQuery);
       }).toList();
     });
   }

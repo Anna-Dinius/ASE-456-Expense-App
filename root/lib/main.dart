@@ -322,7 +322,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Chart(_recentTransactions),
             // NEW: Pass the categories list to the transaction list so it can display category info
-            TransactionList(_userTransactions, _deleteTransaction, _categories),
+            SearchBarWidget(transactions: _userTransactions, deleteTx: _deleteTransaction, categories: _categories),
           ],
         ),
       ),
