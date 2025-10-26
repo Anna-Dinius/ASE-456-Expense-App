@@ -22,6 +22,9 @@ class SavingsGoal {
 	/// Optional notes/description
 	final String? description;
 
+		/// Whether the goal has been completed (persisted for quick queries/UI)
+		final bool completed;
+
 	const SavingsGoal({
 		required this.id,
 		required this.title,
@@ -29,6 +32,7 @@ class SavingsGoal {
 		this.currentAmount = 0.0,
 		this.targetDate,
 		this.description,
+			this.completed = false,
 	});
 
 	/// Convenience: progress between 0.0 and 1.0
@@ -47,6 +51,7 @@ class SavingsGoal {
 		double? currentAmount,
 		DateTime? targetDate,
 		String? description,
+			bool? completed,
 	}) {
 		return SavingsGoal(
 			id: id ?? this.id,
@@ -55,6 +60,7 @@ class SavingsGoal {
 			currentAmount: currentAmount ?? this.currentAmount,
 			targetDate: targetDate ?? this.targetDate,
 			description: description ?? this.description,
+				completed: completed ?? this.completed,
 		);
 	}
 
@@ -66,6 +72,7 @@ class SavingsGoal {
 			'currentAmount': currentAmount,
 			'targetDate': targetDate?.toIso8601String(),
 			'description': description,
+				'completed': completed,
 		};
 	}
 
@@ -79,6 +86,7 @@ class SavingsGoal {
 					? DateTime.parse(json['targetDate'] as String)
 					: null,
 			description: json['description'] as String?,
+					completed: (json['completed'] as bool?) ?? false,
 		);
 	}
 
@@ -95,6 +103,7 @@ class SavingsGoal {
 							? data['targetDate'] as DateTime
 							: null,
 			description: data['description'] as String?,
+				completed: (data['completed'] as bool?) ?? false,
 		);
 	}
 
@@ -105,6 +114,7 @@ class SavingsGoal {
 			'currentAmount': currentAmount,
 			'targetDate': targetDate, // Firestore stores DateTime as Timestamp
 			'description': description,
+				'completed': completed,
 		};
 	}
 
@@ -117,7 +127,8 @@ class SavingsGoal {
 				other.targetAmount == targetAmount &&
 				other.currentAmount == currentAmount &&
 				other.targetDate == targetDate &&
-				other.description == description;
+			other.description == description &&
+			other.completed == completed;
 	}
 
 	@override
@@ -126,9 +137,10 @@ class SavingsGoal {
 			targetAmount.hashCode ^
 			currentAmount.hashCode ^
 			targetDate.hashCode ^
-			(description?.hashCode ?? 0);
+		  (description?.hashCode ?? 0) ^
+		  completed.hashCode;
 
 	@override
 	String toString() =>
-			'SavingsGoal(id: $id, title: $title, targetAmount: $targetAmount, currentAmount: $currentAmount, targetDate: $targetDate)';
+		  'SavingsGoal(id: $id, title: $title, targetAmount: $targetAmount, currentAmount: $currentAmount, targetDate: $targetDate, completed: $completed)';
 }
