@@ -6,8 +6,6 @@ import 'package:p5_expense/view/new_savings_goal.dart';
 import 'package:p5_expense/view/edit_savings_goal.dart';
 import 'package:p5_expense/view/savings_goals_list.dart';
 
-/// A simple, non-functional skeleton for the Savings Summary screen.
-/// Currently displays a placeholder message indicating there are no goals.
 class SavingsSummaryScreen extends StatelessWidget {
   const SavingsSummaryScreen({super.key});
 
