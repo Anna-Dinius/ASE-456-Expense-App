@@ -20,6 +20,7 @@ class SearchBarWidget extends StatefulWidget {
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final _searchController = TextEditingController();
   late List<Transaction> _filteredTransactions;
+  String _selectedCategory = '';
 
   @override
   void initState() {
@@ -68,6 +69,19 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ),
             onChanged: _filterTransactions,
           ),
+        ),
+        Wrap(
+          spacing: 8,
+          children: widget.categories.map((cat) {
+            return ChoiceChip(
+              label: Text(cat.title),
+              selected: _selectedCategory == cat.title,
+              onSelected: (bool selected) {
+                setState(() => _selectedCategory = selected ? cat.title : '');
+                _filterTransactions(_selectedCategory);
+              },
+            );
+          }).toList(),
         ),
 
         // Filtered transaction list
