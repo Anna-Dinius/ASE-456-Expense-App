@@ -1,3 +1,5 @@
+import 'package:p5_expense/view/savings_summary.dart';
+
 import 'theme/main_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -300,6 +302,11 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.category),
             onPressed: () => _showManageCategories(context),
           ),
+          IconButton(icon: Icon(Icons.savings), onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => (SavingsSummaryScreen())),
+              );
+          }),
           // Open Profile summary (with debug copy button) for current user
           IconButton(
             icon: Icon(Icons.person),
