@@ -21,6 +21,8 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   final _searchController = TextEditingController();
   late List<Transaction> _filteredTransactions;
   String _selectedCategory = '';
+  String _selectedOrder = 'Ascend';
+  String _selectedSortBy = 'Date';
 
   @override
   void initState() {
@@ -74,11 +76,37 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
             ),
             Expanded(
               flex: 1,
-              child: Text('Sort By'),
+              child: DropdownButton(
+                      value: _selectedSortBy,
+                      items: <String>['Date', 'Amount']
+                          .map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedSortBy = newValue!;
+                        });
+                      }),
             ),
             Expanded(
               flex: 1,
-              child: Text('Ascend/Descend'),
+              child: DropdownButton(
+                      value: _selectedOrder,
+                      items: <String>['Ascend', 'Descend']
+                          .map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedOrder = newValue!;
+                        });
+                      }),
             ),
           ]
         ),
