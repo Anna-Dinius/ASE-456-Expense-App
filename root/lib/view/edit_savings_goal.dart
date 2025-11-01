@@ -47,7 +47,7 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
     final picked = await showDatePicker(
       context: context,
       initialDate: _targetDate ?? now,
-      firstDate: DateTime(now.year - 1),
+      firstDate: now,
       lastDate: DateTime(now.year + 10),
     );
     if (picked != null) setState(() => _targetDate = picked);
