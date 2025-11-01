@@ -17,7 +17,6 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
   late final TextEditingController _targetAmountController;
   late final TextEditingController _currentAmountController;
   late final TextEditingController _descriptionController;
-
   DateTime? _targetDate;
   bool _submitting = false;
 
@@ -25,11 +24,15 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.goal.title);
-    _targetAmountController =
-        TextEditingController(text: widget.goal.targetAmount.toStringAsFixed(2));
-    _currentAmountController =
-        TextEditingController(text: widget.goal.currentAmount.toStringAsFixed(2));
-    _descriptionController = TextEditingController(text: widget.goal.description ?? '');
+    _targetAmountController = TextEditingController(
+      text: widget.goal.targetAmount.toStringAsFixed(2),
+    );
+    _currentAmountController = TextEditingController(
+      text: widget.goal.currentAmount.toStringAsFixed(2),
+    );
+    _descriptionController = TextEditingController(
+      text: widget.goal.description ?? '',
+    );
     _targetDate = widget.goal.targetDate;
   }
 
@@ -58,29 +61,26 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
 
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be signed in to edit a goal.')),
       );
       return;
     }
 
-    final title = _titleController.text.trim();
-    final targetAmount = double.tryParse(_targetAmountController.text.trim()) ?? 0.0;
-    final currentAmount = double.tryParse(_currentAmountController.text.trim()) ?? 0.0;
-    final description = _descriptionController.text.trim().isEmpty
-        ? null
-        : _descriptionController.text.trim();
-
     setState(() => _submitting = true);
     try {
-      final isCompleted = currentAmount >= targetAmount && targetAmount > 0;
+      final targetAmount = double.parse(_targetAmountController.text.trim());
+      final currentAmount = double.parse(_currentAmountController.text.trim());
       final updated = widget.goal.copyWith(
-        title: title,
+        title: _titleController.text.trim(),
         targetAmount: targetAmount,
         currentAmount: currentAmount,
         targetDate: _targetDate,
-        description: description,
-        completed: isCompleted,
+        description: _descriptionController.text.trim().isEmpty
+            ? null
+            : _descriptionController.text.trim(),
+        completed: currentAmount >= targetAmount && targetAmount > 0,
       );
       await SavingsGoalService.updateGoal(user.uid, updated);
       if (!mounted) return;
@@ -168,7 +168,7 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
                 decoration: const InputDecoration(labelText: 'Description (optional)'),
                 maxLines: 3,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
