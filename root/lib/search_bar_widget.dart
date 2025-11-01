@@ -56,22 +56,34 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Column(
       children: [
         // Search field
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              labelText: 'Search transactions',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+        Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search transactions',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onChanged: _filterTransactions,
               ),
             ),
-            onChanged: _filterTransactions,
-          ),
+            Expanded(
+              flex: 1,
+              child: Text('Sort By'),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text('Ascend/Descend'),
+            ),
+          ]
         ),
         Wrap(
-          spacing: 8,
+          spacing: 5,
           children: widget.categories.map((cat) {
             return ChoiceChip(
               label: Text(cat.title),
