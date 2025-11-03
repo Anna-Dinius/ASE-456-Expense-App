@@ -20,6 +20,9 @@ class SearchBarWidget extends StatefulWidget {
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final _searchController = TextEditingController();
   late List<Transaction> _filteredTransactions;
+  String _selectedCategory = '';
+  String _selectedOrder = 'Ascend';
+  String _selectedSortBy = 'Date';
 
   @override
   void initState() {
@@ -55,19 +58,70 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Column(
       children: [
         // Search field
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: InputDecoration(
-              labelText: 'Search transactions',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
+        Row(
+          children: [
+            Expanded(
+              flex: 10,
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search transactions',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onChanged: _filterTransactions,
               ),
             ),
-            onChanged: _filterTransactions,
-          ),
+            Expanded(
+              flex: 1,
+              child: DropdownButton(
+                      value: _selectedSortBy,
+                      items: <String>['Date', 'Amount']
+                          .map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedSortBy = newValue!;
+                        });
+                      }),
+            ),
+            Expanded(
+              flex: 1,
+              child: DropdownButton(
+                      value: _selectedOrder,
+                      items: <String>['Ascend', 'Descend']
+                          .map((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedOrder = newValue!;
+                        });
+                      }),
+            ),
+          ]
+        ),
+        Wrap(
+          spacing: 5,
+          children: widget.categories.map((cat) {
+            return ChoiceChip(
+              label: Text(cat.title),
+              selected: _selectedCategory == cat.title,
+              onSelected: (bool selected) {
+                setState(() => _selectedCategory = selected ? cat.title : '');
+                _filterTransactions(_selectedCategory);
+              },
+            );
+          }).toList(),
         ),
 
         // Filtered transaction list
