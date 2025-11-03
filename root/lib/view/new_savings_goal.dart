@@ -14,7 +14,6 @@ class _NewSavingsGoalScreenState extends State<NewSavingsGoalScreen> {
   final _titleController = TextEditingController();
   final _targetAmountController = TextEditingController();
   final _descriptionController = TextEditingController();
-
   DateTime? _targetDate;
   bool _submitting = false;
 
@@ -31,12 +30,10 @@ class _NewSavingsGoalScreenState extends State<NewSavingsGoalScreen> {
     final picked = await showDatePicker(
       context: context,
       initialDate: _targetDate ?? now,
-      firstDate: DateTime(now.year - 1),
+      firstDate: now,
       lastDate: DateTime(now.year + 10),
     );
-    if (picked != null) {
-      setState(() => _targetDate = picked);
-    }
+    if (picked != null) setState(() => _targetDate = picked);
   }
 
   Future<void> _submit() async {
@@ -44,29 +41,25 @@ class _NewSavingsGoalScreenState extends State<NewSavingsGoalScreen> {
 
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be signed in to add a goal.')),
       );
       return;
     }
 
-    final title = _titleController.text.trim();
-    final targetAmount = double.tryParse(_targetAmountController.text.trim()) ?? 0.0;
-    final description = _descriptionController.text.trim().isEmpty
-        ? null
-        : _descriptionController.text.trim();
-
     setState(() => _submitting = true);
     try {
       await SavingsGoalService.addGoal(
         user.uid,
-        title: title,
-        targetAmount: targetAmount,
+        title: _titleController.text.trim(),
+        targetAmount: double.parse(_targetAmountController.text.trim()),
         targetDate: _targetDate,
-        description: description,
+        description: _descriptionController.text.trim().isEmpty 
+            ? null 
+            : _descriptionController.text.trim(),
       );
       if (!mounted) return;
-      // Return true to indicate success to the previous screen
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
@@ -140,7 +133,7 @@ class _NewSavingsGoalScreenState extends State<NewSavingsGoalScreen> {
                 ),
                 maxLines: 3,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   Expanded(
