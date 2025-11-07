@@ -20,6 +20,7 @@ class SearchBarWidget extends StatefulWidget {
 class _SearchBarWidgetState extends State<SearchBarWidget> {
   final _searchController = TextEditingController();
   late List<Transaction> _filteredTransactions;
+  String _query = '';
   String _selectedCategory = '';
   String _selectedOrder = 'Ascend';
   String _selectedSortBy = 'Date';
@@ -40,16 +41,35 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     }
   }
 
-  void _filterTransactions(String query) {
-    final lowerQuery = query.toLowerCase();
+  void _filterTransactions() {
+    final lowerQuery = _query.toLowerCase();
+    late List<Transaction> unsortedTransactions;
 
     setState(() {
-      _filteredTransactions = widget.transactions.where((tx) {
+      unsortedTransactions = widget.transactions.where((tx) {
 
-        return tx.title.toLowerCase().contains(lowerQuery) ||
-               tx.amount.toString().contains(lowerQuery) ||
-               widget.categories.firstWhere((category) => category.id == tx.categoryId).title.toLowerCase().contains(lowerQuery);
+        return tx.title.toLowerCase().contains(lowerQuery) &&
+               widget.categories.firstWhere(
+                (category) => category.id == tx.categoryId
+              ).title.contains(_selectedCategory);
       }).toList();
+      //TODO: REFACTOR THIS PART
+      if (_selectedSortBy == 'Date'){
+        unsortedTransactions.sort((a, b) {
+        return a.date.compareTo(b.date);
+      });
+      }
+      if (_selectedSortBy == 'Amount' ){
+        unsortedTransactions.sort((a, b) {
+        return a.amount.compareTo(b.amount);
+      });
+      }
+
+      if (_selectedOrder == 'Descend'){
+        unsortedTransactions = unsortedTransactions.reversed.toList();
+      }
+
+      _filteredTransactions = unsortedTransactions;
     });
   }
 
@@ -71,7 +91,10 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                onChanged: _filterTransactions,
+                onChanged: (input) { 
+                  _query = input;
+                  _filterTransactions();
+                }
               ),
             ),
             Expanded(
@@ -88,6 +111,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedSortBy = newValue!;
+                          _filterTransactions();
                         });
                       }),
             ),
@@ -105,6 +129,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                       onChanged: (String? newValue) {
                         setState(() {
                           _selectedOrder = newValue!;
+                          _filterTransactions();
                         });
                       }),
             ),
@@ -118,7 +143,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               selected: _selectedCategory == cat.title,
               onSelected: (bool selected) {
                 setState(() => _selectedCategory = selected ? cat.title : '');
-                _filterTransactions(_selectedCategory);
+                _filterTransactions();
               },
             );
           }).toList(),
