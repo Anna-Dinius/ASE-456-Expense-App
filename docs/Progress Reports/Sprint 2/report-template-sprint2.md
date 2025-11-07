@@ -89,7 +89,7 @@ Tests (cont.):
 
 ## 🔥 Burndown rate
 
-- #/# Sprint 2 requirements completed
+- #/35 Sprint 2 requirements completed
   - ~#% total
   - ~#% per week
   - ~#% per day

@@ -265,11 +265,11 @@ class Budget {
 enum BudgetType {
   OVERALL,    // Overall spending budget
   CATEGORY,   // Category-specific budget
-  CUSTOM,     // Custom period budget
 }
 
 /// Enum representing the period of the budget
 enum BudgetPeriod {
+  WEEKLY,     // Weekly budget
   MONTHLY,    // Monthly budget
   QUARTERLY,  // Quarterly budget
   YEARLY,     // Yearly budget

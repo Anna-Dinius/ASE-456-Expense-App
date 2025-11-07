@@ -298,6 +298,7 @@ class BudgetService {
   /// Calculates the total spent amount for a specific budget
   /// This includes all transactions within the budget period that match the budget criteria
   static Future<double> calculateSpentAmount(String userId, Budget budget) async {
+    if (!budget.isActive) return 0.0; // Do not sum for inactive budgets
     try {
       // Get all transactions for the user
       final transactionsSnapshot = await _firestore
@@ -340,6 +341,7 @@ class BudgetService {
   /// Calculates the remaining budget amount
   /// Returns the amount left in the budget (can be negative if over budget)
   static Future<double> calculateRemainingAmount(String userId, Budget budget) async {
+    if (!budget.isActive) return budget.amount; // Inactive: nothing spent
     try {
       final spentAmount = await calculateSpentAmount(userId, budget);
       return budget.amount - spentAmount;
@@ -352,6 +354,7 @@ class BudgetService {
   /// Calculates the budget utilization percentage
   /// Returns a value between 0.0 and 1.0 (can exceed 1.0 if over budget)
   static Future<double> calculateUtilizationPercentage(String userId, Budget budget) async {
+    if (!budget.isActive) return 0.0; // Inactive: always 0%
     try {
       final spentAmount = await calculateSpentAmount(userId, budget);
       return spentAmount / budget.amount;

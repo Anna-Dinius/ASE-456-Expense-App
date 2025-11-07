@@ -13,9 +13,9 @@ import 'package:p5_expense/view/profile_summary.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
 import 'package:p5_expense/view/new_transaction.dart';
-import 'package:p5_expense/view/transaction_list.dart';
 import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/view/manage_categories.dart';
+import 'package:p5_expense/view/budgets_list.dart';
 import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
@@ -301,6 +301,16 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.category),
             onPressed: () => _showManageCategories(context),
+          ),
+          IconButton(
+            icon: Icon(Icons.account_balance_wallet),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BudgetsListScreen(categories: _categories),
+                ),
+              );
+            },
           ),
           IconButton(icon: Icon(Icons.savings), onPressed: () {
             Navigator.of(context).push(

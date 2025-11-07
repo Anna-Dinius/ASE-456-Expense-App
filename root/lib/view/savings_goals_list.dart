@@ -3,9 +3,10 @@ import 'package:p5_expense/model/savings_goal.dart';
 
 class SavingsGoalsList extends StatelessWidget {
   final List<SavingsGoal> savingsGoals;
-  final void Function(SavingsGoal goal)? onDelete;
-  final void Function(SavingsGoal goal)? onEdit;
-  final void Function(SavingsGoal goal)? onContribute;
+  final void Function(SavingsGoal)? onDelete;
+  final void Function(SavingsGoal)? onEdit;
+  final void Function(SavingsGoal)? onContribute;
+
   const SavingsGoalsList(
     this.savingsGoals, {
     super.key,
@@ -13,7 +14,6 @@ class SavingsGoalsList extends StatelessWidget {
     this.onEdit,
     this.onContribute,
   });
-  
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,13 @@ class SavingsGoalsList extends StatelessWidget {
       itemCount: savingsGoals.length,
       separatorBuilder: (_, __) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
-        final g = savingsGoals[index];
-        final isCompleted = g.completed || g.progress >= 1.0;
-        final percent = isCompleted ? 100 : (g.progress * 100).round();
+        final goal = savingsGoals[index];
+        final isCompleted = goal.completed || goal.progress >= 1.0;
+        final percent = isCompleted ? 100 : (goal.progress * 100).round();
         return Card(
           elevation: 1,
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -38,7 +38,7 @@ class SavingsGoalsList extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        g.title,
+                        goal.title,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -47,7 +47,7 @@ class SavingsGoalsList extends StatelessWidget {
                     ),
                     if (isCompleted)
                       const Padding(
-                        padding: EdgeInsets.only(right: 8.0),
+                        padding: EdgeInsets.only(right: 8),
                         child: Chip(
                           label: Text('Completed'),
                           visualDensity: VisualDensity.compact,
@@ -60,22 +60,22 @@ class SavingsGoalsList extends StatelessWidget {
                         const SizedBox(width: 8),
                         IconButton(
                           icon: const Icon(Icons.edit_outlined),
-                          tooltip: 'Edit goal',
-                          onPressed: (onEdit == null || isCompleted)
-                              ? null
-                              : () => onEdit!(g),
+                          tooltip: 'Edit',
+                          onPressed: (onEdit == null || isCompleted) 
+                              ? null 
+                              : () => onEdit!(goal),
                         ),
                         IconButton(
                           icon: const Icon(Icons.add_circle_outline),
                           tooltip: 'Contribute',
                           onPressed: (onContribute == null || isCompleted)
                               ? null
-                              : () => onContribute!(g),
+                              : () => onContribute!(goal),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_outline),
-                          tooltip: 'Delete goal',
-                          onPressed: onDelete == null ? null : () => onDelete!(g),
+                          tooltip: 'Delete',
+                          onPressed: onDelete == null ? null : () => onDelete!(goal),
                         ),
                       ],
                     ),
@@ -85,7 +85,7 @@ class SavingsGoalsList extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(4),
                   child: LinearProgressIndicator(
-                    value: g.progress,
+                    value: goal.progress,
                     minHeight: 8,
                     backgroundColor: Colors.grey.shade200,
                   ),
@@ -95,20 +95,20 @@ class SavingsGoalsList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${g.currentAmount.toStringAsFixed(2)} / \$${g.targetAmount.toStringAsFixed(2)}',
+                      '\$${goal.currentAmount.toStringAsFixed(2)} / \$${goal.targetAmount.toStringAsFixed(2)}',
                       style: const TextStyle(color: Colors.black54),
                     ),
-                    if (g.targetDate != null)
+                    if (goal.targetDate != null)
                       Text(
-                        '${g.targetDate!.year}-${g.targetDate!.month.toString().padLeft(2, '0')}-${g.targetDate!.day.toString().padLeft(2, '0')}',
+                        '${goal.targetDate!.year}-${goal.targetDate!.month.toString().padLeft(2, '0')}-${goal.targetDate!.day.toString().padLeft(2, '0')}',
                         style: const TextStyle(color: Colors.black54),
                       ),
                   ],
                 ),
-                if (g.description != null && g.description!.isNotEmpty) ...[
+                if (goal.description != null && goal.description!.isNotEmpty) ...[
                   const SizedBox(height: 6),
                   Text(
-                    g.description!,
+                    goal.description!,
                     style: const TextStyle(color: Colors.black87),
                   ),
                 ],
