@@ -97,9 +97,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 }
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: DropdownButton(
+            DropdownButton(
                       value: _selectedSortBy,
                       items: <String>['Date', 'Amount']
                           .map((String value) {
@@ -114,10 +112,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                           _filterTransactions();
                         });
                       }),
-            ),
-            Expanded(
-              flex: 1,
-              child: DropdownButton(
+            DropdownButton(
                       value: _selectedOrder,
                       items: <String>['Ascend', 'Descend']
                           .map((String value) {
@@ -132,7 +127,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                           _filterTransactions();
                         });
                       }),
-            ),
           ]
         ),
         Wrap(
