@@ -4,8 +4,14 @@ class ChartBar extends StatelessWidget {
   final String label;
   final double spendingAmount;
   final double spendingPctOfTotal;
+  final Color? barColor; // Optional custom color
 
-  ChartBar(this.label, this.spendingAmount, this.spendingPctOfTotal);
+  ChartBar(
+    this.label,
+    this.spendingAmount,
+    this.spendingPctOfTotal, {
+    this.barColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,7 @@ class ChartBar extends StatelessWidget {
                 heightFactor: spendingPctOfTotal,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: barColor ?? Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),

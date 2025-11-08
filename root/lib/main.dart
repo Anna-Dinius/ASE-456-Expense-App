@@ -16,6 +16,7 @@ import 'package:p5_expense/view/new_transaction.dart';
 import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/view/manage_categories.dart';
 import 'package:p5_expense/view/budgets_list.dart';
+import 'package:p5_expense/view/charts_overview.dart';
 import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
@@ -111,15 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // APIs
-  List<Transaction> get _recentTransactions {
-    return _userTransactions.where((tx) {
-      return tx.date.isAfter(
-        DateTime.now().subtract(
-          Duration(days: 7),
-        ),
-      );
-    }).toList();
-  }
+  // Note: _recentTransactions removed - Chart widget now uses AnalyticsService directly
 
   /// Adds a new transaction to the list
   /// This method is called when the user submits the "Add Transaction" form
@@ -312,6 +305,17 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
           ),
+          IconButton(
+            icon: Icon(Icons.bar_chart),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ChartsOverviewScreen(),
+                ),
+              );
+            },
+            tooltip: 'View Charts',
+          ),
           IconButton(icon: Icon(Icons.savings), onPressed: () {
             Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => (SavingsSummaryScreen())),
@@ -337,7 +341,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
+            Chart.withUserId(widget.userId),
             // NEW: Pass the categories list to the transaction list so it can display category info
             SearchBarWidget(transactions: _userTransactions, deleteTx: _deleteTransaction, categories: _categories),
           ],
