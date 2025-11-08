@@ -5,9 +5,30 @@ import 'package:p5_expense/service/savings_goal_service.dart';
 import 'package:p5_expense/view/new_savings_goal.dart';
 import 'package:p5_expense/view/edit_savings_goal.dart';
 import 'package:p5_expense/view/savings_goals_list.dart';
+import 'package:confetti/confetti.dart';
+import 'dart:math';
 
-class SavingsSummaryScreen extends StatelessWidget {
+class SavingsSummaryScreen extends StatefulWidget {
   const SavingsSummaryScreen({super.key});
+
+  @override
+  State<SavingsSummaryScreen> createState() => _SavingsSummaryScreenState();
+}
+
+class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +54,106 @@ class SavingsSummaryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _GoalsBody(),
+      body: Stack(
+        children: [
+          _GoalsBody(
+            onMilestoneReached: (goalTitle, milestone) {
+              // Only play confetti for 100% completion
+              if (milestone == 100) {
+                _confettiController.play();
+              }
+              _showMilestoneNotification(context, goalTitle, milestone);
+            },
+          ),
+          // Confetti widget overlay
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirection: pi / 2, // Downward from top
+              blastDirectionality: BlastDirectionality.explosive,
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              gravity: 0.3,
+              shouldLoop: false,
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple,
+                Colors.yellow,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Shows a celebratory notification when a milestone is reached
+  void _showMilestoneNotification(BuildContext context, String goalTitle, int milestone) {
+    String emoji;
+    String message;
+    Color backgroundColor;
+    
+    switch (milestone) {
+      case 50:
+        emoji = '🎯';
+        message = 'Halfway there! You\'ve reached 50% of "$goalTitle"!';
+        backgroundColor = Colors.blue;
+        break;
+      case 75:
+        emoji = '🌟';
+        message = 'Amazing progress! You\'ve reached 75% of "$goalTitle"!';
+        backgroundColor = Colors.orange;
+        break;
+      case 100:
+        emoji = '🎉';
+        message = 'Congratulations! You\'ve completed "$goalTitle"!';
+        backgroundColor = Colors.green;
+        break;
+      default:
+        return;
+    }
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Text(
+              emoji,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.all(16),
+      ),
     );
   }
 }
 
 class _GoalsBody extends StatelessWidget {
+  final Function(String goalTitle, int milestone) onMilestoneReached;
+
+  const _GoalsBody({required this.onMilestoneReached});
+
   @override
   Widget build(BuildContext context) {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
@@ -94,7 +209,7 @@ class _GoalsBody extends StatelessWidget {
                 
                 // Show milestone notifications for each newly reached milestone
                 for (final milestone in newMilestones) {
-                  _showMilestoneNotification(context, goal.title, milestone);
+                  onMilestoneReached(goal.title, milestone);
                   // Small delay between multiple milestone notifications
                   await Future.delayed(const Duration(milliseconds: 300));
                 }
@@ -200,63 +315,6 @@ Future<double?> _showContributeDialog(BuildContext context) async {
     return null;
   }
   return amount;
-}
-
-/// Shows a celebratory notification when a milestone is reached
-void _showMilestoneNotification(BuildContext context, String goalTitle, int milestone) {
-  String emoji;
-  String message;
-  Color backgroundColor;
-  
-  switch (milestone) {
-    case 50:
-      emoji = '🎯';
-      message = 'Halfway there! You\'ve reached 50% of "$goalTitle"!';
-      backgroundColor = Colors.blue;
-      break;
-    case 75:
-      emoji = '🌟';
-      message = 'Amazing progress! You\'ve reached 75% of "$goalTitle"!';
-      backgroundColor = Colors.orange;
-      break;
-    case 100:
-      emoji = '🎉';
-      message = 'Congratulations! You\'ve completed "$goalTitle"!';
-      backgroundColor = Colors.green;
-      break;
-    default:
-      return;
-  }
-  
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Row(
-        children: [
-          Text(
-            emoji,
-            style: const TextStyle(fontSize: 24),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              message,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        ],
-      ),
-      backgroundColor: backgroundColor,
-      duration: const Duration(seconds: 4),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      margin: const EdgeInsets.all(16),
-    ),
-  );
 }
 
 class _EmptyPlaceholder extends StatelessWidget {
