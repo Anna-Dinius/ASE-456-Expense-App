@@ -76,16 +76,35 @@ class _GoalsBody extends StatelessWidget {
 
                 final applied = amount > remaining ? remaining : amount;
                 final newCurrent = goal.currentAmount + applied;
-                final updated = goal.copyWith(
+                
+                // Create updated goal with new amount and completion status
+                var updated = goal.copyWith(
                   currentAmount: newCurrent,
                   completed: newCurrent >= goal.targetAmount && goal.targetAmount > 0,
                 );
                 
+                // Detect newly reached milestones
+                final newMilestones = updated.detectNewMilestones(goal);
+                
+                // Update milestone flags
+                updated = updated.updateMilestones();
+                
                 await SavingsGoalService.updateGoal(user.uid, updated);
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Added \$${applied.toStringAsFixed(2)} to "${goal.title}"')),
-                );
+                
+                // Show milestone notifications for each newly reached milestone
+                for (final milestone in newMilestones) {
+                  _showMilestoneNotification(context, goal.title, milestone);
+                  // Small delay between multiple milestone notifications
+                  await Future.delayed(const Duration(milliseconds: 300));
+                }
+                
+                // Show contribution success message (unless 100% milestone was reached)
+                if (!newMilestones.contains(100)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Added \$${applied.toStringAsFixed(2)} to "${goal.title}"')),
+                  );
+                }
               } catch (e) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -181,6 +200,63 @@ Future<double?> _showContributeDialog(BuildContext context) async {
     return null;
   }
   return amount;
+}
+
+/// Shows a celebratory notification when a milestone is reached
+void _showMilestoneNotification(BuildContext context, String goalTitle, int milestone) {
+  String emoji;
+  String message;
+  Color backgroundColor;
+  
+  switch (milestone) {
+    case 50:
+      emoji = '🎯';
+      message = 'Halfway there! You\'ve reached 50% of "$goalTitle"!';
+      backgroundColor = Colors.blue;
+      break;
+    case 75:
+      emoji = '🌟';
+      message = 'Amazing progress! You\'ve reached 75% of "$goalTitle"!';
+      backgroundColor = Colors.orange;
+      break;
+    case 100:
+      emoji = '🎉';
+      message = 'Congratulations! You\'ve completed "$goalTitle"!';
+      backgroundColor = Colors.green;
+      break;
+    default:
+      return;
+  }
+  
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Row(
+        children: [
+          Text(
+            emoji,
+            style: const TextStyle(fontSize: 24),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: backgroundColor,
+      duration: const Duration(seconds: 4),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      margin: const EdgeInsets.all(16),
+    ),
+  );
 }
 
 class _EmptyPlaceholder extends StatelessWidget {

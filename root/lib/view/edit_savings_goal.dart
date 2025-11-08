@@ -72,7 +72,8 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
     try {
       final targetAmount = double.parse(_targetAmountController.text.trim());
       final currentAmount = double.parse(_currentAmountController.text.trim());
-      final updated = widget.goal.copyWith(
+      
+      var updated = widget.goal.copyWith(
         title: _titleController.text.trim(),
         targetAmount: targetAmount,
         currentAmount: currentAmount,
@@ -82,6 +83,10 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
             : _descriptionController.text.trim(),
         completed: currentAmount >= targetAmount && targetAmount > 0,
       );
+      
+      // Update milestone flags based on new progress
+      updated = updated.updateMilestones();
+      
       await SavingsGoalService.updateGoal(user.uid, updated);
       if (!mounted) return;
       Navigator.of(context).pop(true);
