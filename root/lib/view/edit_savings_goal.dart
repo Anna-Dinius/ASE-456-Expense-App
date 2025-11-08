@@ -84,7 +84,6 @@ class _EditSavingsGoalScreenState extends State<EditSavingsGoalScreen> {
         completed: currentAmount >= targetAmount && targetAmount > 0,
       );
       
-      // Update milestone flags based on new progress
       updated = updated.updateMilestones();
       
       await SavingsGoalService.updateGoal(user.uid, updated);

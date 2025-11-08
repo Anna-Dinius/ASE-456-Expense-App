@@ -8,8 +8,6 @@ class SavingsGoal {
   final DateTime? targetDate;
   final String? description;
   final bool completed;
-  
-  // Milestone tracking - tracks which milestones have been reached
   final bool milestone50Reached;
   final bool milestone75Reached;
   final bool milestone100Reached;
@@ -33,22 +31,17 @@ class SavingsGoal {
     return p.clamp(0.0, 1.0);
   }
 
-  /// Detects which new milestones have been reached
-  /// Returns a list of milestone percentages that were newly achieved
   List<int> detectNewMilestones(SavingsGoal oldGoal) {
     final newMilestones = <int>[];
     
-    // Check 50% milestone
     if (!oldGoal.milestone50Reached && progress >= 0.5) {
       newMilestones.add(50);
     }
     
-    // Check 75% milestone
     if (!oldGoal.milestone75Reached && progress >= 0.75) {
       newMilestones.add(75);
     }
     
-    // Check 100% milestone
     if (!oldGoal.milestone100Reached && progress >= 1.0) {
       newMilestones.add(100);
     }
@@ -56,7 +49,6 @@ class SavingsGoal {
     return newMilestones;
   }
 
-  /// Updates milestone flags based on current progress
   SavingsGoal updateMilestones() {
     return copyWith(
       milestone50Reached: milestone50Reached || progress >= 0.5,

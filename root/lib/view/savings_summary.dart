@@ -8,6 +8,12 @@ import 'package:p5_expense/view/savings_goals_list.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
 
+enum GoalFilter {
+  all,
+  active,
+  completed,
+}
+
 class SavingsSummaryScreen extends StatefulWidget {
   const SavingsSummaryScreen({super.key});
 
@@ -17,6 +23,7 @@ class SavingsSummaryScreen extends StatefulWidget {
 
 class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
   late ConfettiController _confettiController;
+  GoalFilter _currentFilter = GoalFilter.active;
 
   @override
   void initState() {
@@ -56,21 +63,63 @@ class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
       ),
       body: Stack(
         children: [
-          _GoalsBody(
-            onMilestoneReached: (goalTitle, milestone) {
-              // Only play confetti for 100% completion
-              if (milestone == 100) {
-                _confettiController.play();
-              }
-              _showMilestoneNotification(context, goalTitle, milestone);
-            },
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FilterChip(
+                      label: const Text('Active'),
+                      selected: _currentFilter == GoalFilter.active,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.active);
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    FilterChip(
+                      label: const Text('Completed'),
+                      selected: _currentFilter == GoalFilter.completed,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.completed);
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    FilterChip(
+                      label: const Text('All'),
+                      selected: _currentFilter == GoalFilter.all,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.all);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: _GoalsBody(
+                  filter: _currentFilter,
+                  onMilestoneReached: (goalTitle, milestone) {
+                    if (milestone == 100) {
+                      _confettiController.play();
+                    }
+                    _showMilestoneNotification(context, goalTitle, milestone);
+                  },
+                ),
+              ),
+            ],
           ),
-          // Confetti widget overlay
           Align(
             alignment: Alignment.topCenter,
             child: ConfettiWidget(
               confettiController: _confettiController,
-              blastDirection: pi / 2, // Downward from top
+              blastDirection: pi / 2,
               blastDirectionality: BlastDirectionality.explosive,
               emissionFrequency: 0.05,
               numberOfParticles: 20,
@@ -91,7 +140,6 @@ class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
     );
   }
 
-  /// Shows a celebratory notification when a milestone is reached
   void _showMilestoneNotification(BuildContext context, String goalTitle, int milestone) {
     String emoji;
     String message;
@@ -150,9 +198,13 @@ class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
 }
 
 class _GoalsBody extends StatelessWidget {
+  final GoalFilter filter;
   final Function(String goalTitle, int milestone) onMilestoneReached;
 
-  const _GoalsBody({required this.onMilestoneReached});
+  const _GoalsBody({
+    required this.filter,
+    required this.onMilestoneReached,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -168,8 +220,23 @@ class _GoalsBody extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
-        final goals = snapshot.data ?? [];
-        if (goals.isEmpty) return _EmptyPlaceholder();
+        final allGoals = snapshot.data ?? [];
+        
+        final goals = allGoals.where((goal) {
+          final isCompleted = goal.completed || goal.progress >= 1.0;
+          switch (filter) {
+            case GoalFilter.active:
+              return !isCompleted;
+            case GoalFilter.completed:
+              return isCompleted;
+            case GoalFilter.all:
+              return true;
+          }
+        }).toList();
+        
+        if (goals.isEmpty) {
+          return _EmptyFilterPlaceholder(filter: filter);
+        }
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -192,29 +259,23 @@ class _GoalsBody extends StatelessWidget {
                 final applied = amount > remaining ? remaining : amount;
                 final newCurrent = goal.currentAmount + applied;
                 
-                // Create updated goal with new amount and completion status
                 var updated = goal.copyWith(
                   currentAmount: newCurrent,
                   completed: newCurrent >= goal.targetAmount && goal.targetAmount > 0,
                 );
                 
-                // Detect newly reached milestones
                 final newMilestones = updated.detectNewMilestones(goal);
                 
-                // Update milestone flags
                 updated = updated.updateMilestones();
                 
                 await SavingsGoalService.updateGoal(user.uid, updated);
                 if (!context.mounted) return;
                 
-                // Show milestone notifications for each newly reached milestone
                 for (final milestone in newMilestones) {
                   onMilestoneReached(goal.title, milestone);
-                  // Small delay between multiple milestone notifications
                   await Future.delayed(const Duration(milliseconds: 300));
                 }
                 
-                // Show contribution success message (unless 100% milestone was reached)
                 if (!newMilestones.contains(100)) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Added \$${applied.toStringAsFixed(2)} to "${goal.title}"')),
@@ -341,6 +402,50 @@ class _EmptyPlaceholder extends StatelessWidget {
               'Create a goal to start tracking your savings.',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyFilterPlaceholder extends StatelessWidget {
+  final GoalFilter filter;
+
+  const _EmptyFilterPlaceholder({required this.filter});
+
+  @override
+  Widget build(BuildContext context) {
+    String message;
+    switch (filter) {
+      case GoalFilter.active:
+        message = 'No active goals.\nAll goals are completed!';
+        break;
+      case GoalFilter.completed:
+        message = 'No completed goals yet.\nKeep saving to reach your goals!';
+        break;
+      case GoalFilter.all:
+        message = 'No savings goals yet.\nCreate a goal to start tracking your savings.';
+        break;
+    }
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.savings_outlined,
+              size: 64,
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),
           ],
         ),
