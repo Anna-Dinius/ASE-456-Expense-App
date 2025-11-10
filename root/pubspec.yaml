@@ -19,6 +19,16 @@ dependencies:
   firebase_auth: ^6.1.1
   # Confetti animation for milestone celebrations
   confetti: ^0.7.0
+  # PDF generation for report exports
+  pdf: ^3.11.1
+  # File system access for saving files
+  path_provider: ^2.1.4
+  # Share functionality for exporting files
+  share_plus: ^10.1.2
+  # Printing for PDF preview
+  printing: ^5.13.3
+  # Web file downloads
+  universal_html: ^2.2.4
 
 dev_dependencies:
   flutter_test:
