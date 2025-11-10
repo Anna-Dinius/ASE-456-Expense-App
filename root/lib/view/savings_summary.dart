@@ -5,9 +5,37 @@ import 'package:p5_expense/service/savings_goal_service.dart';
 import 'package:p5_expense/view/new_savings_goal.dart';
 import 'package:p5_expense/view/edit_savings_goal.dart';
 import 'package:p5_expense/view/savings_goals_list.dart';
+import 'package:confetti/confetti.dart';
+import 'dart:math';
 
-class SavingsSummaryScreen extends StatelessWidget {
+enum GoalFilter {
+  all,
+  active,
+  completed,
+}
+
+class SavingsSummaryScreen extends StatefulWidget {
   const SavingsSummaryScreen({super.key});
+
+  @override
+  State<SavingsSummaryScreen> createState() => _SavingsSummaryScreenState();
+}
+
+class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
+  late ConfettiController _confettiController;
+  GoalFilter _currentFilter = GoalFilter.active;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: const Duration(seconds: 3));
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +61,151 @@ class SavingsSummaryScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: _GoalsBody(),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FilterChip(
+                      label: const Text('Active'),
+                      selected: _currentFilter == GoalFilter.active,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.active);
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    FilterChip(
+                      label: const Text('Completed'),
+                      selected: _currentFilter == GoalFilter.completed,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.completed);
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    FilterChip(
+                      label: const Text('All'),
+                      selected: _currentFilter == GoalFilter.all,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() => _currentFilter = GoalFilter.all);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: _GoalsBody(
+                  filter: _currentFilter,
+                  onMilestoneReached: (goalTitle, milestone) {
+                    if (milestone == 100) {
+                      _confettiController.play();
+                    }
+                    _showMilestoneNotification(context, goalTitle, milestone);
+                  },
+                ),
+              ),
+            ],
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: ConfettiWidget(
+              confettiController: _confettiController,
+              blastDirection: pi / 2,
+              blastDirectionality: BlastDirectionality.explosive,
+              emissionFrequency: 0.05,
+              numberOfParticles: 20,
+              gravity: 0.3,
+              shouldLoop: false,
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple,
+                Colors.yellow,
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showMilestoneNotification(BuildContext context, String goalTitle, int milestone) {
+    String emoji;
+    String message;
+    Color backgroundColor;
+    
+    switch (milestone) {
+      case 50:
+        emoji = '🎯';
+        message = 'Halfway there! You\'ve reached 50% of "$goalTitle"!';
+        backgroundColor = Colors.blue;
+        break;
+      case 75:
+        emoji = '🌟';
+        message = 'Amazing progress! You\'ve reached 75% of "$goalTitle"!';
+        backgroundColor = Colors.orange;
+        break;
+      case 100:
+        emoji = '🎉';
+        message = 'Congratulations! You\'ve completed "$goalTitle"!';
+        backgroundColor = Colors.green;
+        break;
+      default:
+        return;
+    }
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Text(
+              emoji,
+              style: const TextStyle(fontSize: 24),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: backgroundColor,
+        duration: const Duration(seconds: 4),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.all(16),
+      ),
     );
   }
 }
 
 class _GoalsBody extends StatelessWidget {
+  final GoalFilter filter;
+  final Function(String goalTitle, int milestone) onMilestoneReached;
+
+  const _GoalsBody({
+    required this.filter,
+    required this.onMilestoneReached,
+  });
+
   @override
   Widget build(BuildContext context) {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
@@ -53,8 +220,23 @@ class _GoalsBody extends StatelessWidget {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
-        final goals = snapshot.data ?? [];
-        if (goals.isEmpty) return _EmptyPlaceholder();
+        final allGoals = snapshot.data ?? [];
+        
+        final goals = allGoals.where((goal) {
+          final isCompleted = goal.completed || goal.progress >= 1.0;
+          switch (filter) {
+            case GoalFilter.active:
+              return !isCompleted;
+            case GoalFilter.completed:
+              return isCompleted;
+            case GoalFilter.all:
+              return true;
+          }
+        }).toList();
+        
+        if (goals.isEmpty) {
+          return _EmptyFilterPlaceholder(filter: filter);
+        }
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -76,16 +258,29 @@ class _GoalsBody extends StatelessWidget {
 
                 final applied = amount > remaining ? remaining : amount;
                 final newCurrent = goal.currentAmount + applied;
-                final updated = goal.copyWith(
+                
+                var updated = goal.copyWith(
                   currentAmount: newCurrent,
                   completed: newCurrent >= goal.targetAmount && goal.targetAmount > 0,
                 );
                 
+                final newMilestones = updated.detectNewMilestones(goal);
+                
+                updated = updated.updateMilestones();
+                
                 await SavingsGoalService.updateGoal(user.uid, updated);
                 if (!context.mounted) return;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Added \$${applied.toStringAsFixed(2)} to "${goal.title}"')),
-                );
+                
+                for (final milestone in newMilestones) {
+                  onMilestoneReached(goal.title, milestone);
+                  await Future.delayed(const Duration(milliseconds: 300));
+                }
+                
+                if (!newMilestones.contains(100)) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Added \$${applied.toStringAsFixed(2)} to "${goal.title}"')),
+                  );
+                }
               } catch (e) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -207,6 +402,50 @@ class _EmptyPlaceholder extends StatelessWidget {
               'Create a goal to start tracking your savings.',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyFilterPlaceholder extends StatelessWidget {
+  final GoalFilter filter;
+
+  const _EmptyFilterPlaceholder({required this.filter});
+
+  @override
+  Widget build(BuildContext context) {
+    String message;
+    switch (filter) {
+      case GoalFilter.active:
+        message = 'No active goals.\nAll goals are completed!';
+        break;
+      case GoalFilter.completed:
+        message = 'No completed goals yet.\nKeep saving to reach your goals!';
+        break;
+      case GoalFilter.all:
+        message = 'No savings goals yet.\nCreate a goal to start tracking your savings.';
+        break;
+    }
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.savings_outlined,
+              size: 64,
+              color: Theme.of(context).primaryColor,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),
           ],
         ),
