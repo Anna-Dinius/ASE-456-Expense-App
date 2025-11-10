@@ -4,16 +4,26 @@
 import os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-paths = [os.path.join(ROOT, 'root/lib'), os.path.join(ROOT, 'root/test')]
+LIB_PATH = os.path.join(ROOT, 'root/lib')
+TEST_PATH = os.path.join(ROOT, 'root/test')
+paths = [LIB_PATH, TEST_PATH]
+
 files = []
+test_file_count = 0
+
 for p in paths:
     for dirpath, dirnames, filenames in os.walk(p):
         for f in filenames:
             if f.endswith('.dart'):
-                files.append(os.path.join(dirpath, f))
+                full_path = os.path.join(dirpath, f)
+                files.append(full_path)
+                if full_path.startswith(TEST_PATH):
+                    test_file_count += 1
 
 counts = {}
 total = 0
+test_total = 0
+
 for fp in sorted(files):
     with open(fp, 'r', encoding='utf-8') as fh:
         lines = fh.readlines()
@@ -27,9 +37,13 @@ for fp in sorted(files):
         count += 1
     counts[fp] = count
     total += count
+    if fp.startswith(TEST_PATH):
+        test_total += count
 
 print('Files scanned:')
 for fp in sorted(counts.keys()):
     rel = os.path.relpath(fp, ROOT)
     print(f"- `{rel}`: {counts[fp]}")
-print(f"Total: {total}")
+print(f"\nTotal LOC: {total}")
+print(f"Total LOC in tests: {test_total}")
+print(f"Total test files: {test_file_count}")
