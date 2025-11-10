@@ -27,6 +27,13 @@ title: Pocket Protectors Week 8 Progress Report
 
 ---
 
+<div style="display: flex; gap: 10px;">
+  <img src="./screenshots/expense-charts-7-days.png" width="350px" />
+  <img src="./screenshots/expense-charts-30-days.png" width="350px" />
+</div>
+
+---
+
 ## Milestones Completed - Cody
 
 ✅ Added celebration notifications on screen when user reaches (50%, 75%, and 100%)
@@ -37,6 +44,10 @@ title: Pocket Protectors Week 8 Progress Report
 
 ---
 
+![height:600px](./screenshots/savings-goals-filter.png)
+
+---
+
 ## Milestones Completed - Dillon
 
 ✅ Finished Sort feature
@@ -44,6 +55,10 @@ title: Pocket Protectors Week 8 Progress Report
 ✅ Created tests
 
 - _Fulfills 6 requirements_
+
+---
+
+![height:600px](./screenshots/filters-and-search.png)
 
 ---
 
