@@ -81,21 +81,23 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         Row(
           children: [
             Expanded(
-              flex: 10,
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  labelText: 'Search transactions',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: EdgeInsetsGeometry.all(5),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    labelText: 'Search transactions',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
+                    onChanged: (input) { 
+                      _query = input;
+                      _filterTransactions();
+                    }
                 ),
-                onChanged: (input) { 
-                  _query = input;
-                  _filterTransactions();
-                }
-              ),
+              ) 
             ),
             DropdownButton(
                       value: _selectedSortBy,
@@ -131,6 +133,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
         ),
         Wrap(
           spacing: 5,
+          runSpacing: 5,
           children: widget.categories.map((cat) {
             return ChoiceChip(
               label: Text(cat.title),
