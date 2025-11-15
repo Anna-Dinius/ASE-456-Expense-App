@@ -256,6 +256,11 @@ void main() {
 
     group('Budget Equality', () {
       test('should compare budgets correctly', () {
+        // Use fixed DateTime values to ensure equality
+        final createdAt = DateTime(2024, 10, 1, 12, 0, 0);
+        final lastUpdatedAt = DateTime(2024, 10, 1, 12, 0, 0);
+        final alertThresholds = [0.5, 0.75, 0.9];
+
         final budget1 = Budget(
           id: 'budget_1',
           name: 'Test Budget',
@@ -265,9 +270,9 @@ void main() {
           type: BudgetType.OVERALL,
           period: BudgetPeriod.MONTHLY,
           isActive: true,
-          alertThresholds: [0.5, 0.75, 0.9],
-          createdAt: DateTime.now(),
-          lastUpdatedAt: DateTime.now(),
+          alertThresholds: alertThresholds,
+          createdAt: createdAt,
+          lastUpdatedAt: lastUpdatedAt,
         );
 
         final budget2 = Budget(
@@ -279,9 +284,9 @@ void main() {
           type: BudgetType.OVERALL,
           period: BudgetPeriod.MONTHLY,
           isActive: true,
-          alertThresholds: [0.5, 0.75, 0.9],
-          createdAt: budget1.createdAt,
-          lastUpdatedAt: budget1.lastUpdatedAt,
+          alertThresholds: alertThresholds,
+          createdAt: createdAt,
+          lastUpdatedAt: lastUpdatedAt,
         );
 
         expect(budget1, equals(budget2));

@@ -328,5 +328,142 @@ void main() {
         expect(goal, equals(goal));
       });
     });
+
+    group('milestone detection', () {
+      test('detectNewMilestones finds 50% milestone', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 400,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 500,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(50));
+        expect(milestones.length, 1);
+      });
+
+      test('detectNewMilestones finds 75% milestone', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 700,
+          milestone50Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 750,
+          milestone50Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(75));
+        expect(milestones.length, 1);
+      });
+
+      test('detectNewMilestones finds 100% milestone', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 950,
+          milestone50Reached: true,
+          milestone75Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 1000,
+          milestone50Reached: true,
+          milestone75Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(100));
+        expect(milestones.length, 1);
+      });
+
+      test('detectNewMilestones finds multiple milestones at once', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 0,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 1000,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, containsAll([50, 75, 100]));
+        expect(milestones.length, 3);
+      });
+
+      test('detectNewMilestones ignores already reached milestones', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 600,
+          milestone50Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 800,
+          milestone50Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(75));
+        expect(milestones, isNot(contains(50)));
+      });
+
+      test('updateMilestones sets flags correctly', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 800,
+        );
+
+        final updated = goal.updateMilestones();
+        expect(updated.milestone50Reached, true);
+        expect(updated.milestone75Reached, true);
+        expect(updated.milestone100Reached, false);
+      });
+
+      test('updateMilestones preserves already reached milestones', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 400,
+          milestone50Reached: true,
+        );
+
+        final updated = goal.updateMilestones();
+        expect(updated.milestone50Reached, true);
+      });
+    });
   });
 }

@@ -8,6 +8,9 @@ class SavingsGoal {
   final DateTime? targetDate;
   final String? description;
   final bool completed;
+  final bool milestone50Reached;
+  final bool milestone75Reached;
+  final bool milestone100Reached;
 
   const SavingsGoal({
     required this.id,
@@ -17,12 +20,41 @@ class SavingsGoal {
     this.targetDate,
     this.description,
     this.completed = false,
+    this.milestone50Reached = false,
+    this.milestone75Reached = false,
+    this.milestone100Reached = false,
   });
 
   double get progress {
     if (targetAmount <= 0) return 0.0;
     final p = currentAmount / targetAmount;
     return p.clamp(0.0, 1.0);
+  }
+
+  List<int> detectNewMilestones(SavingsGoal oldGoal) {
+    final newMilestones = <int>[];
+    
+    if (!oldGoal.milestone50Reached && progress >= 0.5) {
+      newMilestones.add(50);
+    }
+    
+    if (!oldGoal.milestone75Reached && progress >= 0.75) {
+      newMilestones.add(75);
+    }
+    
+    if (!oldGoal.milestone100Reached && progress >= 1.0) {
+      newMilestones.add(100);
+    }
+    
+    return newMilestones;
+  }
+
+  SavingsGoal updateMilestones() {
+    return copyWith(
+      milestone50Reached: milestone50Reached || progress >= 0.5,
+      milestone75Reached: milestone75Reached || progress >= 0.75,
+      milestone100Reached: milestone100Reached || progress >= 1.0,
+    );
   }
 
   SavingsGoal copyWith({
@@ -33,6 +65,9 @@ class SavingsGoal {
     DateTime? targetDate,
     String? description,
     bool? completed,
+    bool? milestone50Reached,
+    bool? milestone75Reached,
+    bool? milestone100Reached,
   }) {
     return SavingsGoal(
       id: id ?? this.id,
@@ -42,6 +77,9 @@ class SavingsGoal {
       targetDate: targetDate ?? this.targetDate,
       description: description ?? this.description,
       completed: completed ?? this.completed,
+      milestone50Reached: milestone50Reached ?? this.milestone50Reached,
+      milestone75Reached: milestone75Reached ?? this.milestone75Reached,
+      milestone100Reached: milestone100Reached ?? this.milestone100Reached,
     );
   }
 
@@ -56,6 +94,9 @@ class SavingsGoal {
           : data['targetDate'] as DateTime?,
       description: data['description'] as String?,
       completed: (data['completed'] as bool?) ?? false,
+      milestone50Reached: (data['milestone50Reached'] as bool?) ?? false,
+      milestone75Reached: (data['milestone75Reached'] as bool?) ?? false,
+      milestone100Reached: (data['milestone100Reached'] as bool?) ?? false,
     );
   }
 
@@ -67,6 +108,9 @@ class SavingsGoal {
       'targetDate': targetDate,
       'description': description,
       'completed': completed,
+      'milestone50Reached': milestone50Reached,
+      'milestone75Reached': milestone75Reached,
+      'milestone100Reached': milestone100Reached,
     };
   }
 
@@ -80,7 +124,10 @@ class SavingsGoal {
         other.currentAmount == currentAmount &&
         other.targetDate == targetDate &&
         other.description == description &&
-        other.completed == completed;
+        other.completed == completed &&
+        other.milestone50Reached == milestone50Reached &&
+        other.milestone75Reached == milestone75Reached &&
+        other.milestone100Reached == milestone100Reached;
   }
 
   @override
@@ -91,5 +138,8 @@ class SavingsGoal {
       currentAmount.hashCode ^
       targetDate.hashCode ^
       (description?.hashCode ?? 0) ^
-      completed.hashCode;
+      completed.hashCode ^
+      milestone50Reached.hashCode ^
+      milestone75Reached.hashCode ^
+      milestone100Reached.hashCode;
 }
