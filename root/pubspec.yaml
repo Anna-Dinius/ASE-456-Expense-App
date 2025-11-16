@@ -19,6 +19,8 @@ dependencies:
   firebase_auth: ^6.1.1
   # Confetti animation for milestone celebrations
   confetti: ^0.7.0
+  # Charts for savings dashboard visualization
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

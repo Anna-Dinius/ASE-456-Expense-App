@@ -297,11 +297,14 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.category),
             onPressed: () => _showManageCategories(context),
           ),
-          IconButton(icon: Icon(Icons.savings), onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => (SavingsSummaryScreen())),
+          IconButton(
+            icon: Icon(Icons.savings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => SavingsSummaryScreen()),
               );
-          }),
+            },
+          ),
           // Open Profile summary (with debug copy button) for current user
           IconButton(
             icon: Icon(Icons.person),
