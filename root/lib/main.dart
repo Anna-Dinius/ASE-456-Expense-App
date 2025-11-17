@@ -17,6 +17,7 @@ import 'package:p5_expense/view/chart.dart';
 import 'package:p5_expense/view/manage_categories.dart';
 import 'package:p5_expense/view/budgets_list.dart';
 import 'package:p5_expense/view/charts_overview.dart';
+import 'package:p5_expense/view/report_list.dart';
 import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
 import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
@@ -315,6 +316,17 @@ class _MyHomePageState extends State<MyHomePage> {
               );
             },
             tooltip: 'View Charts',
+          ),
+          IconButton(
+            icon: Icon(Icons.assessment),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ReportsListScreen(),
+                ),
+              );
+            },
+            tooltip: 'View Reports',
           ),
           IconButton(icon: Icon(Icons.savings), onPressed: () {
             Navigator.of(context).push(
