@@ -130,38 +130,38 @@ void main() {
     expect(find.text('Pizza'), findsNothing);
   });
 
-testWidgets('sorts transactions by amount descending', (WidgetTester tester) async {
-  await tester.pumpWidget(createWidgetUnderTest());
+  testWidgets('sorts transactions by amount descending', (WidgetTester tester) async {
+    await tester.pumpWidget(createWidgetUnderTest());
 
-  // Find all DropdownButtons in the widget tree
-  final dropdowns = find.byType(DropdownButton<String>);
+    // Find all DropdownButtons in the widget tree
+    final dropdowns = find.byType(DropdownButton<String>);
 
-  // The widget defines:
-  //   - first DropdownButton: Sort By ('Date' / 'Amount')
-  //   - second DropdownButton: Order ('Ascend' / 'Descend')
+    // The widget defines:
+    //   - first DropdownButton: Sort By ('Date' / 'Amount')
+    //   - second DropdownButton: Order ('Ascend' / 'Descend')
 
-  // Select the first dropdown (Sort By)
-  final sortByDropdown = dropdowns.at(0);
-  await tester.tap(sortByDropdown);
-  await tester.pumpAndSettle();
+    // Select the first dropdown (Sort By)
+    final sortByDropdown = dropdowns.at(0);
+    await tester.tap(sortByDropdown);
+    await tester.pumpAndSettle();
 
-  // Select the "Amount" item from the opened menu
-  await tester.tap(find.text('Amount').last);
-  await tester.pumpAndSettle();
+    // Select the "Amount" item from the opened menu
+    await tester.tap(find.text('Amount').last);
+    await tester.pumpAndSettle();
 
-  // Now select the second dropdown (Order)
-  final orderDropdown = dropdowns.at(1);
-  await tester.tap(orderDropdown);
-  await tester.pumpAndSettle();
+    // Now select the second dropdown (Order)
+    final orderDropdown = dropdowns.at(1);
+    await tester.tap(orderDropdown);
+    await tester.pumpAndSettle();
 
-  // Select the "Descend" item from the opened menu
-  await tester.tap(find.text('Descend').last);
-  await tester.pumpAndSettle();
+    // Select the "Descend" item from the opened menu
+    await tester.tap(find.text('Descend').last);
+    await tester.pumpAndSettle();
 
-  // Verify sorting order: "Pizza" (15.0) should appear before "Burger" (10.0)
-  final listTiles = tester.widgetList<ListTile>(find.byType(ListTile)).toList();
-  expect((listTiles.first.title as Text).data, equals('Pizza'));
-});
+    // Verify sorting order: "Pizza" (15.0) should appear before "Burger" (10.0)
+    final listTiles = tester.widgetList<ListTile>(find.byType(ListTile)).toList();
+    expect((listTiles.first.title as Text).data, equals('Pizza'));
+  });
 
 
   testWidgets('updates transactions when parent widget changes', (WidgetTester tester) async {
@@ -195,5 +195,46 @@ testWidgets('sorts transactions by amount descending', (WidgetTester tester) asy
 
     expect(find.text('New Expense'), findsOneWidget);
     expect(find.text('Burger'), findsNothing);
+  });
+  testWidgets('filters by category then sorts by amount descending', (WidgetTester tester) async {
+    await tester.pumpWidget(createWidgetUnderTest());
+
+    // --------- SELECT CATEGORY "Food" ----------
+    final chips = find.byType(ChoiceChip);
+
+    final foodChip = tester.widgetList<ChoiceChip>(chips).firstWhere(
+      (chip) => (chip.label as Text).data == 'Food',
+    );
+
+    final foodFinder = find.byWidget(foodChip);
+
+    await tester.tap(foodFinder);
+    await tester.pumpAndSettle();
+
+    // Only Burger (10) and Pizza (15) remain
+    expect(find.text('Bus Ticket'), findsNothing);
+
+    // --------- SORT BY "Amount" ----------
+    final dropdowns = find.byType(DropdownButton<String>);
+
+    // Dropdown 0 = Sort By
+    await tester.tap(dropdowns.at(0));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Amount').last);
+    await tester.pumpAndSettle();
+
+    // --------- SORT ORDER = Descend ----------
+    await tester.tap(dropdowns.at(1));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Descend').last);
+    await tester.pumpAndSettle();
+
+    // Order inside Food should now be Pizza (15) before Burger (10)
+    final tiles = tester.widgetList<ListTile>(find.byType(ListTile)).toList();
+    final firstTitle = (tiles.first.title as Text).data;
+
+    expect(firstTitle, equals('Pizza'));
   });
 }
