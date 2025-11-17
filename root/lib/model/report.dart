@@ -162,8 +162,8 @@ class Report {
   Map<String, dynamic> toMap() {
     return {
       'period': period,
-      'startDate': startDate,
-      'endDate': endDate,
+      'startDate': Timestamp.fromDate(startDate),
+      'endDate': Timestamp.fromDate(endDate),
       'totalSpent': totalSpent,
       'averageDailySpending': averageDailySpending,
       'averageWeeklySpending': averageWeeklySpending,
@@ -172,8 +172,8 @@ class Report {
       'recurringTransactionImpact': recurringTransactionImpact.toMap(),
       'categoryBreakdown': categoryBreakdown,
       'transactionCount': transactionCount,
-      'generatedAt': generatedAt,
-      'lastUpdatedAt': lastUpdatedAt,
+      'generatedAt': Timestamp.fromDate(generatedAt),
+      'lastUpdatedAt': Timestamp.fromDate(lastUpdatedAt),
     };
   }
 
@@ -224,9 +224,9 @@ class Report {
     return 'Report(id: $id, period: $period, totalSpent: $totalSpent, transactionCount: $transactionCount)';
   }
 
-  /// Calculates the number of days in this report period
+  /// Calculates the number of days in this report period (inclusive)
   int get daysInPeriod {
-    return endDate.difference(startDate).inDays;
+    return endDate.difference(startDate).inDays + 1;
   }
 
   /// Calculates the number of weeks in this report period
@@ -234,9 +234,9 @@ class Report {
     return (daysInPeriod / 7).ceil();
   }
 
-  /// Calculates the number of months in this report period
+  /// Calculates the number of months in this report period (inclusive)
   int get monthsInPeriod {
-    return ((endDate.year - startDate.year) * 12) + (endDate.month - startDate.month);
+    return ((endDate.year - startDate.year) * 12) + (endDate.month - startDate.month) + 1;
   }
 }
 

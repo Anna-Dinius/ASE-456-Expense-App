@@ -368,66 +368,64 @@ void main() {
 
     group('Report Equality', () {
       test('should correctly compare two reports for equality', () {
+        // Use shared constants to ensure exact same values
+        final startDate = DateTime(2024, 11, 1);
+        final endDate = DateTime(2024, 11, 7);
+        final generatedAt = DateTime(2024, 11, 8, 10, 0);
+        final lastUpdatedAt = DateTime(2024, 11, 8, 10, 0);
+        final emptyMap = <String, double>{};
+        final emptyCategoryPerf = <String, double>{};
+        final emptyRecurringByCat = <String, double>{};
+        final emptyList = <String>[];
+        final budgetPerf = BudgetPerformance(
+          totalBudgetAmount: 1000.0,
+          totalSpentAgainstBudgets: 500.0,
+          utilizationPercentage: 0.5,
+          exceededBudgets: 0,
+          metBudgets: 0,
+          underUtilizedBudgets: 1,
+          categoryPerformance: emptyCategoryPerf,
+        );
+        final recurringImpact = RecurringTransactionImpact(
+          totalRecurringAmount: 200.0,
+          recurringTransactionCount: 5,
+          recurringPercentage: 0.4,
+          recurringByCategory: emptyRecurringByCat,
+          contributingRecurringIds: emptyList,
+        );
+
         final report1 = Report(
           id: 'test_report_1',
           period: 'Test Report',
-          startDate: DateTime(2024, 11, 1),
-          endDate: DateTime(2024, 11, 7),
+          startDate: startDate,
+          endDate: endDate,
           totalSpent: 500.0,
           averageDailySpending: 71.43,
           averageWeeklySpending: 500.0,
           averageMonthlySpending: 2142.86,
-          budgetPerformance: BudgetPerformance(
-            totalBudgetAmount: 1000.0,
-            totalSpentAgainstBudgets: 500.0,
-            utilizationPercentage: 0.5,
-            exceededBudgets: 0,
-            metBudgets: 0,
-            underUtilizedBudgets: 1,
-            categoryPerformance: {},
-          ),
-          recurringTransactionImpact: RecurringTransactionImpact(
-            totalRecurringAmount: 200.0,
-            recurringTransactionCount: 5,
-            recurringPercentage: 0.4,
-            recurringByCategory: {},
-            contributingRecurringIds: [],
-          ),
-          categoryBreakdown: {},
+          budgetPerformance: budgetPerf,
+          recurringTransactionImpact: recurringImpact,
+          categoryBreakdown: emptyMap,
           transactionCount: 10,
-          generatedAt: DateTime(2024, 11, 8, 10, 0),
-          lastUpdatedAt: DateTime(2024, 11, 8, 10, 0),
+          generatedAt: generatedAt,
+          lastUpdatedAt: lastUpdatedAt,
         );
 
         final report2 = Report(
           id: 'test_report_1',
           period: 'Test Report',
-          startDate: DateTime(2024, 11, 1),
-          endDate: DateTime(2024, 11, 7),
+          startDate: startDate,
+          endDate: endDate,
           totalSpent: 500.0,
           averageDailySpending: 71.43,
           averageWeeklySpending: 500.0,
           averageMonthlySpending: 2142.86,
-          budgetPerformance: BudgetPerformance(
-            totalBudgetAmount: 1000.0,
-            totalSpentAgainstBudgets: 500.0,
-            utilizationPercentage: 0.5,
-            exceededBudgets: 0,
-            metBudgets: 0,
-            underUtilizedBudgets: 1,
-            categoryPerformance: {},
-          ),
-          recurringTransactionImpact: RecurringTransactionImpact(
-            totalRecurringAmount: 200.0,
-            recurringTransactionCount: 5,
-            recurringPercentage: 0.4,
-            recurringByCategory: {},
-            contributingRecurringIds: [],
-          ),
-          categoryBreakdown: {},
+          budgetPerformance: budgetPerf,
+          recurringTransactionImpact: recurringImpact,
+          categoryBreakdown: emptyMap,
           transactionCount: 10,
-          generatedAt: DateTime(2024, 11, 8, 10, 0),
-          lastUpdatedAt: DateTime(2024, 11, 8, 10, 0),
+          generatedAt: generatedAt,
+          lastUpdatedAt: lastUpdatedAt,
         );
 
         expect(report1, equals(report2));
