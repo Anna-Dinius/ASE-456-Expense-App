@@ -87,6 +87,14 @@ Tests (cont.):
 
 ---
 
+## Tests
+
+- **Total number of test files**: #
+- **Total number of tests**: #
+- **Total LoC**: #
+
+---
+
 ## 🔥 Burndown rate
 
 - #/35 Sprint 2 requirements completed
