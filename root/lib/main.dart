@@ -256,7 +256,8 @@ class _MyHomePageState extends State<MyHomePage> {
               (p) => _isSameDay(p, today) || p.isBefore(today),
             )
             .toList();
-        var combinedPayments = pastPayments + duePayments; //necessary to handle an edge case where past payment already contains the currently due payment
+        var combinedPayments = pastPayments +
+            duePayments; //necessary to handle an edge case where past payment already contains the currently due payment
         debugPrint('combinedPayments: $combinedPayments');
         if (combinedPayments.isNotEmpty) {
           // Keep the last due payment as the new "current date"
@@ -328,11 +329,14 @@ class _MyHomePageState extends State<MyHomePage> {
             },
             tooltip: 'View Reports',
           ),
-          IconButton(icon: Icon(Icons.savings), onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => (SavingsSummaryScreen())),
+          IconButton(
+            icon: Icon(Icons.savings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => SavingsSummaryScreen()),
               );
-          }),
+            },
+          ),
           // Open Profile summary (with debug copy button) for current user
           IconButton(
             icon: Icon(Icons.person),
@@ -355,7 +359,10 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Chart.withUserId(widget.userId),
             // NEW: Pass the categories list to the transaction list so it can display category info
-            SearchBarWidget(transactions: _userTransactions, deleteTx: _deleteTransaction, categories: _categories),
+            SearchBarWidget(
+                transactions: _userTransactions,
+                deleteTx: _deleteTransaction,
+                categories: _categories),
           ],
         ),
       ),

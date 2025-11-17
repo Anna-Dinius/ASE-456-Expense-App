@@ -5,6 +5,7 @@ import 'package:p5_expense/service/savings_goal_service.dart';
 import 'package:p5_expense/view/new_savings_goal.dart';
 import 'package:p5_expense/view/edit_savings_goal.dart';
 import 'package:p5_expense/view/savings_goals_list.dart';
+import 'package:p5_expense/view/savings_dashboard.dart';
 import 'package:confetti/confetti.dart';
 import 'dart:math';
 
@@ -43,6 +44,17 @@ class _SavingsSummaryScreenState extends State<SavingsSummaryScreen> {
       appBar: AppBar(
         title: const Text('Savings Goals'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.dashboard),
+            tooltip: 'View dashboard',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const SavingsDashboardScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.add),
             tooltip: 'Add goal',
