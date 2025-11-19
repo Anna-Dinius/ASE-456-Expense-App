@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
@@ -574,10 +575,12 @@ class CategoryPieChart extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
-            // Pie chart will be implemented in chart_pie.dart
-            ChartPie(
-              categoryAnalysis: categoryAnalysis,
-              categories: categories,
+            // Center the pie chart
+            Center(
+              child: ChartPie(
+                categoryAnalysis: categoryAnalysis,
+                categories: categories,
+              ),
             ),
             const SizedBox(height: 16),
             // Category legend
@@ -591,6 +594,10 @@ class CategoryPieChart extends StatelessWidget {
   Widget _buildCategoryLegend() {
     final sortedEntries = categoryAnalysis.entries.toList()
       ..sort((a, b) => (b.value['amount'] as double).compareTo(a.value['amount'] as double));
+
+    if (sortedEntries.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       children: sortedEntries.map((entry) {
@@ -609,7 +616,7 @@ class CategoryPieChart extends StatelessWidget {
         );
 
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 6),
           child: Row(
             children: [
               Container(
@@ -618,20 +625,29 @@ class CategoryPieChart extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: category.color,
                   shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Icon(category.icon, size: 20, color: category.color),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   category.title,
-                  style: const TextStyle(fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              const SizedBox(width: 8),
               Text(
                 '\$${amount.toStringAsFixed(2)}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(width: 8),
               Text(
@@ -639,6 +655,7 @@ class CategoryPieChart extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
@@ -669,7 +686,45 @@ class SpendingTrendsChart extends StatelessWidget {
       ..sort((a, b) => a.key.compareTo(b.key));
 
     if (sortedTrends.isEmpty) {
-      return const SizedBox.shrink();
+      return Card(
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SizedBox(
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.bar_chart_outlined,
+                    size: 48,
+                    color: Colors.grey[400],
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'No spending trends',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Add transactions to see spending patterns',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[500],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
     }
 
     final maxAmount = sortedTrends.map((e) => e.value).reduce((a, b) => a > b ? a : b);
@@ -694,12 +749,19 @@ class SpendingTrendsChart extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              height: 200,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: sortedTrends.map((entry) {
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // Make chart responsive - adjust height based on available space
+                final chartHeight = constraints.maxHeight > 0 
+                    ? math.min(constraints.maxHeight - 100.0, 250.0)
+                    : 200.0;
+                
+                return SizedBox(
+                  height: chartHeight,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: sortedTrends.map((entry) {
                   final heightFactor = maxAmount > 0 ? entry.value / maxAmount : 0.0;
                   final dateFormat = DateFormat('MMM d');
                   
@@ -745,7 +807,9 @@ class SpendingTrendsChart extends StatelessWidget {
                     ),
                   );
                 }).toList(),
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),

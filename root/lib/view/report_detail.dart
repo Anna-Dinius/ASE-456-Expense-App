@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 import 'package:p5_expense/model/report.dart';
 import 'package:p5_expense/model/category.dart';
+import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/service/analytics_service.dart';
 import 'package:p5_expense/service/category_service.dart';
 import 'package:p5_expense/service/report_export_service.dart';
@@ -23,6 +25,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
   List<Category> _categories = [];
   Map<DateTime, double> _spendingTrends = {};
   bool _loading = false;
+  List<Transaction> _transactions = [];
 
   @override
   void initState() {
@@ -49,9 +52,23 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         endDate: widget.report.endDate,
       );
 
+      // Load transactions for highlights (biggest expense, etc.)
+      final transactionsSnapshot = await firestore.FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('transactions')
+          .where('date', isGreaterThanOrEqualTo: widget.report.startDate)
+          .where('date', isLessThanOrEqualTo: widget.report.endDate)
+          .get();
+
+      final transactions = transactionsSnapshot.docs
+          .map((doc) => Transaction.fromMap(doc.data(), doc.id))
+          .toList();
+
       setState(() {
         _categories = categories;
         _spendingTrends = spendingTrends;
+        _transactions = transactions;
         _loading = false;
       });
     } catch (e) {
@@ -311,39 +328,44 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     // Report summary card
                     _buildSummaryCard(),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
+
+                    // Report highlights
+                    _buildHighlights(),
+
+                    const SizedBox(height: 20),
 
                     // Spending metrics
                     _buildSpendingMetrics(),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
 
                     // Budget performance
-                    if (widget.report.budgetPerformance.totalBudgetAmount > 0)
+                    if (widget.report.budgetPerformance.totalBudgetAmount > 0) ...[
                       _buildBudgetPerformance(),
-
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Category pie chart
-                    if (widget.report.categoryBreakdown.isNotEmpty)
+                    if (widget.report.categoryBreakdown.isNotEmpty) ...[
                       CategoryPieChart(
                         categoryAnalysis: _getCategoryAnalysis(),
                         categories: _categories,
                         startDate: widget.report.startDate,
                         endDate: widget.report.endDate,
                       ),
-
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Spending trends chart
-                    if (_spendingTrends.isNotEmpty)
+                    if (_spendingTrends.isNotEmpty) ...[
                       SpendingTrendsChart(
                         spendingTrends: _spendingTrends,
                         startDate: widget.report.startDate,
                         endDate: widget.report.endDate,
                       ),
-
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Budget progress chart (if budgets exist)
                     if (widget.report.budgetPerformance.totalBudgetAmount > 0)
@@ -353,28 +375,31 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         ),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
-                            return BudgetProgressChart(
-                              budgetPerformance: widget.report.budgetPerformance,
-                              categories: snapshot.data!,
+                            return Column(
+                              children: [
+                                BudgetProgressChart(
+                                  budgetPerformance: widget.report.budgetPerformance,
+                                  categories: snapshot.data!,
+                                ),
+                                const SizedBox(height: 20),
+                              ],
                             );
                           }
                           return const SizedBox.shrink();
                         },
                       ),
 
-                    const SizedBox(height: 16),
-
                     // Recurring transactions impact
-                    if (widget.report.recurringTransactionImpact.recurringTransactionCount > 0)
+                    if (widget.report.recurringTransactionImpact.recurringTransactionCount > 0) ...[
                       _buildRecurringImpact(),
-
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Category breakdown list
-                    if (widget.report.categoryBreakdown.isNotEmpty)
+                    if (widget.report.categoryBreakdown.isNotEmpty) ...[
                       _buildCategoryBreakdown(),
-
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 20),
+                    ],
 
                     // Report metadata
                     _buildReportMetadata(),
@@ -382,6 +407,183 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _buildHighlights() {
+    // Find top category
+    String? topCategoryId;
+    double topCategoryAmount = 0.0;
+    if (widget.report.categoryBreakdown.isNotEmpty) {
+      final sortedCategories = widget.report.categoryBreakdown.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+      topCategoryId = sortedCategories.first.key;
+      topCategoryAmount = sortedCategories.first.value;
+    }
+    Category? topCategory;
+    if (topCategoryId != null) {
+      try {
+        topCategory = _categories.firstWhere((c) => c.id == topCategoryId);
+      } catch (e) {
+        topCategory = Category(
+          id: topCategoryId,
+          title: topCategoryId,
+          color: Colors.grey,
+          icon: Icons.category,
+        );
+      }
+    }
+
+    // Find biggest expense
+    Transaction? biggestExpense;
+    if (_transactions.isNotEmpty) {
+      biggestExpense = _transactions.reduce(
+        (a, b) => a.amount > b.amount ? a : b,
+      );
+    }
+
+    // Note: Spending trend calculation can be added later if needed
+    // It would require loading previous period transactions for comparison
+
+    // Budget status
+    final utilization = widget.report.budgetPerformance.utilizationPercentage;
+    String budgetStatus;
+    Color budgetStatusColor;
+    if (utilization >= 1.0) {
+      budgetStatus = 'Over Budget';
+      budgetStatusColor = Colors.red;
+    } else if (utilization >= 0.9) {
+      budgetStatus = 'Almost Limit';
+      budgetStatusColor = Colors.orange;
+    } else if (utilization >= 0.75) {
+      budgetStatus = 'Getting Close';
+      budgetStatusColor = Colors.amber;
+    } else {
+      budgetStatus = 'On Track';
+      budgetStatusColor = Colors.green;
+    }
+
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.stars, color: Theme.of(context).primaryColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Key Highlights',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                // Top Category
+                if (topCategory != null)
+                  _buildHighlightCard(
+                    icon: Icons.category,
+                    iconColor: topCategory.color,
+                    label: 'Top Category',
+                    value: topCategory.title,
+                    subtitle: '\$${topCategoryAmount.toStringAsFixed(2)}',
+                  ),
+
+                // Biggest Expense
+                if (biggestExpense != null)
+                  _buildHighlightCard(
+                    icon: Icons.attach_money,
+                    iconColor: Colors.red,
+                    label: 'Biggest Expense',
+                    value: biggestExpense.title,
+                    subtitle: '\$${biggestExpense.amount.toStringAsFixed(2)}',
+                  ),
+
+                // Budget Status
+                if (widget.report.budgetPerformance.totalBudgetAmount > 0)
+                  _buildHighlightCard(
+                    icon: Icons.pie_chart,
+                    iconColor: budgetStatusColor,
+                    label: 'Budget Status',
+                    value: budgetStatus,
+                    subtitle: '${(utilization * 100).toStringAsFixed(1)}% used',
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHighlightCard({
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required String value,
+    String? subtitle,
+  }) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: iconColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: iconColor.withOpacity(0.3)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 20, color: iconColor),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: iconColor,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 

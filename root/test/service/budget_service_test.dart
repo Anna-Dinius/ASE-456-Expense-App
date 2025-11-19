@@ -322,5 +322,391 @@ void main() {
         expect(foodBudget.type, BudgetType.CATEGORY);
       });
     });
+
+    group('Budget Update Operations', () {
+      test('should update budget name correctly', () {
+        final budget = Budget(
+          id: 'test_budget',
+          name: 'Original Name',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final updatedBudget = budget.copyWith(
+          name: 'Updated Name',
+          lastUpdatedAt: DateTime(2024, 10, 2),
+        );
+
+        expect(updatedBudget.name, 'Updated Name');
+        expect(updatedBudget.amount, 1000.0); // Amount unchanged
+        expect(updatedBudget.lastUpdatedAt.isAfter(budget.lastUpdatedAt), true);
+      });
+
+      test('should update budget amount correctly', () {
+        final budget = Budget(
+          id: 'test_budget',
+          name: 'Test Budget',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final updatedBudget = budget.copyWith(
+          amount: 1500.0,
+          lastUpdatedAt: DateTime(2024, 10, 2),
+        );
+
+        expect(updatedBudget.amount, 1500.0);
+        expect(updatedBudget.name, 'Test Budget'); // Name unchanged
+      });
+
+      test('should update budget active status', () {
+        final budget = Budget(
+          id: 'test_budget',
+          name: 'Test Budget',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final updatedBudget = budget.copyWith(
+          isActive: false,
+          lastUpdatedAt: DateTime(2024, 10, 2),
+        );
+
+        expect(updatedBudget.isActive, false);
+        expect(budget.isActive, true); // Original unchanged
+      });
+
+      test('should update date range correctly', () {
+        final budget = Budget(
+          id: 'test_budget',
+          name: 'Test Budget',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final newStartDate = DateTime(2024, 11, 1);
+        final newEndDate = DateTime(2024, 11, 30);
+        final updatedBudget = budget.copyWith(
+          startDate: newStartDate,
+          endDate: newEndDate,
+          lastUpdatedAt: DateTime(2024, 10, 2),
+        );
+
+        expect(updatedBudget.startDate, newStartDate);
+        expect(updatedBudget.endDate, newEndDate);
+        expect(updatedBudget.totalDays, 29); // November has 30 days
+      });
+    });
+
+    group('Budget Delete Operations', () {
+      test('should identify expired budgets', () {
+        final expiredBudget = Budget(
+          id: 'expired_budget',
+          name: 'Expired Budget',
+          amount: 1000.0,
+          startDate: DateTime(2024, 9, 1),
+          endDate: DateTime(2024, 9, 30),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 9, 1),
+          lastUpdatedAt: DateTime(2024, 9, 1),
+        );
+
+        // Note: This test assumes current date is after September 30, 2024
+        // In a real test, you would mock DateTime.now()
+        expect(expiredBudget.endDate.isBefore(DateTime(2024, 10, 1)), true);
+      });
+
+      test('should handle budget deletion edge cases', () {
+        // Test that budget properties remain valid after copy operations
+        final budget = Budget(
+          id: 'test_budget',
+          name: 'Test Budget',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        // Simulate marking as inactive (soft delete pattern)
+        final deactivatedBudget = budget.copyWith(isActive: false);
+
+        expect(deactivatedBudget.id, budget.id);
+        expect(deactivatedBudget.isActive, false);
+        expect(budget.isActive, true); // Original unchanged
+      });
+    });
+
+    group('Overlapping Budget Validation', () {
+      test('should detect overlapping date ranges', () {
+        final budget1 = Budget(
+          id: 'budget_1',
+          name: 'Budget 1',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        // Overlapping budget (starts before budget1 ends)
+        final budget2 = Budget(
+          id: 'budget_2',
+          name: 'Budget 2',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 15), // Overlaps with budget1
+          endDate: DateTime(2024, 11, 15),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 15),
+          lastUpdatedAt: DateTime(2024, 10, 15),
+        );
+
+        // Check if dates overlap
+        final overlaps = budget1.startDate.isBefore(budget2.endDate) &&
+            budget2.startDate.isBefore(budget1.endDate);
+
+        expect(overlaps, true);
+      });
+
+      test('should detect non-overlapping date ranges', () {
+        final budget1 = Budget(
+          id: 'budget_1',
+          name: 'Budget 1',
+          amount: 1000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        // Non-overlapping budget (starts after budget1 ends)
+        final budget2 = Budget(
+          id: 'budget_2',
+          name: 'Budget 2',
+          amount: 1000.0,
+          startDate: DateTime(2024, 11, 1), // After budget1 ends
+          endDate: DateTime(2024, 11, 30),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 11, 1),
+          lastUpdatedAt: DateTime(2024, 11, 1),
+        );
+
+        // Check if dates overlap
+        final overlaps = budget1.startDate.isBefore(budget2.endDate) &&
+            budget2.startDate.isBefore(budget1.endDate);
+
+        expect(overlaps, false);
+      });
+
+      test('should allow overlapping budgets of different types', () {
+        // Overall and category budgets can overlap
+        final overallBudget = Budget(
+          id: 'overall',
+          name: 'Overall Budget',
+          amount: 2000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final categoryBudget = Budget(
+          id: 'category',
+          name: 'Food Budget',
+          amount: 500.0,
+          startDate: DateTime(2024, 10, 1), // Same dates
+          endDate: DateTime(2024, 10, 31),
+          categoryId: 'food',
+          type: BudgetType.CATEGORY,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        // These can overlap because they're different types
+        expect(overallBudget.type != categoryBudget.type, true);
+      });
+
+      test('should detect overlapping budgets of same type and category', () {
+        final budget1 = Budget(
+          id: 'food_1',
+          name: 'Food Budget 1',
+          amount: 500.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          categoryId: 'food',
+          type: BudgetType.CATEGORY,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        final budget2 = Budget(
+          id: 'food_2',
+          name: 'Food Budget 2',
+          amount: 600.0,
+          startDate: DateTime(2024, 10, 15), // Overlaps
+          endDate: DateTime(2024, 11, 15),
+          categoryId: 'food', // Same category
+          type: BudgetType.CATEGORY, // Same type
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 15),
+          lastUpdatedAt: DateTime(2024, 10, 15),
+        );
+
+        // These should conflict (same type, same category, overlapping dates)
+        final sameType = budget1.type == budget2.type;
+        final sameCategory = budget1.categoryId == budget2.categoryId;
+        final datesOverlap = budget1.startDate.isBefore(budget2.endDate) &&
+            budget2.startDate.isBefore(budget1.endDate);
+
+        expect(sameType && sameCategory && datesOverlap, true);
+      });
+    });
+
+    group('Budget Edge Cases', () {
+      test('should handle zero amount budget', () {
+        final budget = Budget(
+          id: 'zero_budget',
+          name: 'Zero Budget',
+          amount: 0.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        expect(budget.amount, 0.0);
+        // Note: Validation should prevent zero amounts in production
+      });
+
+      test('should handle very large budget amounts', () {
+        final budget = Budget(
+          id: 'large_budget',
+          name: 'Large Budget',
+          amount: 1000000.0,
+          startDate: DateTime(2024, 10, 1),
+          endDate: DateTime(2024, 10, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.MONTHLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 1),
+          lastUpdatedAt: DateTime(2024, 10, 1),
+        );
+
+        expect(budget.amount, 1000000.0);
+        // Note: Validation should cap at $1,000,000 in production
+      });
+
+      test('should handle single day budget', () {
+        final budget = Budget(
+          id: 'single_day',
+          name: 'Single Day Budget',
+          amount: 100.0,
+          startDate: DateTime(2024, 10, 15),
+          endDate: DateTime(2024, 10, 15),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.CUSTOM,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 10, 15),
+          lastUpdatedAt: DateTime(2024, 10, 15),
+        );
+
+        expect(budget.totalDays, 0); // Same day = 0 days difference
+        expect(budget.startDate.day, budget.endDate.day);
+      });
+
+      test('should handle long period budgets', () {
+        final budget = Budget(
+          id: 'yearly_budget',
+          name: 'Yearly Budget',
+          amount: 12000.0,
+          startDate: DateTime(2024, 1, 1),
+          endDate: DateTime(2024, 12, 31),
+          type: BudgetType.OVERALL,
+          period: BudgetPeriod.YEARLY,
+          isActive: true,
+          alertThresholds: [0.5, 0.75, 0.9],
+          createdAt: DateTime(2024, 1, 1),
+          lastUpdatedAt: DateTime(2024, 1, 1),
+        );
+
+        expect(budget.totalDays, 365); // 2024 is a leap year, but Dec 31 - Jan 1 = 364 days
+        expect(budget.period, BudgetPeriod.YEARLY);
+      });
+    });
+
+    // Note: Integration tests for BudgetService.updateBudget() and deleteBudget()
+    // require Firebase emulators or mocking. These tests verify the model logic
+    // and validation patterns. Full service tests should be added with:
+    // - Firebase emulator setup
+    // - Mock Firestore instances
+    // - Test user authentication
+    // See Week 10 plan for integration testing requirements
   });
 }

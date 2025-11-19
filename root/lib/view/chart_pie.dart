@@ -17,23 +17,61 @@ class ChartPie extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (categoryAnalysis.isEmpty) {
-      return const SizedBox(
+      return SizedBox(
         height: 200,
         child: Center(
-          child: Text('No data to display'),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.pie_chart_outline,
+                size: 48,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'No spending data',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Add transactions to see category breakdown',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[500],
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       );
     }
 
-    return SizedBox(
-      height: 250,
-      width: 250,
-      child: CustomPaint(
-        painter: _PieChartPainter(
-          categoryAnalysis: categoryAnalysis,
-          categories: categories,
-        ),
-      ),
+    // Make chart responsive to screen size
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Use available width, but cap at 300px for readability
+        final chartSize = math.min(
+          math.min(constraints.maxWidth - 32.0, 300.0),
+          constraints.maxHeight > 0 ? math.min(constraints.maxHeight - 32.0, 300.0) : 250.0,
+        );
+        
+        return SizedBox(
+          height: chartSize,
+          width: chartSize,
+          child: CustomPaint(
+            painter: _PieChartPainter(
+              categoryAnalysis: categoryAnalysis,
+              categories: categories,
+            ),
+          ),
+        );
+      },
     );
   }
 }

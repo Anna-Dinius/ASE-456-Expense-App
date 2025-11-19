@@ -123,12 +123,29 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
         isActive: _isActive,
       );
       if (!mounted) return;
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Budget "${name}" updated successfully'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      
       // Return true to indicate success
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
+      
+      // Show user-friendly error message
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update budget: $e')),
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
       );
     } finally {
       if (mounted) setState(() => _submitting = false);

@@ -124,12 +124,29 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
         period: _selectedPeriod,
       );
       if (!mounted) return;
+      
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Budget "${name}" created successfully'),
+          backgroundColor: Colors.green,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      
       // Return true to indicate success
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
+      
+      // Show user-friendly error message
+      final errorMessage = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create budget: $e')),
+        SnackBar(
+          content: Text(errorMessage),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
       );
     } finally {
       if (mounted) setState(() => _submitting = false);

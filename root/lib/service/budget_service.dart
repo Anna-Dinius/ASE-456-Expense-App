@@ -109,7 +109,8 @@ class BudgetService {
         userId, startDate, endDate, type, categoryId
       );
       if (overlappingBudgets.isNotEmpty) {
-        throw Exception('Budget overlaps with existing budget(s) in the same period');
+        final budgetNames = overlappingBudgets.map((b) => b.name).join(', ');
+        throw Exception('Budget overlaps with existing budget(s): $budgetNames. Please adjust the date range or deactivate the overlapping budget(s).');
       }
 
       // Create new budget
@@ -201,7 +202,8 @@ class BudgetService {
         userId, startDate, endDate, type, categoryId, excludeBudgetId: budgetId
       );
       if (overlappingBudgets.isNotEmpty) {
-        throw Exception('Budget overlaps with existing budget(s) in the same period');
+        final budgetNames = overlappingBudgets.map((b) => b.name).join(', ');
+        throw Exception('Budget overlaps with existing budget(s): $budgetNames. Please adjust the date range or deactivate the overlapping budget(s).');
       }
 
       // Update budget
