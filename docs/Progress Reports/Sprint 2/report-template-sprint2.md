@@ -49,8 +49,8 @@ title: Pocket Protectors Week /# Progress Report
 
 ### Individual Contributions:
 
-- Cody: ~#
 - Jeff: ~#
+- Cody: ~#
 - Dillon: ~#
 
 ### Codebase LoC Summary After Integration:
@@ -84,6 +84,14 @@ Tests:
 ---
 
 Tests (cont.):
+
+---
+
+## Tests
+
+- **Total number of test files**: #
+- **Total number of tests**: #
+- **Total LoC**: #
 
 ---
 
