@@ -53,7 +53,6 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
                 (category) => category.id == tx.categoryId
               ).title.contains(_selectedCategory);
       }).toList();
-      //TODO: REFACTOR THIS PART
       if (_selectedSortBy == 'Date'){
         unsortedTransactions.sort((a, b) {
         return a.date.compareTo(b.date);
@@ -100,35 +99,39 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
               ) 
             ),
             DropdownButton(
-                      value: _selectedSortBy,
-                      items: <String>['Date', 'Amount']
-                          .map((String value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedSortBy = newValue!;
-                          _filterTransactions();
-                        });
-                      }),
+              padding: EdgeInsets.all(5),
+              value: _selectedSortBy,
+              items: <String>['Date', 'Amount']
+                .map((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedSortBy = newValue!;
+                  _filterTransactions();
+                });
+              }
+            ),
             DropdownButton(
-                      value: _selectedOrder,
-                      items: <String>['Ascend', 'Descend']
-                          .map((String value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _selectedOrder = newValue!;
-                          _filterTransactions();
-                        });
-                      }),
+              padding: EdgeInsets.all(5),
+              value: _selectedOrder,
+              items: <String>['Ascend', 'Descend']
+                .map((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                   );
+                }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedOrder = newValue!;
+                  _filterTransactions();
+                });
+              }
+            ),
           ]
         ),
         Wrap(
