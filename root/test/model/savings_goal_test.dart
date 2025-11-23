@@ -464,6 +464,306 @@ void main() {
         final updated = goal.updateMilestones();
         expect(updated.milestone50Reached, true);
       });
+
+      test('detectNewMilestones returns empty list when no new milestones', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 400,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 450,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, isEmpty);
+      });
+
+      test('detectNewMilestones with zero target amount returns empty', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 0,
+          currentAmount: 0,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 0,
+          currentAmount: 100,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, isEmpty);
+      });
+
+      test('detectNewMilestones with decreased progress returns empty', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 600,
+          milestone50Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 400,
+          milestone50Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, isEmpty);
+      });
+
+      test('updateMilestones with 100% completion sets all flags', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 1000,
+        );
+
+        final updated = goal.updateMilestones();
+        expect(updated.milestone50Reached, true);
+        expect(updated.milestone75Reached, true);
+        expect(updated.milestone100Reached, true);
+      });
+
+      test('updateMilestones with zero progress sets no flags', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 0,
+        );
+
+        final updated = goal.updateMilestones();
+        expect(updated.milestone50Reached, false);
+        expect(updated.milestone75Reached, false);
+        expect(updated.milestone100Reached, false);
+      });
+
+      test('detectNewMilestones at exact 50% boundary', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 100,
+          currentAmount: 49,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 100,
+          currentAmount: 50,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(50));
+      });
+
+      test('detectNewMilestones at exact 75% boundary', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 100,
+          currentAmount: 74,
+          milestone50Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 100,
+          currentAmount: 75,
+          milestone50Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, contains(75));
+      });
+
+      test('detectNewMilestones skips intermediate milestones when jumping', () {
+        final oldGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 600,
+          milestone50Reached: true,
+        );
+
+        final newGoal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 1000,
+          milestone50Reached: true,
+        );
+
+        final milestones = newGoal.detectNewMilestones(oldGoal);
+        expect(milestones, containsAll([75, 100]));
+        expect(milestones.length, 2);
+      });
+    });
+
+    group('edge cases', () {
+      test('progress handles very small amounts correctly', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 0.01,
+          currentAmount: 0.005,
+        );
+        expect(goal.progress, 0.5);
+      });
+
+      test('progress handles very large amounts correctly', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000000000,
+          currentAmount: 500000000,
+        );
+        expect(goal.progress, 0.5);
+      });
+
+      test('copyWith preserves description when not specified', () {
+        final original = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          description: 'Original description',
+        );
+
+        final updated = original.copyWith(currentAmount: 100);
+        expect(updated.description, 'Original description');
+      });
+
+      test('copyWith preserves targetDate when not specified', () {
+        final original = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          targetDate: DateTime(2025, 12, 31),
+        );
+
+        final updated = original.copyWith(currentAmount: 100);
+        expect(updated.targetDate, DateTime(2025, 12, 31));
+      });
+
+      test('toMap includes milestone flags', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 800,
+          milestone50Reached: true,
+          milestone75Reached: true,
+        );
+
+        final map = goal.toMap();
+        expect(map['milestone50Reached'], true);
+        expect(map['milestone75Reached'], true);
+        expect(map['milestone100Reached'], false);
+      });
+
+      test('fromMap handles missing milestone flags', () {
+        final map = {
+          'title': 'Test',
+          'targetAmount': 1000,
+          'currentAmount': 500,
+        };
+
+        final goal = SavingsGoal.fromMap(map, 'goal_1');
+        expect(goal.milestone50Reached, false);
+        expect(goal.milestone75Reached, false);
+        expect(goal.milestone100Reached, false);
+      });
+
+      test('fromMap handles all milestone flags set to true', () {
+        final map = {
+          'title': 'Test',
+          'targetAmount': 1000,
+          'currentAmount': 1000,
+          'milestone50Reached': true,
+          'milestone75Reached': true,
+          'milestone100Reached': true,
+        };
+
+        final goal = SavingsGoal.fromMap(map, 'goal_1');
+        expect(goal.milestone50Reached, true);
+        expect(goal.milestone75Reached, true);
+        expect(goal.milestone100Reached, true);
+      });
+
+      test('equality considers milestone flags', () {
+        final goal1 = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 500,
+          milestone50Reached: true,
+        );
+
+        final goal2 = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 500,
+          milestone50Reached: false,
+        );
+
+        expect(goal1, isNot(equals(goal2)));
+      });
+
+      test('copyWith can update all milestone flags', () {
+        final original = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+        );
+
+        final updated = original.copyWith(
+          milestone50Reached: true,
+          milestone75Reached: true,
+          milestone100Reached: true,
+        );
+
+        expect(updated.milestone50Reached, true);
+        expect(updated.milestone75Reached, true);
+        expect(updated.milestone100Reached, true);
+      });
+
+      test('progress with floating point precision edge case', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 3.0,
+          currentAmount: 1.0,
+        );
+        expect(goal.progress, closeTo(0.333333, 0.00001));
+      });
+
+      test('completed goal with progress over 100%', () {
+        final goal = SavingsGoal(
+          id: 'goal_1',
+          title: 'Test',
+          targetAmount: 1000,
+          currentAmount: 1500,
+          completed: true,
+        );
+        expect(goal.progress, 1.0);
+        expect(goal.completed, true);
+      });
     });
   });
 }

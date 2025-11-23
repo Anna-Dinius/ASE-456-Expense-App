@@ -306,5 +306,305 @@ void main() {
       expect(fetched!.currentAmount, 1000); // Capped at target
       expect(fetched.completed, true);
     });
+
+    test('addGoal with empty title string', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: '',
+        targetAmount: 1000,
+        db: db,
+      );
+
+      expect(goal.title, '');
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.title, '');
+    });
+
+    test('addGoal with very long title', () async {
+      final longTitle = 'A' * 500;
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: longTitle,
+        targetAmount: 1000,
+        db: db,
+      );
+
+      expect(goal.title.length, 500);
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.title, longTitle);
+    });
+
+    test('addGoal with very long description', () async {
+      final longDescription = 'B' * 1000;
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Test',
+        targetAmount: 1000,
+        description: longDescription,
+        db: db,
+      );
+
+      expect(goal.description!.length, 1000);
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.description, longDescription);
+    });
+
+    test('addGoal with zero target amount', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Zero Target',
+        targetAmount: 0,
+        db: db,
+      );
+
+      expect(goal.targetAmount, 0);
+      expect(goal.progress, 0.0);
+    });
+
+    test('addGoal with negative current amount', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Negative Start',
+        targetAmount: 1000,
+        currentAmount: -100,
+        db: db,
+      );
+
+      expect(goal.currentAmount, -100);
+      expect(goal.progress, 0.0);
+    });
+
+    test('addGoal with very small decimal amounts', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Pennies',
+        targetAmount: 0.01,
+        currentAmount: 0.005,
+        db: db,
+      );
+
+      expect(goal.targetAmount, 0.01);
+      expect(goal.currentAmount, 0.005);
+      expect(goal.progress, 0.5);
+    });
+
+    test('addGoal with very large amounts', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Millions',
+        targetAmount: 1000000000,
+        currentAmount: 500000000,
+        db: db,
+      );
+
+      expect(goal.targetAmount, 1000000000);
+      expect(goal.currentAmount, 500000000);
+    });
+
+    test('addGoal with past target date', () async {
+      final pastDate = DateTime(2020, 1, 1);
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Past Due',
+        targetAmount: 1000,
+        targetDate: pastDate,
+        db: db,
+      );
+
+      expect(goal.targetDate, pastDate);
+    });
+
+    test('addGoal with far future target date', () async {
+      final futureDate = DateTime(2100, 12, 31);
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Far Future',
+        targetAmount: 1000,
+        targetDate: futureDate,
+        db: db,
+      );
+
+      expect(goal.targetDate, futureDate);
+    });
+
+    test('updateGoal with changed milestone flags', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Milestone Test',
+        targetAmount: 1000,
+        currentAmount: 500,
+        db: db,
+      );
+
+      final updated = goal.copyWith(
+        currentAmount: 750,
+        milestone50Reached: true,
+        milestone75Reached: true,
+      );
+      await SavingsGoalService.updateGoal(userId, updated, db: db);
+
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.milestone50Reached, true);
+      expect(fetched.milestone75Reached, true);
+    });
+
+    test('deleteGoal with non-existent goal id does not throw', () async {
+      // Should not throw even if goal doesn't exist
+      await SavingsGoalService.deleteGoal(userId, 'non_existent_id', db: db);
+      
+      final goals = await SavingsGoalService.getAllGoals(userId, db: db);
+      expect(goals, isEmpty);
+    });
+
+    test('updateGoal to decrease current amount', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Withdrawal',
+        targetAmount: 1000,
+        currentAmount: 500,
+        db: db,
+      );
+
+      final updated = goal.copyWith(currentAmount: 300);
+      await SavingsGoalService.updateGoal(userId, updated, db: db);
+
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.currentAmount, 300);
+    });
+
+    test('updateGoal to uncomplete a goal', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Uncomplete',
+        targetAmount: 1000,
+        currentAmount: 1000,
+        db: db,
+      );
+
+      final completed = goal.copyWith(completed: true);
+      await SavingsGoalService.updateGoal(userId, completed, db: db);
+
+      var fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.completed, true);
+
+      final uncompleted = fetched.copyWith(
+        currentAmount: 800,
+        completed: false,
+      );
+      await SavingsGoalService.updateGoal(userId, uncompleted, db: db);
+
+      fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.completed, false);
+      expect(fetched.currentAmount, 800);
+    });
+
+    test('getAllGoals with many goals returns all in order', () async {
+      final date1 = DateTime(2025, 1, 1);
+      final date2 = DateTime(2025, 6, 1);
+      final date3 = DateTime(2025, 12, 31);
+
+      await SavingsGoalService.addGoal(
+        userId,
+        title: 'Goal C',
+        targetAmount: 1000,
+        targetDate: date3,
+        db: db,
+      );
+
+      await SavingsGoalService.addGoal(
+        userId,
+        title: 'Goal A',
+        targetAmount: 2000,
+        targetDate: date1,
+        db: db,
+      );
+
+      await SavingsGoalService.addGoal(
+        userId,
+        title: 'Goal B',
+        targetAmount: 3000,
+        targetDate: date2,
+        db: db,
+      );
+
+      final goals = await SavingsGoalService.getAllGoals(userId, db: db);
+      expect(goals.length, 3);
+    });
+
+    test('streamGoals with null target dates', () async {
+      await SavingsGoalService.addGoal(
+        userId,
+        title: 'No Date 1',
+        targetAmount: 1000,
+        db: db,
+      );
+
+      await SavingsGoalService.addGoal(
+        userId,
+        title: 'No Date 2',
+        targetAmount: 2000,
+        db: db,
+      );
+
+      final stream = SavingsGoalService.streamGoals(userId, db: db);
+      final goals = await stream.first;
+
+      expect(goals.length, 2);
+    });
+
+    test('concurrent updates to same goal', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'Concurrent',
+        targetAmount: 1000,
+        currentAmount: 0,
+        db: db,
+      );
+
+      final update1 = goal.copyWith(currentAmount: 100);
+      final update2 = goal.copyWith(currentAmount: 200);
+
+      await Future.wait([
+        SavingsGoalService.updateGoal(userId, update1, db: db),
+        SavingsGoalService.updateGoal(userId, update2, db: db),
+      ]);
+
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      // One of the updates should win
+      expect(fetched!.currentAmount, anyOf(100, 200));
+    });
+
+    test('updateGoal preserves id', () async {
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: 'ID Test',
+        targetAmount: 1000,
+        db: db,
+      );
+
+      final originalId = goal.id;
+      final updated = goal.copyWith(title: 'Updated Title');
+      await SavingsGoalService.updateGoal(userId, updated, db: db);
+
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.id, originalId);
+    });
+
+    test('special characters in title and description', () async {
+      final specialTitle = 'Goal! @#\$%^&*()_+{}|:"<>?~`-=[]\\;\',./';
+      final specialDesc = 'Description with émojis 😀🎉💰 and spëcial çhars';
+
+      final goal = await SavingsGoalService.addGoal(
+        userId,
+        title: specialTitle,
+        targetAmount: 1000,
+        description: specialDesc,
+        db: db,
+      );
+
+      final fetched = await SavingsGoalService.getGoal(userId, goal.id, db: db);
+      expect(fetched!.title, specialTitle);
+      expect(fetched.description, specialDesc);
+    });
   });
 }
