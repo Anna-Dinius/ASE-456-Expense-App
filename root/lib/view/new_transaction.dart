@@ -132,7 +132,7 @@ class NewTransactionState extends State<NewTransaction> {
         _selectedDate = pickedDate;
       });
     });
-    print('...');
+    debugPrint('...');
   }
 
   void _endDatePicker() {
@@ -153,7 +153,7 @@ class NewTransactionState extends State<NewTransaction> {
         _endDate = pickedDate;
       });
     });
-    print('...');
+    debugPrint('...');
   }
 
   @override

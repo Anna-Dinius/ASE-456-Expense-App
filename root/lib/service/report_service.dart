@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:p5_expense/model/report.dart';
 
 /// Service class for managing reports in Firebase Firestore
@@ -40,7 +41,7 @@ class ReportService {
         lastUpdatedAt: report.lastUpdatedAt,
       );
     } catch (e) {
-      print('Error saving report: $e');
+      debugPrint('Error saving report: $e');
       rethrow;
     }
   }
@@ -59,7 +60,7 @@ class ReportService {
           .map((doc) => Report.fromMap(doc.data(), doc.id))
           .toList();
     } catch (e) {
-      print('Error getting reports: $e');
+      debugPrint('Error getting reports: $e');
       return [];
     }
   }
@@ -79,7 +80,7 @@ class ReportService {
       }
       return null;
     } catch (e) {
-      print('Error getting report by ID: $e');
+      debugPrint('Error getting report by ID: $e');
       return null;
     }
   }
@@ -97,10 +98,10 @@ class ReportService {
       return allReports.where((report) {
         // Check if report period overlaps with the given range
         return report.startDate.isBefore(endDate) &&
-               report.endDate.isAfter(startDate);
+            report.endDate.isAfter(startDate);
       }).toList();
     } catch (e) {
-      print('Error getting reports in date range: $e');
+      debugPrint('Error getting reports in date range: $e');
       return [];
     }
   }
@@ -116,14 +117,14 @@ class ReportService {
           .orderBy('generatedAt', descending: true)
           .limit(1)
           .get();
-      
+
       if (snapshot.docs.isNotEmpty) {
         final doc = snapshot.docs.first;
         return Report.fromMap(doc.data(), doc.id);
       }
       return null;
     } catch (e) {
-      print('Error getting most recent report: $e');
+      debugPrint('Error getting most recent report: $e');
       return null;
     }
   }
@@ -157,7 +158,8 @@ class ReportService {
         recurringTransactionImpact: report.recurringTransactionImpact,
         categoryBreakdown: report.categoryBreakdown,
         transactionCount: report.transactionCount,
-        generatedAt: existingReport.generatedAt, // Keep original generation time
+        generatedAt:
+            existingReport.generatedAt, // Keep original generation time
         lastUpdatedAt: DateTime.now(), // Update timestamp
       );
 
@@ -171,7 +173,7 @@ class ReportService {
 
       return updatedReport;
     } catch (e) {
-      print('Error updating report: $e');
+      debugPrint('Error updating report: $e');
       rethrow;
     }
   }
@@ -197,10 +199,10 @@ class ReportService {
           .doc(reportId)
           .delete();
 
-      print('Successfully deleted report $reportId');
+      debugPrint('Successfully deleted report $reportId');
       return true;
     } catch (e) {
-      print('Error deleting report: $e');
+      debugPrint('Error deleting report: $e');
       rethrow;
     }
   }
@@ -221,7 +223,7 @@ class ReportService {
             .toList();
       });
     } catch (e) {
-      print('Error getting reports stream: $e');
+      debugPrint('Error getting reports stream: $e');
       return Stream.value([]);
     }
   }
@@ -238,9 +240,8 @@ class ReportService {
           .get();
       return snapshot.count ?? 0;
     } catch (e) {
-      print('Error getting report count: $e');
+      debugPrint('Error getting report count: $e');
       return 0;
     }
   }
 }
-

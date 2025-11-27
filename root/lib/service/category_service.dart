@@ -22,7 +22,7 @@ class CategoryService {
           .map((doc) => Category.fromMap(doc.data(), doc.id))
           .toList();
     } catch (e) {
-      print('Error getting categories: $e');
+      debugPrint('Error getting categories: $e');
       return [];
     }
   }
@@ -43,7 +43,7 @@ class CategoryService {
       }
       return null;
     } catch (e) {
-      print('Error getting category by ID: $e');
+      debugPrint('Error getting category by ID: $e');
       return null;
     }
   }
@@ -94,7 +94,7 @@ class CategoryService {
         icon: category.icon,
       );
     } catch (e) {
-      print('Error creating category: $e');
+      debugPrint('Error creating category: $e');
       rethrow;
     }
   }
@@ -148,7 +148,7 @@ class CategoryService {
 
       return updatedCategory;
     } catch (e) {
-      print('Error updating category: $e');
+      debugPrint('Error updating category: $e');
       rethrow;
     }
   }
@@ -212,11 +212,11 @@ class CategoryService {
       // Commit all changes
       await batch.commit();
 
-      print(
+      debugPrint(
           'Deleted category $categoryId and reassigned ${transactionsSnapshot.docs.length} transactions to $replacementCategoryId');
       return true;
     } catch (e) {
-      print('Error deleting category: $e');
+      debugPrint('Error deleting category: $e');
       rethrow;
     }
   }
@@ -252,7 +252,7 @@ class CategoryService {
 
       await batch.commit();
     } catch (e) {
-      print('Error force-reseeding default categories: $e');
+      debugPrint('Error force-reseeding default categories: $e');
       rethrow;
     }
   }
@@ -293,7 +293,7 @@ class CategoryService {
 
       await batch.commit();
     } catch (e) {
-      print('Error seeding default categories: $e');
+      debugPrint('Error seeding default categories: $e');
       rethrow;
     }
   }
@@ -311,7 +311,7 @@ class CategoryService {
           .get();
 
       if (transactionsSnapshot.docs.isEmpty) {
-        print('No legacy transactions found to migrate');
+        debugPrint('No legacy transactions found to migrate');
         return;
       }
 
@@ -322,10 +322,10 @@ class CategoryService {
       }
 
       await batch.commit();
-      print(
+      debugPrint(
           'Successfully migrated ${transactionsSnapshot.docs.length} legacy transactions');
     } catch (e) {
-      print('Error migrating legacy transactions: $e');
+      debugPrint('Error migrating legacy transactions: $e');
       rethrow;
     }
   }
@@ -375,7 +375,7 @@ class CategoryService {
           .get();
       return snapshot.docs.length;
     } catch (e) {
-      print('Error getting transaction count for category: $e');
+      debugPrint('Error getting transaction count for category: $e');
       return 0;
     }
   }

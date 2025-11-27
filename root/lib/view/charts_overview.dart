@@ -438,7 +438,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
           );
         }
       } catch (e) {
-        print('Error loading budget performance: $e');
+        debugPrint('Error loading budget performance: $e');
         // Continue without budget performance if there's an error
       }
 
@@ -468,7 +468,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
           .map((doc) => Transaction.fromMap(doc.data(), doc.id))
           .toList();
     } catch (e) {
-      print('Error getting transactions: $e');
+      debugPrint('Error getting transactions: $e');
       return [];
     }
   }

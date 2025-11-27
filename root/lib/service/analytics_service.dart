@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
+import 'package:flutter/material.dart';
 import 'package:p5_expense/model/budget.dart';
 import 'package:p5_expense/model/report.dart';
 import 'package:p5_expense/model/transaction.dart';
@@ -8,7 +9,8 @@ import 'package:p5_expense/service/budget_service.dart';
 /// Handles budget calculations, spending analysis, and report generation
 /// Integrates with existing transaction and budget data
 class AnalyticsService {
-  static final firestore.FirebaseFirestore _firestore = firestore.FirebaseFirestore.instance;
+  static final firestore.FirebaseFirestore _firestore =
+      firestore.FirebaseFirestore.instance;
 
   /// Generates a comprehensive financial report for a specific period
   /// Returns a Report object with all financial metrics
@@ -20,22 +22,28 @@ class AnalyticsService {
   }) async {
     try {
       // Get all transactions in the period
-      final transactions = await _getTransactionsInPeriod(userId, startDate, endDate);
-      
+      final transactions =
+          await _getTransactionsInPeriod(userId, startDate, endDate);
+
       // Get all budgets that overlap with the period
       final budgets = await _getBudgetsInPeriod(userId, startDate, endDate);
 
       // Calculate basic spending metrics
       final totalSpent = _calculateTotalSpent(transactions);
-      final averageDailySpending = _calculateAverageDailySpending(transactions, startDate, endDate);
-      final averageWeeklySpending = _calculateAverageWeeklySpending(transactions, startDate, endDate);
-      final averageMonthlySpending = _calculateAverageMonthlySpending(transactions, startDate, endDate);
+      final averageDailySpending =
+          _calculateAverageDailySpending(transactions, startDate, endDate);
+      final averageWeeklySpending =
+          _calculateAverageWeeklySpending(transactions, startDate, endDate);
+      final averageMonthlySpending =
+          _calculateAverageMonthlySpending(transactions, startDate, endDate);
 
       // Calculate budget performance
-      final budgetPerformance = await _calculateBudgetPerformance(userId, budgets, transactions, startDate, endDate);
+      final budgetPerformance = await _calculateBudgetPerformance(
+          userId, budgets, transactions, startDate, endDate);
 
       // Calculate recurring transaction impact
-      final recurringImpact = _calculateRecurringTransactionImpact(transactions);
+      final recurringImpact =
+          _calculateRecurringTransactionImpact(transactions);
 
       // Calculate category breakdown
       final categoryBreakdown = _calculateCategoryBreakdown(transactions);
@@ -61,7 +69,7 @@ class AnalyticsService {
 
       return report;
     } catch (e) {
-      print('Error generating report: $e');
+      debugPrint('Error generating report: $e');
       rethrow;
     }
   }
@@ -87,7 +95,8 @@ class AnalyticsService {
         totalBudgetAmount += budget.amount;
 
         // Calculate spent amount for this budget
-        final spentAmount = await _calculateSpentForBudget(transactions, budget, startDate, endDate);
+        final spentAmount = await _calculateSpentForBudget(
+            transactions, budget, startDate, endDate);
         totalSpentAgainstBudgets += spentAmount;
 
         // Calculate utilization percentage
@@ -108,8 +117,8 @@ class AnalyticsService {
         }
       }
 
-      final utilizationPercentage = totalBudgetAmount > 0 
-          ? totalSpentAgainstBudgets / totalBudgetAmount 
+      final utilizationPercentage = totalBudgetAmount > 0
+          ? totalSpentAgainstBudgets / totalBudgetAmount
           : 0.0;
 
       return BudgetPerformance(
@@ -122,7 +131,7 @@ class AnalyticsService {
         categoryPerformance: categoryPerformance,
       );
     } catch (e) {
-      print('Error calculating budget performance: $e');
+      debugPrint('Error calculating budget performance: $e');
       rethrow;
     }
   }
@@ -136,7 +145,8 @@ class AnalyticsService {
     String? categoryId,
   }) async {
     try {
-      final transactions = await _getTransactionsInPeriod(userId, startDate, endDate);
+      final transactions =
+          await _getTransactionsInPeriod(userId, startDate, endDate);
       final trends = <DateTime, double>{};
 
       for (final transaction in transactions) {
@@ -145,13 +155,14 @@ class AnalyticsService {
           continue;
         }
 
-        final date = DateTime(transaction.date.year, transaction.date.month, transaction.date.day);
+        final date = DateTime(transaction.date.year, transaction.date.month,
+            transaction.date.day);
         trends[date] = (trends[date] ?? 0.0) + transaction.amount;
       }
 
       return trends;
     } catch (e) {
-      print('Error calculating spending trends: $e');
+      debugPrint('Error calculating spending trends: $e');
       return {};
     }
   }
@@ -164,31 +175,35 @@ class AnalyticsService {
     required DateTime endDate,
   }) async {
     try {
-      final transactions = await _getTransactionsInPeriod(userId, startDate, endDate);
+      final transactions =
+          await _getTransactionsInPeriod(userId, startDate, endDate);
       final categoryTotals = <String, double>{};
       double totalSpent = 0.0;
 
       // Calculate totals by category
       for (final transaction in transactions) {
         final categoryId = transaction.categoryId;
-        categoryTotals[categoryId] = (categoryTotals[categoryId] ?? 0.0) + transaction.amount;
+        categoryTotals[categoryId] =
+            (categoryTotals[categoryId] ?? 0.0) + transaction.amount;
         totalSpent += transaction.amount;
       }
 
       // Calculate percentages and create analysis
       final analysis = <String, Map<String, dynamic>>{};
       for (final entry in categoryTotals.entries) {
-        final percentage = totalSpent > 0 ? (entry.value / totalSpent) * 100 : 0.0;
+        final percentage =
+            totalSpent > 0 ? (entry.value / totalSpent) * 100 : 0.0;
         analysis[entry.key] = {
           'amount': entry.value,
           'percentage': percentage,
-          'transactionCount': transactions.where((t) => t.categoryId == entry.key).length,
+          'transactionCount':
+              transactions.where((t) => t.categoryId == entry.key).length,
         };
       }
 
       return analysis;
     } catch (e) {
-      print('Error calculating category analysis: $e');
+      debugPrint('Error calculating category analysis: $e');
       return {};
     }
   }
@@ -212,7 +227,7 @@ class AnalyticsService {
           .map((doc) => Transaction.fromMap(doc.data(), doc.id))
           .toList();
     } catch (e) {
-      print('Error getting transactions in period: $e');
+      debugPrint('Error getting transactions in period: $e');
       return [];
     }
   }
@@ -227,18 +242,19 @@ class AnalyticsService {
       final allBudgets = await BudgetService.getAllBudgets(userId);
       return allBudgets.where((budget) {
         return budget.isActive &&
-               budget.startDate.isBefore(endDate) &&
-               budget.endDate.isAfter(startDate);
+            budget.startDate.isBefore(endDate) &&
+            budget.endDate.isAfter(startDate);
       }).toList();
     } catch (e) {
-      print('Error getting budgets in period: $e');
+      debugPrint('Error getting budgets in period: $e');
       return [];
     }
   }
 
   /// Calculates total spent amount from transactions
   static double _calculateTotalSpent(List<Transaction> transactions) {
-    return transactions.fold(0.0, (sum, transaction) => sum + transaction.amount);
+    return transactions.fold(
+        0.0, (sum, transaction) => sum + transaction.amount);
   }
 
   /// Calculates average daily spending
@@ -270,7 +286,9 @@ class AnalyticsService {
     DateTime endDate,
   ) {
     final totalSpent = _calculateTotalSpent(transactions);
-    final months = ((endDate.year - startDate.year) * 12) + (endDate.month - startDate.month) + 1;
+    final months = ((endDate.year - startDate.year) * 12) +
+        (endDate.month - startDate.month) +
+        1;
     return months > 0 ? totalSpent / months : 0.0;
   }
 
@@ -295,14 +313,16 @@ class AnalyticsService {
   static RecurringTransactionImpact _calculateRecurringTransactionImpact(
     List<Transaction> transactions,
   ) {
-    final recurringTransactions = transactions.where((t) => t.recurring).toList();
+    final recurringTransactions =
+        transactions.where((t) => t.recurring).toList();
     final totalSpent = _calculateTotalSpent(transactions);
     final recurringAmount = _calculateTotalSpent(recurringTransactions);
-    
+
     final recurringByCategory = <String, double>{};
     for (final transaction in recurringTransactions) {
-      recurringByCategory[transaction.categoryId] = 
-          (recurringByCategory[transaction.categoryId] ?? 0.0) + transaction.amount;
+      recurringByCategory[transaction.categoryId] =
+          (recurringByCategory[transaction.categoryId] ?? 0.0) +
+              transaction.amount;
     }
 
     return RecurringTransactionImpact(
@@ -310,15 +330,17 @@ class AnalyticsService {
       recurringTransactionCount: recurringTransactions.length,
       recurringPercentage: totalSpent > 0 ? recurringAmount / totalSpent : 0.0,
       recurringByCategory: recurringByCategory,
-      contributingRecurringIds: recurringTransactions.map<String>((t) => t.id).toList(),
+      contributingRecurringIds:
+          recurringTransactions.map<String>((t) => t.id).toList(),
     );
   }
 
   /// Calculates category breakdown
-  static Map<String, double> _calculateCategoryBreakdown(List<Transaction> transactions) {
+  static Map<String, double> _calculateCategoryBreakdown(
+      List<Transaction> transactions) {
     final breakdown = <String, double>{};
     for (final transaction in transactions) {
-      breakdown[transaction.categoryId] = 
+      breakdown[transaction.categoryId] =
           (breakdown[transaction.categoryId] ?? 0.0) + transaction.amount;
     }
     return breakdown;
@@ -335,14 +357,14 @@ class AnalyticsService {
 
     for (final transaction in transactions) {
       // Check if transaction is within budget period
-      if (transaction.date.isAfter(budget.startDate.subtract(Duration(days: 1))) &&
+      if (transaction.date
+              .isAfter(budget.startDate.subtract(Duration(days: 1))) &&
           transaction.date.isBefore(budget.endDate.add(Duration(days: 1)))) {
-        
         // Check if transaction matches budget criteria
         if (budget.type == BudgetType.OVERALL) {
           spent += transaction.amount;
-        } else if (budget.type == BudgetType.CATEGORY && 
-                   budget.categoryId == transaction.categoryId) {
+        } else if (budget.type == BudgetType.CATEGORY &&
+            budget.categoryId == transaction.categoryId) {
           spent += transaction.amount;
         }
       }

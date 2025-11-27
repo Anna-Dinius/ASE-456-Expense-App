@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class TransactionService {
   final FirebaseFirestore firestore;
@@ -43,7 +44,7 @@ class TransactionService {
         }
       }
     } catch (e) {
-      print('Error updating recurring transactions: $e');
+      debugPrint('Error updating recurring transactions: $e');
     }
   }
 

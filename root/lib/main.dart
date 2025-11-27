@@ -85,7 +85,7 @@ class MyHomePageState extends State<MyHomePage> {
       await updateRecurringTransactions(widget.userId);
       await loadTransactions();
     } catch (e) {
-      print('Error initializing app: $e');
+      debugPrint('Error initializing app: $e');
       // Still try to load data even if initialization fails
       await loadCategories();
       await updateRecurringTransactions(widget.userId);
@@ -102,7 +102,7 @@ class MyHomePageState extends State<MyHomePage> {
         _categories.addAll(categories);
       });
     } catch (e) {
-      print('Error loading categories: $e');
+      debugPrint('Error loading categories: $e');
       // Keep default categories as fallback
     }
   }

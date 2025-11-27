@@ -34,7 +34,7 @@ class Chart extends StatelessWidget {
         endDate: endDate,
       );
     } catch (e) {
-      print('Error loading spending trends: $e');
+      debugPrint('Error loading spending trends: $e');
       return {};
     }
   }
