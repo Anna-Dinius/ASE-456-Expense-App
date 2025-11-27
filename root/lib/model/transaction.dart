@@ -15,10 +15,10 @@ class Transaction {
   // When this expense occurred
   final DateTime date;
 
-  // NEW: Which category this expense belongs to (links to Category.id)
+  // Which category this expense belongs to (links to Category.id)
   final String categoryId;
 
-  // NEW: Recurring Payments
+  // Recurring Payments
   final bool recurring;
   final String interval;
 
@@ -33,7 +33,7 @@ class Transaction {
     required this.title,
     required this.amount,
     required this.date,
-    required this.categoryId, // NEW: Now required to categorize every expense
+    required this.categoryId, // Now required to categorize every expense
     //New: Now required recurring and interval
     required this.recurring,
     required this.interval,
@@ -82,8 +82,8 @@ class Transaction {
       'title': title,
       'amount': amount,
       'date': date.toIso8601String(), // Convert date to string format
-      'categoryId': categoryId, // NEW: Include category information
-      'recurring': recurring, // NEW: Include recurring and interval
+      'categoryId': categoryId, // Include category information
+      'recurring': recurring, // Include recurring and interval
       'interval': interval,
       'pastPayments': pastPayments
           .map((n) => n.toIso8601String())
@@ -105,8 +105,8 @@ class Transaction {
       title: json['title'],
       amount: json['amount'].toDouble(), // Convert back to double
       date: DateTime.parse(json['date']), // Convert string back to DateTime
-      categoryId: json['categoryId'], // NEW: Restore category information
-      recurring: json['recurring'], // NEW: Include recurring and interval
+      categoryId: json['categoryId'], // Restore category information
+      recurring: json['recurring'], // Include recurring and interval
       interval: json['interval'],
       //Casting the below fields as Lists if available, otherwise use empty list to parse.
       pastPayments: (json['pastPayments'] as List<dynamic>? ?? [])
@@ -126,19 +126,18 @@ class Transaction {
       title: data['title'],
       amount: (data['amount']).toDouble(),
       date: (data['date']).toDate(),
-      categoryId: data['categoryId'] ??
-          'other', // NEW: Include category, default to 'other'
-      recurring:
-          data['recurring'] ?? false, // NEW: Include recurring and interval
+      categoryId:
+          data['categoryId'] ?? 'other', // Include category, default to 'other'
+      recurring: data['recurring'] ?? false, // Include recurring and interval
       interval: data['interval'] ?? '',
       pastPayments: (data['pastPayments'] as List<dynamic>?)
-          ?.map((e) => (e as Timestamp).toDate())
-          .toList() 
-        ?? [],
+              ?.map((e) => (e as Timestamp).toDate())
+              .toList() ??
+          [],
       futurePayments: (data['futurePayments'] as List<dynamic>?)
-          ?.map((e) => (e as Timestamp).toDate())
-          .toList() 
-        ?? [],
+              ?.map((e) => (e as Timestamp).toDate())
+              .toList() ??
+          [],
     );
   }
 
@@ -149,7 +148,7 @@ class Transaction {
       'title': title,
       'amount': amount,
       'date': date,
-      'categoryId': categoryId, // NEW: Include category information
+      'categoryId': categoryId, // Include category information
       'recurring': recurring,
       'interval': interval,
       'pastPayments': pastPayments,
@@ -170,8 +169,8 @@ class Transaction {
         other.title == title &&
         other.amount == amount &&
         other.date == date &&
-        other.categoryId == categoryId && // NEW: Also compare category
-        other.recurring == recurring && // NEW: Include recurring and interval
+        other.categoryId == categoryId && // Also compare category
+        other.recurring == recurring && // Include recurring and interval
         other.interval == interval &&
         other.pastPayments == pastPayments &&
         other.futurePayments == futurePayments;
@@ -186,8 +185,8 @@ class Transaction {
         title.hashCode ^
         amount.hashCode ^
         date.hashCode ^
-        categoryId.hashCode ^ // NEW: Include category in hash calculation
-        recurring.hashCode ^ // NEW: Include recurring and interval
+        categoryId.hashCode ^ // Include category in hash calculation
+        recurring.hashCode ^ // Include recurring and interval
         interval.hashCode ^
         pastPayments.hashCode ^
         futurePayments.hashCode;

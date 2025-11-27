@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:p5_expense/model/category.dart'; // NEW: Import Category model for dropdown
-import 'package:p5_expense/view/widgets/category_picker.dart'; // NEW: Import CategoryPicker widget
+import 'package:p5_expense/model/category.dart'; // Import Category model for dropdown
+import 'package:p5_expense/view/widgets/category_picker.dart'; // Import CategoryPicker widget
 
 /// Widget for adding new expense transactions
 /// This form allows users to enter transaction details and select a category
@@ -9,7 +9,7 @@ class NewTransaction extends StatefulWidget {
   // Function to call when the user submits the form
   final Function addTx;
 
-  // NEW: List of available categories for the user to choose from
+  // List of available categories for the user to choose from
   final List<Category> categories;
 
   const NewTransaction(this.addTx, this.categories, {super.key});
@@ -27,11 +27,11 @@ class NewTransactionState extends State<NewTransaction> {
   DateTime _selectedDate = DateTime.now();
   DateTime _endDate = DateTime.now();
 
-  // NEW: The category the user selected for this transaction
+  // The category the user selected for this transaction
   // It's nullable (?) because the user might not have selected one yet
   Category? _selectedCategory;
 
-  //NEW: The user can select recurring payments through a check box, and then select an interval
+  //The user can select recurring payments through a check box, and then select an interval
   bool _isRecurring = false;
   String _selectedInterval =
       'Daily'; //Set to Daily as default due to DropDownMenu
@@ -98,8 +98,8 @@ class NewTransactionState extends State<NewTransaction> {
     }
 
     // Call the parent's addTx function with all the form data
-    // NEW: Include the selected category ID
-    // NEW: Included isRecurring and selectedInterval
+    // Include the selected category ID
+    // Included isRecurring and selectedInterval
     widget.addTx(
         enteredTitle,
         enteredAmount,
@@ -177,7 +177,7 @@ class NewTransactionState extends State<NewTransaction> {
                   keyboardType: TextInputType.number,
                   onSubmitted: (_) => _submitData(),
                 ),
-                //NEW: Recurring Payment Toggle
+                //Recurring Payment Toggle
                 CheckboxListTile(
                     title: Text('Recurring Payment'),
                     checkColor: Colors.white,
@@ -203,7 +203,7 @@ class NewTransactionState extends State<NewTransaction> {
                           _selectedInterval = newValue!;
                         });
                       }),
-                // NEW: Category Selection using CategoryPicker
+                // Category Selection using CategoryPicker
                 // This allows users to choose which category their expense belongs to
                 CategoryPicker(
                   categories: widget.categories,

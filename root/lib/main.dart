@@ -19,8 +19,8 @@ import 'package:p5_expense/view/budgets_list.dart';
 import 'package:p5_expense/view/charts_overview.dart';
 import 'package:p5_expense/view/report_list.dart';
 import 'package:p5_expense/model/transaction.dart';
-import 'package:p5_expense/model/category.dart'; // NEW: Import the Category model
-import 'package:p5_expense/service/category_service.dart'; // NEW: Import CategoryService
+import 'package:p5_expense/model/category.dart'; // Import the Category model
+import 'package:p5_expense/service/category_service.dart'; // Import CategoryService
 
 import 'package:p5_expense/view/search_bar_widget.dart';
 
@@ -61,7 +61,7 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   List<Transaction> _userTransactions = [];
 
-  // NEW: List to store all available categories
+  // List to store all available categories
   // We start with the default categories, but users can add/edit/delete them later
   final List<Category> _categories = List.from(DefaultCategories.categories);
 
@@ -120,7 +120,7 @@ class MyHomePageState extends State<MyHomePage> {
   /// Adds a new transaction to the list
   /// This method is called when the user submits the "Add Transaction" form
   ///
-  /// NEW: Now requires a categoryId parameter to categorize the expense
+  /// Now requires a categoryId parameter to categorize the expense
   Future<void> _addNewTransaction(
       String txTitle,
       double txAmount,
@@ -142,8 +142,8 @@ class MyHomePageState extends State<MyHomePage> {
       title: txTitle,
       amount: txAmount,
       date: chosenDate,
-      categoryId: categoryId, // NEW: Include the selected category
-      recurring: recurring, //NEW: Include recurring and interval
+      categoryId: categoryId, // Include the selected category
+      recurring: recurring, //Include recurring and interval
       interval: interval,
       pastPayments: pastPayments,
       futurePayments: futurePayments,
@@ -162,8 +162,7 @@ class MyHomePageState extends State<MyHomePage> {
       'title': txTitle,
       'amount': txAmount,
       'date': chosenDate,
-      'categoryId':
-          categoryId, // NEW: Include category information in Firestore
+      'categoryId': categoryId, // Include category information in Firestore
       'recurring': recurring,
       'interval': interval,
       'pastPayments': pastPayments,
@@ -177,7 +176,7 @@ class MyHomePageState extends State<MyHomePage> {
     showModalBottomSheet(
       context: ctx,
       builder: (_) {
-        // NEW: Pass the categories list to the form so users can select from them
+        // Pass the categories list to the form so users can select from them
         return NewTransaction(_addNewTransaction, _categories);
       },
     );
@@ -228,7 +227,7 @@ class MyHomePageState extends State<MyHomePage> {
         .toList();
   }
 
-  //NEW: This functions updates the scheduled and current payments of Transactions in the database
+  //This functions updates the scheduled and current payments of Transactions in the database
   Future<void> updateRecurringTransactions(userId) async {
     debugPrint('updateRecurringTransactions was called.');
     final today = DateTime.now();
@@ -359,7 +358,7 @@ class MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart.withUserId(widget.userId),
-            // NEW: Pass the categories list to the transaction list so it can display category info
+            // Pass the categories list to the transaction list so it can display category info
             SearchBarWidget(
                 transactions: _userTransactions,
                 deleteTx: _deleteTransaction,

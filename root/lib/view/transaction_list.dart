@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:p5_expense/model/transaction.dart';
-import 'package:p5_expense/model/category.dart'; // NEW: Import Category model to display category info
-import 'package:p5_expense/view/widgets/category_badge.dart'; // NEW: Import CategoryBadge widget
+import 'package:p5_expense/model/category.dart'; // Import Category model to display category info
+import 'package:p5_expense/view/widgets/category_badge.dart'; // Import CategoryBadge widget
 
 /// Widget that displays a list of all transactions
 /// Shows each transaction with its category information and allows deletion
@@ -14,7 +14,7 @@ class TransactionList extends StatelessWidget {
   // Function to call when user wants to delete a transaction
   final Function deleteTx;
 
-  // NEW: List of categories to look up category information for each transaction
+  // List of categories to look up category information for each transaction
   final List<Category> categories;
 
   const TransactionList(this.transactions, this.deleteTx, this.categories,
@@ -72,7 +72,7 @@ class TransactionList extends StatelessWidget {
                   horizontal: 5,
                 ),
                 child: ListTile(
-                  // NEW: Show category icon and color in the leading circle
+                  // Show category icon and color in the leading circle
                   leading: CircleAvatar(
                     radius: 30,
                     backgroundColor: category.color.withValues(alpha: 0.2),
@@ -93,7 +93,7 @@ class TransactionList extends StatelessWidget {
                       Text(
                         DateFormat.yMMMd().format(transaction.date),
                       ),
-                      // NEW: Show category badge using CategoryBadge widget
+                      // Show category badge using CategoryBadge widget
                       Container(
                         margin: EdgeInsets.only(top: 4),
                         child: CategoryBadge(
