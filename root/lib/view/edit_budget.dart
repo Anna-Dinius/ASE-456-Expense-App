@@ -38,8 +38,9 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.budget.name);
-    _amountController = TextEditingController(text: widget.budget.amount.toStringAsFixed(2));
-    
+    _amountController =
+        TextEditingController(text: widget.budget.amount.toStringAsFixed(2));
+
     _selectedType = widget.budget.type;
     _selectedPeriod = widget.budget.period;
     _startDate = widget.budget.startDate;
@@ -50,7 +51,11 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
     if (widget.budget.categoryId != null) {
       _selectedCategory = widget.categories.firstWhere(
         (c) => c.id == widget.budget.categoryId,
-        orElse: () => Category(id: 'unknown', title: 'Unknown', color: Colors.grey, icon: Icons.help),
+        orElse: () => Category(
+            id: 'unknown',
+            title: 'Unknown',
+            color: Colors.grey,
+            icon: Icons.help),
       );
     }
   }
@@ -70,7 +75,8 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
       lastDate: DateTime.now().add(Duration(days: 365 * 5)),
     );
     if (picked != null) {
-      setState(() => _startDate = DateTime(picked.year, picked.month, picked.day));
+      setState(
+          () => _startDate = DateTime(picked.year, picked.month, picked.day));
     }
   }
 
@@ -82,7 +88,8 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
       lastDate: DateTime.now().add(Duration(days: 365 * 5)),
     );
     if (picked != null) {
-      setState(() => _endDate = DateTime(picked.year, picked.month, picked.day, 23, 59, 59));
+      setState(() => _endDate =
+          DateTime(picked.year, picked.month, picked.day, 23, 59, 59));
     }
   }
 
@@ -92,7 +99,8 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be signed in to edit a budget.')),
+        const SnackBar(
+            content: Text('You must be signed in to edit a budget.')),
       );
       return;
     }
@@ -100,7 +108,9 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
     // Validate category for category-specific budgets
     if (_selectedType == BudgetType.CATEGORY && _selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category for category-specific budgets.')),
+        const SnackBar(
+            content: Text(
+                'Please select a category for category-specific budgets.')),
       );
       return;
     }
@@ -123,21 +133,21 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
         isActive: _isActive,
       );
       if (!mounted) return;
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Budget "${name}" updated successfully'),
+          content: Text('Budget "$name" updated successfully'),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 2),
         ),
       );
-      
+
       // Return true to indicate success
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
-      
+
       // Show user-friendly error message
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -206,7 +216,8 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
                   prefixText: '\$',
                   hintText: '0.00',
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 textInputAction: TextInputAction.next,
                 validator: (v) {
                   final value = double.tryParse(v?.trim() ?? '');
@@ -340,7 +351,8 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
               // Active Status
               SwitchListTile(
                 title: const Text('Active Budget'),
-                subtitle: const Text('Inactive budgets will not track spending'),
+                subtitle:
+                    const Text('Inactive budgets will not track spending'),
                 value: _isActive,
                 onChanged: (value) {
                   setState(() => _isActive = value);
@@ -365,4 +377,3 @@ class _EditBudgetScreenState extends State<EditBudgetScreen> {
     );
   }
 }
-

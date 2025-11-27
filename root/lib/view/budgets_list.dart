@@ -54,7 +54,7 @@ class _BudgetsListScreenState extends State<BudgetsListScreen> {
         builder: (context) => NewBudgetScreen(categories: widget.categories),
       ),
     );
-    
+
     if (result == true && mounted) {
       await _loadBudgets();
     }
@@ -69,7 +69,7 @@ class _BudgetsListScreenState extends State<BudgetsListScreen> {
         ),
       ),
     );
-    
+
     if (result == true && mounted) {
       await _loadBudgets();
     }
@@ -137,7 +137,8 @@ class _BudgetsListScreenState extends State<BudgetsListScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.account_balance_wallet_outlined, size: 64, color: Colors.grey),
+                      const Icon(Icons.account_balance_wallet_outlined,
+                          size: 64, color: Colors.grey),
                       const SizedBox(height: 16),
                       Text(
                         'No budgets yet',
@@ -146,7 +147,10 @@ class _BudgetsListScreenState extends State<BudgetsListScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Create a budget to track your spending',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(color: Colors.grey),
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
@@ -213,7 +217,8 @@ class _BudgetCardState extends State<_BudgetCard> {
     }
 
     try {
-      final spent = await BudgetService.calculateSpentAmount(user.uid, widget.budget);
+      final spent =
+          await BudgetService.calculateSpentAmount(user.uid, widget.budget);
       if (mounted) {
         setState(() {
           _spentAmount = spent;
@@ -231,11 +236,17 @@ class _BudgetCardState extends State<_BudgetCard> {
     if (widget.budget.categoryId == null) return null;
     return widget.categories.firstWhere(
       (c) => c.id == widget.budget.categoryId,
-      orElse: () => Category(id: 'unknown', title: 'Unknown', color: Colors.grey, icon: Icons.help),
+      orElse: () => Category(
+          id: 'unknown',
+          title: 'Unknown',
+          color: Colors.grey,
+          icon: Icons.help),
     );
   }
 
-  double get _utilization => widget.budget.amount > 0 ? (_spentAmount / widget.budget.amount).clamp(0.0, 1.0) : 0.0;
+  double get _utilization => widget.budget.amount > 0
+      ? (_spentAmount / widget.budget.amount).clamp(0.0, 1.0)
+      : 0.0;
   double get _remaining => widget.budget.amount - _spentAmount;
 
   Color get _statusColor {
@@ -333,11 +344,13 @@ class _BudgetCardState extends State<_BudgetCard> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _statusColor.withOpacity(0.1),
+                      color: _statusColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: _statusColor.withOpacity(0.3)),
+                      border: Border.all(
+                          color: _statusColor.withValues(alpha: 0.3)),
                     ),
                     child: Text(
                       _statusText,
@@ -441,4 +454,3 @@ class _BudgetCardState extends State<_BudgetCard> {
     );
   }
 }
-

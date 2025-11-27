@@ -7,6 +7,8 @@ import 'package:p5_expense/service/user_service.dart';
 import 'package:p5_expense/view/sign_in.dart';
 
 class ProfileCreationScreen extends StatefulWidget {
+  const ProfileCreationScreen({super.key});
+
   @override
   State<ProfileCreationScreen> createState() => _ProfileCreationScreenState();
 }
@@ -83,9 +85,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: 'Full Name'),
-                validator: (v) => (v == null || v.trim().isEmpty)
-                    ? 'Name is required'
-                    : null,
+                validator: (v) =>
+                    (v == null || v.trim().isEmpty) ? 'Name is required' : null,
               ),
               TextFormField(
                 controller: _emailController,
@@ -99,9 +100,8 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
                 controller: _passwordController,
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
-                validator: (v) => (v == null || v.length < 6)
-                    ? 'Min 6 characters'
-                    : null,
+                validator: (v) =>
+                    (v == null || v.length < 6) ? 'Min 6 characters' : null,
               ),
               TextFormField(
                 controller: _confirmPasswordController,
@@ -133,5 +133,3 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
     );
   }
 }
-
-

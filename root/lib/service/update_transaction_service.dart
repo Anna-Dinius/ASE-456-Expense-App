@@ -18,7 +18,6 @@ class TransactionService {
       for (final doc in snapshot.docs) {
         final data = doc.data();
 
-        final currentDate = (data['date'] as Timestamp).toDate();
         final pastPayments = (data['pastPayments'] as List<dynamic>? ?? [])
             .map((e) => (e as Timestamp).toDate())
             .toList();

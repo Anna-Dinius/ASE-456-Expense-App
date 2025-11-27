@@ -2,22 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:p5_expense/model/transaction.dart';
 import 'package:p5_expense/model/category.dart';
 import 'package:p5_expense/view/transaction_list.dart';
+
 class SearchBarWidget extends StatefulWidget {
   final List<Transaction> transactions;
   final Function deleteTx;
   final List<Category> categories;
 
-  SearchBarWidget({
+  const SearchBarWidget({
     required this.transactions,
     required this.deleteTx,
     required this.categories,
+    super.key,
   });
 
   @override
-  _SearchBarWidgetState createState() => _SearchBarWidgetState();
+  SearchBarWidgetState createState() => SearchBarWidgetState();
 }
 
-class _SearchBarWidgetState extends State<SearchBarWidget> {
+class SearchBarWidgetState extends State<SearchBarWidget> {
   final _searchController = TextEditingController();
   late List<Transaction> _filteredTransactions;
   String _query = '';
@@ -30,6 +32,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     super.initState();
     _filteredTransactions = widget.transactions;
   }
+
   @override //This handles a bug where the transactions wouldn't show up at the start.
   void didUpdateWidget(covariant SearchBarWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -47,24 +50,24 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
 
     setState(() {
       unsortedTransactions = widget.transactions.where((tx) {
-
         return tx.title.toLowerCase().contains(lowerQuery) &&
-               widget.categories.firstWhere(
-                (category) => category.id == tx.categoryId
-              ).title.contains(_selectedCategory);
+            widget.categories
+                .firstWhere((category) => category.id == tx.categoryId)
+                .title
+                .contains(_selectedCategory);
       }).toList();
-      if (_selectedSortBy == 'Date'){
+      if (_selectedSortBy == 'Date') {
         unsortedTransactions.sort((a, b) {
-        return a.date.compareTo(b.date);
-      });
+          return a.date.compareTo(b.date);
+        });
       }
-      if (_selectedSortBy == 'Amount' ){
+      if (_selectedSortBy == 'Amount') {
         unsortedTransactions.sort((a, b) {
-        return a.amount.compareTo(b.amount);
-      });
+          return a.amount.compareTo(b.amount);
+        });
       }
 
-      if (_selectedOrder == 'Descend'){
+      if (_selectedOrder == 'Descend') {
         unsortedTransactions = unsortedTransactions.reversed.toList();
       }
 
@@ -77,63 +80,55 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
     return Column(
       children: [
         // Search field
-        Row(
-          children: [
-            Expanded(
+        Row(children: [
+          Expanded(
               child: Padding(
-                padding: EdgeInsetsGeometry.all(5),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    labelText: 'Search transactions',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+            padding: EdgeInsetsGeometry.all(5),
+            child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  labelText: 'Search transactions',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                    onChanged: (input) { 
-                      _query = input;
-                      _filterTransactions();
-                    }
                 ),
-              ) 
-            ),
-            DropdownButton(
+                onChanged: (input) {
+                  _query = input;
+                  _filterTransactions();
+                }),
+          )),
+          DropdownButton(
               padding: EdgeInsets.all(5),
               value: _selectedSortBy,
-              items: <String>['Date', 'Amount']
-                .map((String value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              items: <String>['Date', 'Amount'].map((String value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedSortBy = newValue!;
                   _filterTransactions();
                 });
-              }
-            ),
-            DropdownButton(
+              }),
+          DropdownButton(
               padding: EdgeInsets.all(5),
               value: _selectedOrder,
-              items: <String>['Ascend', 'Descend']
-                .map((String value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: Text(value),
-                   );
-                }).toList(),
+              items: <String>['Ascend', 'Descend'].map((String value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedOrder = newValue!;
                   _filterTransactions();
                 });
-              }
-            ),
-          ]
-        ),
+              }),
+        ]),
         Wrap(
           spacing: 5,
           runSpacing: 5,

@@ -186,15 +186,15 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
             Text(
               'No reports yet',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.grey[600],
-              ),
+                    color: Colors.grey[600],
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               'Generate your first report to get started',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[500],
-              ),
+                    color: Colors.grey[500],
+                  ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -249,7 +249,7 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: utilizationColor.withOpacity(0.15),
+                    backgroundColor: utilizationColor.withValues(alpha: 0.15),
                     child: Icon(
                       Icons.assessment,
                       color: utilizationColor,
@@ -263,16 +263,18 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
                       children: [
                         Text(
                           report.period,
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           '${dateFormat.format(report.startDate)} - ${dateFormat.format(report.endDate)}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey[600],
+                                  ),
                         ),
                       ],
                     ),
@@ -359,7 +361,8 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
     );
   }
 
-  Widget _buildReportMetric(IconData icon, String label, String value, Color color) {
+  Widget _buildReportMetric(
+      IconData icon, String label, String value, Color color) {
     return Column(
       children: [
         Icon(icon, size: 20, color: color),
@@ -384,5 +387,3 @@ class _ReportsListScreenState extends State<ReportsListScreen> {
     );
   }
 }
-
-

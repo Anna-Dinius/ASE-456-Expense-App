@@ -18,10 +18,10 @@ class ManageCategoriesScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ManageCategoriesScreenState createState() => _ManageCategoriesScreenState();
+  ManageCategoriesScreenState createState() => ManageCategoriesScreenState();
 }
 
-class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
+class ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
   late List<Category> _categories;
   bool _isLoading = false;
 
@@ -280,8 +280,8 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showCategoryDialog(),
-        child: Icon(Icons.add),
         tooltip: 'Add Category',
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -303,10 +303,10 @@ class CategoryEditDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CategoryEditDialogState createState() => _CategoryEditDialogState();
+  CategoryEditDialogState createState() => CategoryEditDialogState();
 }
 
-class _CategoryEditDialogState extends State<CategoryEditDialog> {
+class CategoryEditDialogState extends State<CategoryEditDialog> {
   late TextEditingController _titleController;
   late Color _selectedColor;
   late IconData _selectedIcon;
@@ -557,10 +557,10 @@ class ReassignmentDialog extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ReassignmentDialogState createState() => _ReassignmentDialogState();
+  ReassignmentDialogState createState() => ReassignmentDialogState();
 }
 
-class _ReassignmentDialogState extends State<ReassignmentDialog> {
+class ReassignmentDialogState extends State<ReassignmentDialog> {
   Category? _selectedReplacementCategory;
 
   @override

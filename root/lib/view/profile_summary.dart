@@ -6,6 +6,8 @@ import 'package:p5_expense/service/auth_service.dart';
 import 'package:p5_expense/view/profile_editing.dart';
 
 class ProfileSummaryScreen extends StatelessWidget {
+  const ProfileSummaryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final fb_auth.User? user = AuthService.currentUser;
@@ -48,18 +50,22 @@ class ProfileSummaryScreen extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage: (data['profileImageUrl'] ?? '').toString().isNotEmpty
-                    ? NetworkImage(data['profileImageUrl'])
-                    : null,
+                backgroundImage:
+                    (data['profileImageUrl'] ?? '').toString().isNotEmpty
+                        ? NetworkImage(data['profileImageUrl'])
+                        : null,
                 child: (data['profileImageUrl'] ?? '').toString().isEmpty
                     ? Icon(Icons.person, size: 40)
                     : null,
               ),
               const SizedBox(height: 12),
-              Text(data['name'] ?? '', style: Theme.of(context).textTheme.headlineSmall),
-              Text(data['email'] ?? '', style: Theme.of(context).textTheme.bodyMedium),
+              Text(data['name'] ?? '',
+                  style: Theme.of(context).textTheme.headlineSmall),
+              Text(data['email'] ?? '',
+                  style: Theme.of(context).textTheme.bodyMedium),
               const SizedBox(height: 8),
-              Text('Phone: ${(data['phoneNumber'] ?? '').isEmpty ? 'N/A' : data['phoneNumber']}'),
+              Text(
+                  'Phone: ${(data['phoneNumber'] ?? '').isEmpty ? 'N/A' : data['phoneNumber']}'),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () {
@@ -76,5 +82,3 @@ class ProfileSummaryScreen extends StatelessWidget {
     );
   }
 }
-
-

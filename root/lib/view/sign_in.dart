@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:p5_expense/service/auth_service.dart';
 
 class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
+
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
@@ -63,9 +65,8 @@ class _SignInScreenState extends State<SignInScreen> {
                 controller: _passwordController,
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
-                validator: (v) => (v == null || v.isEmpty)
-                    ? 'Password is required'
-                    : null,
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? 'Password is required' : null,
               ),
               const SizedBox(height: 16),
               _loading
@@ -81,5 +82,3 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 }
-
-

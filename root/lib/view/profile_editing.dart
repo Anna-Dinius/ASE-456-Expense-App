@@ -7,6 +7,8 @@ import 'package:p5_expense/service/auth_service.dart';
 import 'package:p5_expense/service/user_service.dart';
 
 class ProfileEditingScreen extends StatefulWidget {
+  const ProfileEditingScreen({super.key});
+
   @override
   State<ProfileEditingScreen> createState() => _ProfileEditingScreenState();
 }
@@ -112,8 +114,8 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
                     child: const Text("Cancel"),
                   ),
                   TextButton(
-                    onPressed: () =>
-                        Navigator.of(dialogContext).pop(passwordController.text),
+                    onPressed: () => Navigator.of(dialogContext)
+                        .pop(passwordController.text),
                     child: const Text("Confirm"),
                   ),
                 ],
@@ -189,7 +191,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
     setState(() => _loading = true);
     try {
       await UserService.deleteUser(user.uid);
-      
+
       if (mounted) {
         // Simply pop back to the very first screen in the stack
         // This ensures we don't have any leftover screens or state
@@ -218,8 +220,7 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
                   children: [
                     TextFormField(
                       controller: _nameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Full Name'),
+                      decoration: const InputDecoration(labelText: 'Full Name'),
                       validator: (v) => (v == null || v.trim().isEmpty)
                           ? 'Name is required'
                           : null,

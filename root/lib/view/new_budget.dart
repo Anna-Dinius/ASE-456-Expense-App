@@ -43,7 +43,8 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
           // Start from Monday of current week
           final monday = now.subtract(Duration(days: now.weekday - 1));
           _startDate = DateTime(monday.year, monday.month, monday.day);
-          _endDate = monday.add(Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+          _endDate = monday
+              .add(Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
           break;
         case BudgetPeriod.MONTHLY:
           _startDate = DateTime(now.year, now.month, 1);
@@ -73,7 +74,8 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
       lastDate: DateTime(now.year + 5),
     );
     if (picked != null) {
-      setState(() => _startDate = DateTime(picked.year, picked.month, picked.day));
+      setState(
+          () => _startDate = DateTime(picked.year, picked.month, picked.day));
     }
   }
 
@@ -85,7 +87,8 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
       lastDate: DateTime(now.year + 5),
     );
     if (picked != null) {
-      setState(() => _endDate = DateTime(picked.year, picked.month, picked.day, 23, 59, 59));
+      setState(() => _endDate =
+          DateTime(picked.year, picked.month, picked.day, 23, 59, 59));
     }
   }
 
@@ -95,7 +98,8 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
     final user = fb_auth.FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be signed in to create a budget.')),
+        const SnackBar(
+            content: Text('You must be signed in to create a budget.')),
       );
       return;
     }
@@ -103,7 +107,9 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
     // Validate category for category-specific budgets
     if (_selectedType == BudgetType.CATEGORY && _selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a category for category-specific budgets.')),
+        const SnackBar(
+            content: Text(
+                'Please select a category for category-specific budgets.')),
       );
       return;
     }
@@ -124,21 +130,21 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
         period: _selectedPeriod,
       );
       if (!mounted) return;
-      
+
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Budget "${name}" created successfully'),
+          content: Text('Budget "$name" created successfully'),
           backgroundColor: Colors.green,
           duration: const Duration(seconds: 2),
         ),
       );
-      
+
       // Return true to indicate success
       Navigator.of(context).pop(true);
     } catch (e) {
       if (!mounted) return;
-      
+
       // Show user-friendly error message
       final errorMessage = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -215,7 +221,8 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
                   prefixText: '\$',
                   hintText: '0.00',
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 textInputAction: TextInputAction.next,
                 validator: (v) {
                   final value = double.tryParse(v?.trim() ?? '');
@@ -362,4 +369,3 @@ class _NewBudgetScreenState extends State<NewBudgetScreen> {
     );
   }
 }
-

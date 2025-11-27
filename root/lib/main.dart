@@ -35,6 +35,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,12 +53,12 @@ class MyApp extends StatelessWidget {
 // categories and transactions from their own subcollections.
 class MyHomePage extends StatefulWidget {
   final String userId;
-  MyHomePage({required this.userId});
+  const MyHomePage({super.key, required this.userId});
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class MyHomePageState extends State<MyHomePage> {
   List<Transaction> _userTransactions = [];
 
   // NEW: List to store all available categories
@@ -240,7 +242,6 @@ class _MyHomePageState extends State<MyHomePage> {
         final data = doc.data();
 
         //1. Safely parse data
-        final currentDate = (data['date'] as firestore.Timestamp).toDate();
         final List<dynamic> pastPaymentsRaw = data['pastPayments'] ?? [];
         final List<dynamic> futurePaymentsRaw = data['futurePayments'] ?? [];
 
@@ -379,6 +380,8 @@ class _MyHomePageState extends State<MyHomePage> {
 // - If signed out: show ProfileCreationScreen
 // - If signed in: ensure user doc exists, then show MyHomePage
 class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<fb_auth.User?>(

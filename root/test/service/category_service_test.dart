@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:p5_expense/model/category.dart';
-import 'package:p5_expense/service/category_service.dart';
 import '../fixtures/category_test_data.dart';
 
 void main() {

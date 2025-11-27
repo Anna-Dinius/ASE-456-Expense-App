@@ -12,13 +12,13 @@ class NewTransaction extends StatefulWidget {
   // NEW: List of available categories for the user to choose from
   final List<Category> categories;
 
-  NewTransaction(this.addTx, this.categories);
+  const NewTransaction(this.addTx, this.categories, {super.key});
 
   @override
-  _NewTransactionState createState() => _NewTransactionState();
+  NewTransactionState createState() => NewTransactionState();
 }
 
-class _NewTransactionState extends State<NewTransaction> {
+class NewTransactionState extends State<NewTransaction> {
   // Controllers for the text input fields
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
@@ -228,13 +228,13 @@ class _NewTransactionState extends State<NewTransaction> {
                       TextButton(
                         style: TextButton.styleFrom(
                             foregroundColor: Theme.of(context).primaryColor),
+                        onPressed: _presentDatePicker,
                         child: Text(
                           'Choose Date',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        onPressed: _presentDatePicker,
                       ),
                     ],
                   ),
@@ -252,13 +252,13 @@ class _NewTransactionState extends State<NewTransaction> {
                         TextButton(
                           style: TextButton.styleFrom(
                               foregroundColor: Theme.of(context).primaryColor),
+                          onPressed: _endDatePicker,
                           child: Text(
                             'Choose Date',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onPressed: _endDatePicker,
                         ),
                       ],
                     ),
@@ -266,8 +266,8 @@ class _NewTransactionState extends State<NewTransaction> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: ElevatedButton(
-                    child: Text('Add Transaction'),
                     onPressed: _submitData,
+                    child: Text('Add Transaction'),
                   ),
                 )
               ],

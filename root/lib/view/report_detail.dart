@@ -92,11 +92,13 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     final totalSpent = widget.report.totalSpent;
 
     for (final entry in widget.report.categoryBreakdown.entries) {
-      final percentage = totalSpent > 0 ? (entry.value / totalSpent) * 100 : 0.0;
+      final percentage =
+          totalSpent > 0 ? (entry.value / totalSpent) * 100 : 0.0;
       analysis[entry.key] = {
         'amount': entry.value,
         'percentage': percentage,
-        'transactionCount': 0, // Report doesn't store transaction count per category
+        'transactionCount':
+            0, // Report doesn't store transaction count per category
       };
     }
 
@@ -166,7 +168,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         // On mobile/desktop, share the file
         if (file != null) {
           final dateFormat = DateFormat('yyyy-MM-dd');
-          final fileName = 'report_${widget.report.period.replaceAll(' ', '_')}_${dateFormat.format(widget.report.startDate)}.pdf';
+          final fileName =
+              'report_${widget.report.period.replaceAll(' ', '_')}_${dateFormat.format(widget.report.startDate)}.pdf';
           await ReportExportService.shareFile(file, fileName);
         }
 
@@ -217,7 +220,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
         // On mobile/desktop, share the file
         if (file != null) {
           final dateFormat = DateFormat('yyyy-MM-dd');
-          final fileName = 'report_${widget.report.period.replaceAll(' ', '_')}_${dateFormat.format(widget.report.startDate)}.csv';
+          final fileName =
+              'report_${widget.report.period.replaceAll(' ', '_')}_${dateFormat.format(widget.report.startDate)}.csv';
           await ReportExportService.shareFile(file, fileName);
         }
 
@@ -341,7 +345,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     const SizedBox(height: 20),
 
                     // Budget performance
-                    if (widget.report.budgetPerformance.totalBudgetAmount > 0) ...[
+                    if (widget.report.budgetPerformance.totalBudgetAmount >
+                        0) ...[
                       _buildBudgetPerformance(),
                       const SizedBox(height: 20),
                     ],
@@ -378,7 +383,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                             return Column(
                               children: [
                                 BudgetProgressChart(
-                                  budgetPerformance: widget.report.budgetPerformance,
+                                  budgetPerformance:
+                                      widget.report.budgetPerformance,
                                   categories: snapshot.data!,
                                 ),
                                 const SizedBox(height: 20),
@@ -390,7 +396,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       ),
 
                     // Recurring transactions impact
-                    if (widget.report.recurringTransactionImpact.recurringTransactionCount > 0) ...[
+                    if (widget.report.recurringTransactionImpact
+                            .recurringTransactionCount >
+                        0) ...[
                       _buildRecurringImpact(),
                       const SizedBox(height: 20),
                     ],
@@ -477,8 +485,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 Text(
                   'Key Highlights',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ],
             ),
@@ -535,9 +543,9 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: iconColor.withOpacity(0.1),
+          color: iconColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: iconColor.withOpacity(0.3)),
+          border: Border.all(color: iconColor.withValues(alpha: 0.3)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -613,8 +621,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
             Text(
               '${dateFormat.format(widget.report.startDate)} - ${dateFormat.format(widget.report.endDate)}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+                    color: Colors.grey[600],
+                  ),
             ),
             const SizedBox(height: 16),
             Row(
@@ -643,9 +651,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: utilizationColor.withOpacity(0.1),
+                  color: utilizationColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: utilizationColor.withOpacity(0.3)),
+                  border: Border.all(
+                      color: utilizationColor.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
@@ -669,11 +678,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 
-  Widget _buildSummaryMetric(String label, String value, IconData icon, Color color) {
+  Widget _buildSummaryMetric(
+      String label, String value, IconData icon, Color color) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -758,8 +768,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
           Text(
             value,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
         ],
       ),
@@ -835,9 +845,12 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildBudgetStat('Exceeded', bp.exceededBudgets.toString(), Colors.red),
-                _buildBudgetStat('Met', bp.metBudgets.toString(), Colors.orange),
-                _buildBudgetStat('On Track', bp.underUtilizedBudgets.toString(), Colors.green),
+                _buildBudgetStat(
+                    'Exceeded', bp.exceededBudgets.toString(), Colors.red),
+                _buildBudgetStat(
+                    'Met', bp.metBudgets.toString(), Colors.orange),
+                _buildBudgetStat('On Track', bp.underUtilizedBudgets.toString(),
+                    Colors.green),
               ],
             ),
           ],
@@ -960,7 +973,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                               value: percentage / 100,
                               minHeight: 4,
                               backgroundColor: Colors.grey[200],
-                              valueColor: AlwaysStoppedAnimation<Color>(category.color),
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(category.color),
                             ),
                           ),
                         ],
@@ -986,7 +1000,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -1053,4 +1067,3 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     );
   }
 }
-

@@ -1,16 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart' as FakeFirestore;
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart'
+    as fake_firestore;
 import 'package:p5_expense/service/update_transaction_service.dart'; // adjust import path to include updateRecurringTransactions
 
 void main() {
   group('TransactionService.updateRecurringTransactions', () {
-    late FakeFirestore.FakeFirebaseFirestore firestore;
+    late fake_firestore.FakeFirebaseFirestore firestore;
     late TransactionService service;
     late String userId;
 
     setUp(() async {
-      firestore = FakeFirestore.FakeFirebaseFirestore();
+      firestore = fake_firestore.FakeFirebaseFirestore();
       service = TransactionService(firestore: firestore);
       userId = 'user_1';
 

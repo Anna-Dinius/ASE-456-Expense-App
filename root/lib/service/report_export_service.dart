@@ -27,79 +27,82 @@ class ReportExportService {
 
       // Build PDF content
       pdf.addPage(
-      pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
-        margin: const pw.EdgeInsets.all(40),
-        build: (pw.Context context) {
-          return [
-            // Header
-            _buildHeader(report, dateFormat),
-            pw.SizedBox(height: 20),
-
-            // Summary Section
-            _buildSummarySection(report, currencyFormat),
-            pw.SizedBox(height: 20),
-
-            // Spending Metrics
-            _buildSpendingMetrics(report, currencyFormat),
-            pw.SizedBox(height: 20),
-
-            // Budget Performance
-            if (report.budgetPerformance.totalBudgetAmount > 0)
-              _buildBudgetPerformance(report, currencyFormat),
-            if (report.budgetPerformance.totalBudgetAmount > 0)
+        pw.MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(40),
+          build: (pw.Context context) {
+            return [
+              // Header
+              _buildHeader(report, dateFormat),
               pw.SizedBox(height: 20),
 
-            // Category Breakdown
-            if (report.categoryBreakdown.isNotEmpty)
-              _buildCategoryBreakdown(report, categories, currencyFormat),
-            if (report.categoryBreakdown.isNotEmpty) pw.SizedBox(height: 20),
-
-            // Recurring Transactions
-            if (report.recurringTransactionImpact.recurringTransactionCount > 0)
-              _buildRecurringTransactions(report, currencyFormat),
-            if (report.recurringTransactionImpact.recurringTransactionCount > 0)
+              // Summary Section
+              _buildSummarySection(report, currencyFormat),
               pw.SizedBox(height: 20),
 
-            // Footer
-            _buildFooter(report, dateFormat),
-          ];
-        },
+              // Spending Metrics
+              _buildSpendingMetrics(report, currencyFormat),
+              pw.SizedBox(height: 20),
+
+              // Budget Performance
+              if (report.budgetPerformance.totalBudgetAmount > 0)
+                _buildBudgetPerformance(report, currencyFormat),
+              if (report.budgetPerformance.totalBudgetAmount > 0)
+                pw.SizedBox(height: 20),
+
+              // Category Breakdown
+              if (report.categoryBreakdown.isNotEmpty)
+                _buildCategoryBreakdown(report, categories, currencyFormat),
+              if (report.categoryBreakdown.isNotEmpty) pw.SizedBox(height: 20),
+
+              // Recurring Transactions
+              if (report.recurringTransactionImpact.recurringTransactionCount >
+                  0)
+                _buildRecurringTransactions(report, currencyFormat),
+              if (report.recurringTransactionImpact.recurringTransactionCount >
+                  0)
+                pw.SizedBox(height: 20),
+
+              // Footer
+              _buildFooter(report, dateFormat),
+            ];
+          },
         ),
       );
 
       // Save PDF to file
       final pdfBytes = await pdf.save();
-      
+
       if (kIsWeb) {
         // Web platform: trigger browser download directly
         final dateFormat = DateFormat('yyyy-MM-dd');
-        final fileName = 'report_${report.period.replaceAll(' ', '_')}_${dateFormat.format(report.startDate)}.pdf';
+        final fileName =
+            'report_${report.period.replaceAll(' ', '_')}_${dateFormat.format(report.startDate)}.pdf';
         final blob = html.Blob([pdfBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         html.AnchorElement(href: url)
           ..setAttribute('download', fileName)
           ..click();
         html.Url.revokeObjectUrl(url);
-        
+
         // Web platform uses browser download, throw UnsupportedError
         throw UnsupportedError('Web platform uses browser download');
       } else {
         // Mobile/Desktop platform: save to file system
         final directory = await getApplicationDocumentsDirectory();
-        final fileName = 'report_${report.id}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+        final fileName =
+            'report_${report.id}_${DateTime.now().millisecondsSinceEpoch}.pdf';
         final filePath = '${directory.path}/$fileName';
         final file = File(filePath);
         await file.writeAsBytes(pdfBytes);
         return file;
       }
     } catch (e) {
-      if (e.toString().contains('MissingPluginException') || 
+      if (e.toString().contains('MissingPluginException') ||
           e.toString().contains('getApplicationDocumentsDirectory')) {
         throw Exception(
-          'Plugin not registered. Please stop the app completely and rebuild it.\n'
-          'Run: flutter clean && flutter pub get && flutter run'
-        );
+            'Plugin not registered. Please stop the app completely and rebuild it.\n'
+            'Run: flutter clean && flutter pub get && flutter run');
       }
       rethrow;
     }
@@ -119,27 +122,36 @@ class ReportExportService {
       // Header
       csv.writeln('Expense Report - ${report.period}');
       csv.writeln('Generated: ${dateFormat.format(report.generatedAt)}');
-      csv.writeln('Period: ${dateFormat.format(report.startDate)} to ${dateFormat.format(report.endDate)}');
+      csv.writeln(
+          'Period: ${dateFormat.format(report.startDate)} to ${dateFormat.format(report.endDate)}');
       csv.writeln('');
 
       // Summary
       csv.writeln('SUMMARY');
       csv.writeln('Total Spent,${report.totalSpent.toStringAsFixed(2)}');
       csv.writeln('Transactions,${report.transactionCount}');
-      csv.writeln('Average Daily,${report.averageDailySpending.toStringAsFixed(2)}');
-      csv.writeln('Average Weekly,${report.averageWeeklySpending.toStringAsFixed(2)}');
-      csv.writeln('Average Monthly,${report.averageMonthlySpending.toStringAsFixed(2)}');
+      csv.writeln(
+          'Average Daily,${report.averageDailySpending.toStringAsFixed(2)}');
+      csv.writeln(
+          'Average Weekly,${report.averageWeeklySpending.toStringAsFixed(2)}');
+      csv.writeln(
+          'Average Monthly,${report.averageMonthlySpending.toStringAsFixed(2)}');
       csv.writeln('');
 
       // Budget Performance
       if (report.budgetPerformance.totalBudgetAmount > 0) {
         csv.writeln('BUDGET PERFORMANCE');
-        csv.writeln('Total Budget,${report.budgetPerformance.totalBudgetAmount.toStringAsFixed(2)}');
-        csv.writeln('Total Spent,${report.budgetPerformance.totalSpentAgainstBudgets.toStringAsFixed(2)}');
-        csv.writeln('Utilization %,${(report.budgetPerformance.utilizationPercentage * 100).toStringAsFixed(1)}');
-        csv.writeln('Exceeded Budgets,${report.budgetPerformance.exceededBudgets}');
+        csv.writeln(
+            'Total Budget,${report.budgetPerformance.totalBudgetAmount.toStringAsFixed(2)}');
+        csv.writeln(
+            'Total Spent,${report.budgetPerformance.totalSpentAgainstBudgets.toStringAsFixed(2)}');
+        csv.writeln(
+            'Utilization %,${(report.budgetPerformance.utilizationPercentage * 100).toStringAsFixed(1)}');
+        csv.writeln(
+            'Exceeded Budgets,${report.budgetPerformance.exceededBudgets}');
         csv.writeln('Met Budgets,${report.budgetPerformance.metBudgets}');
-        csv.writeln('On Track Budgets,${report.budgetPerformance.underUtilizedBudgets}');
+        csv.writeln(
+            'On Track Budgets,${report.budgetPerformance.underUtilizedBudgets}');
         csv.writeln('');
       }
 
@@ -153,9 +165,8 @@ class ReportExportService {
         for (final entry in sortedCategories) {
           final categoryId = entry.key;
           final amount = entry.value;
-          final percentage = report.totalSpent > 0
-              ? (amount / report.totalSpent) * 100
-              : 0.0;
+          final percentage =
+              report.totalSpent > 0 ? (amount / report.totalSpent) * 100 : 0.0;
 
           final category = categories.firstWhere(
             (c) => c.id == categoryId,
@@ -167,7 +178,8 @@ class ReportExportService {
             ),
           );
 
-          csv.writeln('${category.title},${amount.toStringAsFixed(2)},${percentage.toStringAsFixed(1)}%');
+          csv.writeln(
+              '${category.title},${amount.toStringAsFixed(2)},${percentage.toStringAsFixed(1)}%');
         }
         csv.writeln('');
       }
@@ -175,44 +187,48 @@ class ReportExportService {
       // Recurring Transactions
       if (report.recurringTransactionImpact.recurringTransactionCount > 0) {
         csv.writeln('RECURRING TRANSACTIONS');
-        csv.writeln('Total Recurring,${report.recurringTransactionImpact.totalRecurringAmount.toStringAsFixed(2)}');
-        csv.writeln('Recurring Count,${report.recurringTransactionImpact.recurringTransactionCount}');
-        csv.writeln('Percentage of Total,${(report.recurringTransactionImpact.recurringPercentage * 100).toStringAsFixed(1)}%');
+        csv.writeln(
+            'Total Recurring,${report.recurringTransactionImpact.totalRecurringAmount.toStringAsFixed(2)}');
+        csv.writeln(
+            'Recurring Count,${report.recurringTransactionImpact.recurringTransactionCount}');
+        csv.writeln(
+            'Percentage of Total,${(report.recurringTransactionImpact.recurringPercentage * 100).toStringAsFixed(1)}%');
         csv.writeln('');
       }
 
       // Save CSV to file
       final csvContent = csv.toString();
-      
+
       if (kIsWeb) {
         // Web platform: trigger browser download directly
         final dateFormat = DateFormat('yyyy-MM-dd');
-        final fileName = 'report_${report.period.replaceAll(' ', '_')}_${dateFormat.format(report.startDate)}.csv';
+        final fileName =
+            'report_${report.period.replaceAll(' ', '_')}_${dateFormat.format(report.startDate)}.csv';
         final blob = html.Blob([csvContent]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         html.AnchorElement(href: url)
           ..setAttribute('download', fileName)
           ..click();
         html.Url.revokeObjectUrl(url);
-        
+
         // Web platform uses browser download, throw UnsupportedError
         throw UnsupportedError('Web platform uses browser download');
       } else {
         // Mobile/Desktop platform: save to file system
         final directory = await getApplicationDocumentsDirectory();
-        final fileName = 'report_${report.id}_${DateTime.now().millisecondsSinceEpoch}.csv';
+        final fileName =
+            'report_${report.id}_${DateTime.now().millisecondsSinceEpoch}.csv';
         final filePath = '${directory.path}/$fileName';
         final file = File(filePath);
         await file.writeAsString(csvContent);
         return file;
       }
     } catch (e) {
-      if (e.toString().contains('MissingPluginException') || 
+      if (e.toString().contains('MissingPluginException') ||
           e.toString().contains('getApplicationDocumentsDirectory')) {
         throw Exception(
-          'Plugin not registered. Please stop the app completely and rebuild it.\n'
-          'Run: flutter clean && flutter pub get && flutter run'
-        );
+            'Plugin not registered. Please stop the app completely and rebuild it.\n'
+            'Run: flutter clean && flutter pub get && flutter run');
       }
       rethrow;
     }
@@ -293,7 +309,8 @@ class ReportExportService {
     );
   }
 
-  static pw.Widget _buildSummarySection(Report report, NumberFormat currencyFormat) {
+  static pw.Widget _buildSummarySection(
+      Report report, NumberFormat currencyFormat) {
     return pw.Container(
       padding: const pw.EdgeInsets.all(16),
       decoration: pw.BoxDecoration(
@@ -314,7 +331,8 @@ class ReportExportService {
                 pw.SizedBox(height: 4),
                 pw.Text(
                   currencyFormat.format(report.totalSpent),
-                  style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 20, fontWeight: pw.FontWeight.bold),
                 ),
               ],
             ),
@@ -335,7 +353,8 @@ class ReportExportService {
                 pw.SizedBox(height: 4),
                 pw.Text(
                   report.transactionCount.toString(),
-                  style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 20, fontWeight: pw.FontWeight.bold),
                 ),
               ],
             ),
@@ -345,7 +364,8 @@ class ReportExportService {
     );
   }
 
-  static pw.Widget _buildSpendingMetrics(Report report, NumberFormat currencyFormat) {
+  static pw.Widget _buildSpendingMetrics(
+      Report report, NumberFormat currencyFormat) {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
@@ -381,7 +401,8 @@ class ReportExportService {
     );
   }
 
-  static pw.Widget _buildBudgetPerformance(Report report, NumberFormat currencyFormat) {
+  static pw.Widget _buildBudgetPerformance(
+      Report report, NumberFormat currencyFormat) {
     final bp = report.budgetPerformance;
     final utilization = bp.utilizationPercentage;
 
@@ -424,7 +445,8 @@ class ReportExportService {
               children: [
                 pw.Text(
                   bp.exceededBudgets.toString(),
-                  style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 16, fontWeight: pw.FontWeight.bold),
                 ),
                 pw.Text('Exceeded', style: pw.TextStyle(fontSize: 10)),
               ],
@@ -433,7 +455,8 @@ class ReportExportService {
               children: [
                 pw.Text(
                   bp.metBudgets.toString(),
-                  style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 16, fontWeight: pw.FontWeight.bold),
                 ),
                 pw.Text('Met', style: pw.TextStyle(fontSize: 10)),
               ],
@@ -442,7 +465,8 @@ class ReportExportService {
               children: [
                 pw.Text(
                   bp.underUtilizedBudgets.toString(),
-                  style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+                  style: pw.TextStyle(
+                      fontSize: 16, fontWeight: pw.FontWeight.bold),
                 ),
                 pw.Text('On Track', style: pw.TextStyle(fontSize: 10)),
               ],
@@ -477,15 +501,18 @@ class ReportExportService {
               children: [
                 pw.Padding(
                   padding: const pw.EdgeInsets.all(8),
-                  child: pw.Text('Category', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  child: pw.Text('Category',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 ),
                 pw.Padding(
                   padding: const pw.EdgeInsets.all(8),
-                  child: pw.Text('Amount', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  child: pw.Text('Amount',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 ),
                 pw.Padding(
                   padding: const pw.EdgeInsets.all(8),
-                  child: pw.Text('Percentage', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                  child: pw.Text('Percentage',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 ),
               ],
             ),
@@ -522,14 +549,15 @@ class ReportExportService {
                   ),
                 ],
               );
-            }).toList(),
+            }),
           ],
         ),
       ],
     );
   }
 
-  static pw.Widget _buildRecurringTransactions(Report report, NumberFormat currencyFormat) {
+  static pw.Widget _buildRecurringTransactions(
+      Report report, NumberFormat currencyFormat) {
     final impact = report.recurringTransactionImpact;
 
     return pw.Column(
@@ -560,7 +588,8 @@ class ReportExportService {
           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           children: [
             pw.Text('Percentage of Total:'),
-            pw.Text('${(impact.recurringPercentage * 100).toStringAsFixed(1)}%'),
+            pw.Text(
+                '${(impact.recurringPercentage * 100).toStringAsFixed(1)}%'),
           ],
         ),
       ],
@@ -600,4 +629,3 @@ class ReportExportService {
     );
   }
 }
-

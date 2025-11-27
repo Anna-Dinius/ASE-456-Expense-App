@@ -20,10 +20,10 @@ class CategoryPicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CategoryPickerState createState() => _CategoryPickerState();
+  CategoryPickerState createState() => CategoryPickerState();
 }
 
-class _CategoryPickerState extends State<CategoryPicker> {
+class CategoryPickerState extends State<CategoryPicker> {
   final TextEditingController _searchController = TextEditingController();
   List<Category> _filteredCategories = [];
 

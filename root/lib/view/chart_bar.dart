@@ -6,11 +6,12 @@ class ChartBar extends StatelessWidget {
   final double spendingPctOfTotal;
   final Color? barColor; // Optional custom color
 
-  ChartBar(
+  const ChartBar(
     this.label,
     this.spendingAmount,
     this.spendingPctOfTotal, {
     this.barColor,
+    super.key,
   });
 
   @override

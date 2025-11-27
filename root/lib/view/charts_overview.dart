@@ -66,7 +66,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
   void _selectDateRange(int presetIndex) {
     final preset = _dateRangePresets[presetIndex];
     final now = DateTime.now();
-    
+
     setState(() {
       if (preset['days'] != null) {
         _startDate = now.subtract(Duration(days: preset['days'] as int));
@@ -139,7 +139,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),
@@ -173,7 +173,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
               ],
             ),
           ),
-          
+
           // Charts content
           Expanded(
             child: _buildChartsContent(user.uid),
@@ -186,7 +186,7 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
   bool _isPresetSelected(int index) {
     final preset = _dateRangePresets[index];
     final now = DateTime.now();
-    
+
     if (preset['days'] != null) {
       final expectedStart = now.subtract(Duration(days: preset['days'] as int));
       return _startDate.year == expectedStart.year &&
@@ -246,124 +246,135 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
       builder: (context, streamSnapshot) {
         // Create a unique key from stream data to force FutureBuilder reload when transactions change
         // This ensures charts update automatically when new transactions are added
-        final transactionCount = streamSnapshot.hasData ? streamSnapshot.data!.docs.length : 0;
-        final streamKey = '${_startDate.millisecondsSinceEpoch}_${_endDate.millisecondsSinceEpoch}_$transactionCount';
-        
+        final transactionCount =
+            streamSnapshot.hasData ? streamSnapshot.data!.docs.length : 0;
+        final streamKey =
+            '${_startDate.millisecondsSinceEpoch}_${_endDate.millisecondsSinceEpoch}_$transactionCount';
+
         // When transactions change, reload chart data
         return FutureBuilder<Map<String, dynamic>>(
-          key: ValueKey(streamKey), // Key changes when stream updates, forcing reload
+          key: ValueKey(
+              streamKey), // Key changes when stream updates, forcing reload
           future: _loadChartData(userId),
           builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-        if (snapshot.hasError) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading chart data: ${snapshot.error}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () => setState(() {}),
-                  child: const Text('Retry'),
-                ),
-              ],
-            ),
-          );
-        }
-
-        if (!snapshot.hasData) {
-          return const Center(child: Text('No data available'));
-        }
-
-        final data = snapshot.data!;
-        final categoryAnalysis = data['categoryAnalysis'] as Map<String, Map<String, dynamic>>;
-        final spendingTrends = data['spendingTrends'] as Map<DateTime, double>;
-        final budgetPerformance = data['budgetPerformance'] as BudgetPerformance?;
-
-        // Check if we have data
-        if (categoryAnalysis.isEmpty && spendingTrends.isEmpty && budgetPerformance == null) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.pie_chart_outline, size: 64, color: Colors.grey[400]),
-                const SizedBox(height: 16),
-                Text(
-                  'No transactions in this period',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Add some transactions to see charts',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-
-        return RefreshIndicator(
-          key: _refreshKey,
-          onRefresh: () async {
-            // Reload categories and trigger data refresh
-            await _loadCategories();
-            setState(() {
-              // Trigger rebuild to reload chart data
-            });
-          },
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(), // Required for RefreshIndicator
-            child: Column(
-              children: [
-                // Category Pie Chart
-                if (categoryAnalysis.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: CategoryPieChart(
-                      categoryAnalysis: categoryAnalysis,
-                      categories: _categories,
-                      startDate: _startDate,
-                      endDate: _endDate,
+            if (snapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error loading chart data: ${snapshot.error}',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-
-                // Spending Trends Bar Chart
-                if (spendingTrends.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: SpendingTrendsChart(
-                      spendingTrends: spendingTrends,
-                      startDate: _startDate,
-                      endDate: _endDate,
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => setState(() {}),
+                      child: const Text('Retry'),
                     ),
-                  ),
+                  ],
+                ),
+              );
+            }
 
-                // Budget Progress Chart
-                if (budgetPerformance != null && budgetPerformance.totalBudgetAmount > 0)
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: BudgetProgressChart(
-                      budgetPerformance: budgetPerformance,
-                      categories: _categories,
+            if (!snapshot.hasData) {
+              return const Center(child: Text('No data available'));
+            }
+
+            final data = snapshot.data!;
+            final categoryAnalysis =
+                data['categoryAnalysis'] as Map<String, Map<String, dynamic>>;
+            final spendingTrends =
+                data['spendingTrends'] as Map<DateTime, double>;
+            final budgetPerformance =
+                data['budgetPerformance'] as BudgetPerformance?;
+
+            // Check if we have data
+            if (categoryAnalysis.isEmpty &&
+                spendingTrends.isEmpty &&
+                budgetPerformance == null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.pie_chart_outline,
+                        size: 64, color: Colors.grey[400]),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No transactions in this period',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Colors.grey[600],
+                          ),
                     ),
-                  ),
-              ],
-            ),
-          ),
-        );
+                    const SizedBox(height: 8),
+                    Text(
+                      'Add some transactions to see charts',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Colors.grey[500],
+                          ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return RefreshIndicator(
+              key: _refreshKey,
+              onRefresh: () async {
+                // Reload categories and trigger data refresh
+                await _loadCategories();
+                setState(() {
+                  // Trigger rebuild to reload chart data
+                });
+              },
+              child: SingleChildScrollView(
+                physics:
+                    const AlwaysScrollableScrollPhysics(), // Required for RefreshIndicator
+                child: Column(
+                  children: [
+                    // Category Pie Chart
+                    if (categoryAnalysis.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: CategoryPieChart(
+                          categoryAnalysis: categoryAnalysis,
+                          categories: _categories,
+                          startDate: _startDate,
+                          endDate: _endDate,
+                        ),
+                      ),
+
+                    // Spending Trends Bar Chart
+                    if (spendingTrends.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: SpendingTrendsChart(
+                          spendingTrends: spendingTrends,
+                          startDate: _startDate,
+                          endDate: _endDate,
+                        ),
+                      ),
+
+                    // Budget Progress Chart
+                    if (budgetPerformance != null &&
+                        budgetPerformance.totalBudgetAmount > 0)
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: BudgetProgressChart(
+                          budgetPerformance: budgetPerformance,
+                          categories: _categories,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
           },
         );
       },
@@ -392,11 +403,12 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
       // Filter category analysis if budget filter is applied
       final filteredCategoryAnalysis = categoryFilter != null
           ? {
-              categoryFilter: categoryAnalysis[categoryFilter] ?? {
-                'amount': 0.0,
-                'percentage': 0.0,
-                'transactionCount': 0,
-              }
+              categoryFilter: categoryAnalysis[categoryFilter] ??
+                  {
+                    'amount': 0.0,
+                    'percentage': 0.0,
+                    'transactionCount': 0,
+                  }
             }
           : categoryAnalysis;
 
@@ -412,11 +424,11 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
       try {
         final budgets = await BudgetService.getAllBudgets(userId);
         final activeBudgets = budgets.where((b) => b.isActive).toList();
-        
+
         if (activeBudgets.isNotEmpty) {
           // Get transactions in period for budget calculation
           final transactions = await _getTransactionsInPeriod(userId);
-          
+
           budgetPerformance = await AnalyticsService.calculateBudgetPerformance(
             userId: userId,
             budgets: activeBudgets,
@@ -461,7 +473,6 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
     }
   }
 
-
   /// Build budget filter widget
   Widget _buildBudgetFilter(String userId) {
     return FutureBuilder<List<Budget>>(
@@ -505,7 +516,8 @@ class _ChartsOverviewScreenState extends State<ChartsOverviewScreen> {
                   decoration: const InputDecoration(
                     labelText: 'Select Budget',
                     border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   items: [
                     const DropdownMenuItem<String>(
@@ -593,7 +605,8 @@ class CategoryPieChart extends StatelessWidget {
 
   Widget _buildCategoryLegend() {
     final sortedEntries = categoryAnalysis.entries.toList()
-      ..sort((a, b) => (b.value['amount'] as double).compareTo(a.value['amount'] as double));
+      ..sort((a, b) =>
+          (b.value['amount'] as double).compareTo(a.value['amount'] as double));
 
     if (sortedEntries.isEmpty) {
       return const SizedBox.shrink();
@@ -727,8 +740,10 @@ class SpendingTrendsChart extends StatelessWidget {
       );
     }
 
-    final maxAmount = sortedTrends.map((e) => e.value).reduce((a, b) => a > b ? a : b);
-    final totalSpending = sortedTrends.map((e) => e.value).fold(0.0, (a, b) => a + b);
+    final maxAmount =
+        sortedTrends.map((e) => e.value).reduce((a, b) => a > b ? a : b);
+    final totalSpending =
+        sortedTrends.map((e) => e.value).fold(0.0, (a, b) => a + b);
 
     return Card(
       elevation: 4,
@@ -745,68 +760,69 @@ class SpendingTrendsChart extends StatelessWidget {
             Text(
               'Total: \$${totalSpending.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[600],
-              ),
+                    color: Colors.grey[600],
+                  ),
             ),
             const SizedBox(height: 16),
             LayoutBuilder(
               builder: (context, constraints) {
                 // Make chart responsive - adjust height based on available space
-                final chartHeight = constraints.maxHeight > 0 
+                final chartHeight = constraints.maxHeight > 0
                     ? math.min(constraints.maxHeight - 100.0, 250.0)
                     : 200.0;
-                
+
                 return SizedBox(
                   height: chartHeight,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: sortedTrends.map((entry) {
-                  final heightFactor = maxAmount > 0 ? entry.value / maxAmount : 0.0;
-                  final dateFormat = DateFormat('MMM d');
-                  
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            '\$${entry.value.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Expanded(
-                            child: FractionallySizedBox(
-                              heightFactor: heightFactor,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(4),
+                      final heightFactor =
+                          maxAmount > 0 ? entry.value / maxAmount : 0.0;
+                      final dateFormat = DateFormat('MMM d');
+
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                '\$${entry.value.toStringAsFixed(0)}',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Expanded(
+                                child: FractionallySizedBox(
+                                  heightFactor: heightFactor,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              const SizedBox(height: 4),
+                              Text(
+                                dateFormat.format(entry.key),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey[600],
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            dateFormat.format(entry.key),
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.grey[600],
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 );
               },
@@ -848,7 +864,8 @@ class BudgetProgressChart extends StatelessWidget {
     final utilization = budgetPerformance.utilizationPercentage;
     final utilizationColor = _getUtilizationColor(utilization);
     final status = _getUtilizationStatus(utilization);
-    final remaining = budgetPerformance.totalBudgetAmount - budgetPerformance.totalSpentAgainstBudgets;
+    final remaining = budgetPerformance.totalBudgetAmount -
+        budgetPerformance.totalSpentAgainstBudgets;
 
     return Card(
       elevation: 4,
@@ -875,11 +892,13 @@ class BudgetProgressChart extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
-                        color: utilizationColor.withOpacity(0.1),
+                        color: utilizationColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: utilizationColor.withOpacity(0.3)),
+                        border: Border.all(
+                            color: utilizationColor.withValues(alpha: 0.3)),
                       ),
                       child: Text(
                         status,
@@ -1084,4 +1103,3 @@ class BudgetProgressChart extends StatelessWidget {
     );
   }
 }
-

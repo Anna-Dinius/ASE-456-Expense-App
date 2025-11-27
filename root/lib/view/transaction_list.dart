@@ -17,7 +17,8 @@ class TransactionList extends StatelessWidget {
   // NEW: List of categories to look up category information for each transaction
   final List<Category> categories;
 
-  TransactionList(this.transactions, this.deleteTx, this.categories);
+  const TransactionList(this.transactions, this.deleteTx, this.categories,
+      {super.key});
 
   /// Helper method to find a category by its ID
   /// Returns a fallback category if no category with that ID is found
@@ -60,75 +61,75 @@ class TransactionList extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (ctx, index) {
-                // Get the current transaction and its category
-                final transaction = transactions[index];
-                final category = _getCategoryById(transaction.categoryId);
+              // Get the current transaction and its category
+              final transaction = transactions[index];
+              final category = _getCategoryById(transaction.categoryId);
 
-                return Card(
-                  elevation: 5,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5,
+              return Card(
+                elevation: 5,
+                margin: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 5,
+                ),
+                child: ListTile(
+                  // NEW: Show category icon and color in the leading circle
+                  leading: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: category.color.withValues(alpha: 0.2),
+                    child: Icon(
+                      category.icon,
+                      color: category.color,
+                      size: 20,
+                    ),
                   ),
-                  child: ListTile(
-                    // NEW: Show category icon and color in the leading circle
-                    leading: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: category.color.withValues(alpha: 0.2),
-                      child: Icon(
-                        category.icon,
-                        color: category.color,
-                        size: 20,
+                  title: Text(
+                    transaction.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Show the transaction date
+                      Text(
+                        DateFormat.yMMMd().format(transaction.date),
                       ),
-                    ),
-                    title: Text(
-                      transaction.title,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Show the transaction date
-                        Text(
-                          DateFormat.yMMMd().format(transaction.date),
+                      // NEW: Show category badge using CategoryBadge widget
+                      Container(
+                        margin: EdgeInsets.only(top: 4),
+                        child: CategoryBadge(
+                          category: category,
+                          fontSize: 12,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         ),
-                        // NEW: Show category badge using CategoryBadge widget
-                        Container(
-                          margin: EdgeInsets.only(top: 4),
-                          child: CategoryBadge(
-                            category: category,
-                            fontSize: 12,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 2),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Show the transaction amount prominently
-                        Text(
-                          '\$${transaction.amount.toStringAsFixed(2)}',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                        ),
-                        SizedBox(width: 8),
-                        // Delete button
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          color: Theme.of(context).colorScheme.error,
-                          onPressed: () => deleteTx(transaction.id),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              },
-              itemCount: transactions.length,
-            );
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Show the transaction amount prominently
+                      Text(
+                        '\$${transaction.amount.toStringAsFixed(2)}',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                      ),
+                      SizedBox(width: 8),
+                      // Delete button
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Theme.of(context).colorScheme.error,
+                        onPressed: () => deleteTx(transaction.id),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            itemCount: transactions.length,
+          );
   }
 }

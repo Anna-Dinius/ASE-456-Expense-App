@@ -10,23 +10,23 @@ import 'package:p5_expense/service/analytics_service.dart';
 class Chart extends StatelessWidget {
   /// Optional: List of transactions for legacy mode (backward compatibility)
   final List<Transaction>? recentTransactions;
-  
+
   /// Optional: User ID for AnalyticsService integration
   final String? userId;
 
   /// Constructor for legacy mode (transactions list)
-  Chart(this.recentTransactions) : userId = null;
+  const Chart(this.recentTransactions, {super.key}) : userId = null;
 
   /// Named constructor for AnalyticsService mode
-  Chart.withUserId(this.userId) : recentTransactions = null;
+  const Chart.withUserId(this.userId, {super.key}) : recentTransactions = null;
 
   /// Gets spending trends from AnalyticsService
   Future<Map<DateTime, double>> _getSpendingTrends() async {
     if (userId == null) return {};
-    
+
     final endDate = DateTime.now();
     final startDate = endDate.subtract(const Duration(days: 6)); // Last 7 days
-    
+
     try {
       return await AnalyticsService.calculateSpendingTrends(
         userId: userId!,
@@ -42,7 +42,7 @@ class Chart extends StatelessWidget {
   /// Legacy method: Groups transactions by day (for backward compatibility)
   List<Map<String, Object>> _getGroupedTransactionValues() {
     if (recentTransactions == null) return [];
-    
+
     return List.generate(7, (index) {
       final weekDay = DateTime.now().subtract(
         Duration(days: index),
@@ -68,7 +68,7 @@ class Chart extends StatelessWidget {
   List<Map<String, Object>> _trendsToChartData(Map<DateTime, double> trends) {
     final endDate = DateTime.now();
     final startDate = endDate.subtract(const Duration(days: 6));
-    
+
     // Generate chart data for last 7 days
     final chartData = <Map<String, Object>>[];
     for (int i = 0; i < 7; i++) {
@@ -76,13 +76,13 @@ class Chart extends StatelessWidget {
       // Normalize date to match trends map keys (year, month, day only)
       final normalizedDate = DateTime(weekDay.year, weekDay.month, weekDay.day);
       final amount = trends[normalizedDate] ?? 0.0;
-      
+
       chartData.add({
         'day': DateFormat.E().format(weekDay).substring(0, 1),
         'amount': amount,
       });
     }
-    
+
     return chartData;
   }
 
@@ -120,8 +120,8 @@ class Chart extends StatelessWidget {
                   child: Text(
                     'Error loading chart data',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.red,
-                    ),
+                          color: Colors.red,
+                        ),
                   ),
                 ),
               ),
@@ -136,14 +136,15 @@ class Chart extends StatelessWidget {
         },
       );
     }
-    
+
     // Legacy mode: Use transactions list
     final chartData = _getGroupedTransactionValues();
     final totalSpending = _calculateTotalSpending(chartData);
     return _buildChartWidget(chartData, totalSpending);
   }
 
-  Widget _buildChartWidget(List<Map<String, Object>> chartData, double totalSpending) {
+  Widget _buildChartWidget(
+      List<Map<String, Object>> chartData, double totalSpending) {
     if (chartData.isEmpty || totalSpending == 0) {
       return Card(
         elevation: 6,
