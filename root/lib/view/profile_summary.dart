@@ -50,13 +50,30 @@ class ProfileSummaryScreen extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundImage:
-                    (data['profileImageUrl'] ?? '').toString().isNotEmpty
-                        ? NetworkImage(data['profileImageUrl'])
-                        : null,
                 child: (data['profileImageUrl'] ?? '').toString().isEmpty
                     ? Icon(Icons.person, size: 40)
-                    : null,
+                    : ClipOval(
+                        child: Image.network(
+                          data['profileImageUrl'],
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover, // ensures proper scaling
+                          errorBuilder: (context, error, stackTrace) {
+                            // Show a fallback icon
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              // Show snackbar after build completes
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'The image link you chose is not supported.',
+                                  ),
+                                ),
+                              );
+                            });
+                            return Icon(Icons.person, size: 40); // fallback
+                          },
+                        ),
+                      ),
               ),
               const SizedBox(height: 12),
               Text(data['name'] ?? '',
