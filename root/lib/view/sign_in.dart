@@ -34,7 +34,7 @@ class _SignInScreenState extends State<SignInScreen> {
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text("Email or password is incorrect.")),
       );
     } finally {
       if (mounted) setState(() => _loading = false);

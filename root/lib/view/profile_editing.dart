@@ -62,7 +62,8 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
       Navigator.of(context).pop();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(
+            content: Text("Unable to save changes. Please try again later.")),
       );
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -199,8 +200,9 @@ class _ProfileEditingScreenState extends State<ProfileEditingScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text("Unable to delete account. Please try again later.")));
         setState(() => _loading = false);
       }
     }

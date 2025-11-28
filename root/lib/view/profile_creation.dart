@@ -61,7 +61,7 @@ class _ProfileCreationScreenState extends State<ProfileCreationScreen> {
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        SnackBar(content: Text("Please fix the errors above.")),
       );
     } finally {
       if (mounted) {
