@@ -149,6 +149,7 @@ class MyHomePageState extends State<MyHomePage> {
       futurePayments: futurePayments,
     );
 
+    if (!mounted) return;
     setState(() {
       _userTransactions.add(newTx);
     });
