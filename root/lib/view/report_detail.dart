@@ -491,9 +491,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Top Category
                 if (topCategory != null)
@@ -504,7 +503,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     value: topCategory.title,
                     subtitle: '\$${topCategoryAmount.toStringAsFixed(2)}',
                   ),
-
+                const SizedBox(height: 12),
                 // Biggest Expense
                 if (biggestExpense != null)
                   _buildHighlightCard(
@@ -514,7 +513,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                     value: biggestExpense.title,
                     subtitle: '\$${biggestExpense.amount.toStringAsFixed(2)}',
                   ),
-
+                const SizedBox(height: 12),
                 // Budget Status
                 if (widget.report.budgetPerformance.totalBudgetAmount > 0)
                   _buildHighlightCard(
@@ -539,58 +538,56 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
     required String value,
     String? subtitle,
   }) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: iconColor.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: iconColor.withValues(alpha: 0.3)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 20, color: iconColor),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: iconColor.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: iconColor.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 20, color: iconColor),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: iconColor,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            if (subtitle != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey[600],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: iconColor,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          if (subtitle != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[600],
+              ),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
