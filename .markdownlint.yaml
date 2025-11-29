@@ -1,0 +1,10 @@
+default: true
+
+MD013: false # Disable line length rule
+MD024: false # Allow duplicate headings
+MD025: false # Allow multiple top-level headings
+MD026: false # Allow consecutive headings
+MD033: false # Allow inline HTML
+MD034: false # Allow bare URLs
+MD036: false # Allow emphasis instead of headings
+MD045: false # Allow multiple top-level headings
