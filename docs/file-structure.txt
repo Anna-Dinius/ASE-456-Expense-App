@@ -1,0 +1,158 @@
+ASE 456 Team Project Repo/
+├── docs/
+│   ├── jeff_weekly_reports/
+│   │   ├── jeff_sprint2_plan.md
+│   │   ├── week10_jeff_progress.marp.md
+│   │   ├── week2_jeff_progress.marp.md
+│   │   ├── week3_jeff_progress.marp.md
+│   │   ├── week4_jeff_progress.marp.md
+│   │   ├── week5_jeff_progress.marp.md
+│   │   ├── week6_jeff_progress.marp.md
+│   │   ├── week7_jeff_progress.marp.md
+│   │   ├── week8_jeff_progress.marp.md
+│   │   └── week9_jeff_progress.marp.md
+│   ├── preliminary/
+│   │   ├── P5. Expense.md
+│   │   └── P5. Expense.pdf
+│   ├── Progress Reports/
+│   │   ├── Sprint 1/
+│   │   │   ├── report-template.md
+│   │   │   ├── sprint1_team_presentation.md
+│   │   │   └── sprint1_team_presentation.pdf
+│   │   ├── Sprint 2/
+│   │   │   └── report-template-sprint2.md
+│   │   ├── Week 1/
+│   │   │   ├── week-1.md
+│   │   │   └── week-1.pdf
+│   │   ├── Week 10/
+│   │   │   ├── week-10.md
+│   │   │   └── week-10.pdf
+│   │   ├── Week 2/
+│   │   │   ├── week-2.md
+│   │   │   └── week-2.pdf
+│   │   ├── Week 3/
+│   │   │   ├── week-3.md
+│   │   │   └── week-3.pdf
+│   │   ├── Week 4/
+│   │   │   ├── week-4.md
+│   │   │   └── week-4.pdf
+│   │   ├── Week 6/
+│   │   │   ├── week-6.md
+│   │   │   └── week-6.pdf
+│   │   ├── Week 7/
+│   │   │   ├── week-7.md
+│   │   │   └── week-7.pdf
+│   │   ├── Week 8/
+│   │   │   ├── week-8.md
+│   │   │   └── week-8.pdf
+│   │   └── Week 9/
+│   │       ├── week-9.md
+│   │       └── week-9.pdf
+│   └── file-structure.txt
+├── root/
+│   ├── lib/
+│   │   ├── model/
+│   │   │   ├── budget.dart
+│   │   │   ├── category.dart
+│   │   │   ├── report.dart
+│   │   │   ├── savings_goal.dart
+│   │   │   └── transaction.dart
+│   │   ├── service/
+│   │   │   ├── analytics_service.dart
+│   │   │   ├── auth_service.dart
+│   │   │   ├── budget_service.dart
+│   │   │   ├── category_service.dart
+│   │   │   ├── report_export_service.dart
+│   │   │   ├── report_service.dart
+│   │   │   ├── savings_goal_service.dart
+│   │   │   ├── update_transaction_service.dart
+│   │   │   └── user_service.dart
+│   │   ├── theme/
+│   │   │   └── main_theme.dart
+│   │   ├── view/
+│   │   │   ├── widgets/
+│   │   │   │   ├── category_badge.dart
+│   │   │   │   └── category_picker.dart
+│   │   │   ├── budgets_list.dart
+│   │   │   ├── chart.dart
+│   │   │   ├── chart_bar.dart
+│   │   │   ├── chart_pie.dart
+│   │   │   ├── charts_overview.dart
+│   │   │   ├── edit_budget.dart
+│   │   │   ├── edit_savings_goal.dart
+│   │   │   ├── generate_report.dart
+│   │   │   ├── manage_categories.dart
+│   │   │   ├── new_budget.dart
+│   │   │   ├── new_savings_goal.dart
+│   │   │   ├── new_transaction.dart
+│   │   │   ├── profile_creation.dart
+│   │   │   ├── profile_editing.dart
+│   │   │   ├── profile_summary.dart
+│   │   │   ├── report_detail.dart
+│   │   │   ├── report_list.dart
+│   │   │   ├── savings_dashboard.dart
+│   │   │   ├── savings_goals_list.dart
+│   │   │   ├── savings_summary.dart
+│   │   │   ├── search_bar_widget.dart
+│   │   │   ├── sign_in.dart
+│   │   │   └── transaction_list.dart
+│   │   ├── firebase_options.dart
+│   │   └── main.dart
+│   ├── test/
+│   │   ├── acceptance/
+│   │   │   ├── README.md
+│   │   │   ├── SUMMARY.md
+│   │   │   └── user_acceptance_test.dart
+│   │   ├── e2e/
+│   │   │   ├── app_e2e_test.dart
+│   │   │   ├── README.md
+│   │   │   └── SESSION_SUMMARY.md
+│   │   ├── error_handling/
+│   │   │   └── category_error_test.dart
+│   │   ├── fixtures/
+│   │   │   └── category_test_data.dart
+│   │   ├── helpers/
+│   │   │   ├── analytics_test_helpers.dart
+│   │   │   └── test_helpers.dart
+│   │   ├── integration/
+│   │   │   ├── data_model_test.dart
+│   │   │   ├── README.md
+│   │   │   ├── SESSION_SUMMARY.md
+│   │   │   ├── transaction_analysis_test.dart
+│   │   │   ├── user_workflow_integration_test.dart
+│   │   │   └── widget_smoke_test.dart
+│   │   ├── model/
+│   │   │   ├── category_test.dart
+│   │   │   ├── default_categories_test.dart
+│   │   │   └── savings_goal_test.dart
+│   │   ├── regression/
+│   │   │   ├── README.md
+│   │   │   ├── regression_test.dart
+│   │   │   └── SUMMARY.md
+│   │   ├── service/
+│   │   │   ├── analytics_service_test.dart
+│   │   │   ├── budget_service_test.dart
+│   │   │   ├── category_service_test.dart
+│   │   │   ├── category_service_working_test.dart
+│   │   │   ├── report_service_test.dart
+│   │   │   ├── savings_goal_service_test.dart
+│   │   │   └── user_service_test.dart
+│   │   ├── view/
+│   │   │   ├── widgets/
+│   │   │   │   ├── category_badge_test.dart
+│   │   │   │   └── category_picker_test.dart
+│   │   │   ├── profile_creation_test.dart
+│   │   │   ├── profile_editing_test.dart
+│   │   │   ├── profile_summary_test.dart
+│   │   │   ├── search_bar_widget_test.dart
+│   │   │   └── sign_in_test.dart
+│   │   ├── transaction_test.dart
+│   │   └── update_recurring_transactions_test.dart
+│   ├── analysis_options.yaml
+│   ├── firebase.json
+│   └── pubspec.yaml
+├── scripts/
+│   ├── compare_tree.py
+│   ├── loc_counter.py
+│   └── update_file_tree.py
+└── README.md
