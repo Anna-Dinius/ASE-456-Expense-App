@@ -43,7 +43,7 @@ Created 10 comprehensive **User Acceptance Tests (UAT)** that validate core busi
 
 ## File Structure
 
-```
+```txt
 root/test/acceptance/
 ├── README.md              # Complete documentation
 └── user_acceptance_test.dart  # 10 UAT test cases
@@ -65,7 +65,7 @@ flutter test test/acceptance/user_acceptance_test.dart -p vm --plain-name "UAT-1
 
 ## Test Results
 
-```
+```txt
 ✅ UAT-1: User can add a new transaction to their list
 ✅ UAT-2: User can view their spending by category in a chart summary
 ✅ UAT-3: User can delete a transaction and have it removed from list

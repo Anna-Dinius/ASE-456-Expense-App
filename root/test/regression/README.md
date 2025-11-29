@@ -292,7 +292,7 @@ flutter test test/regression/regression_test.dart --reporter expanded
 
 ## File Structure
 
-```
+```txt
 test/
 ├── regression/
 │   ├── regression_test.dart          # Main regression test suite (39 tests)
@@ -372,5 +372,5 @@ For questions about regression tests:
 
 - Review test documentation in comments
 - Check test output for specific failure messages
-- Refer to Flutter testing documentation: https://flutter.dev/docs/testing
+- Refer to Flutter testing documentation: [https://flutter.dev/docs/testing](https://flutter.dev/docs/testing)
 - Review transaction and category model definitions

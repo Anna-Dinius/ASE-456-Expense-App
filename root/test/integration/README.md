@@ -476,7 +476,7 @@ setUp(() {
 
 ## File Structure
 
-```
+```txt
 root/test/integration/
 ├── README.md (this file)
 ├── UPDATED_TESTS_SUMMARY.md (test summary with statistics)

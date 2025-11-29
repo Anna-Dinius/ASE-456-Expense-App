@@ -43,7 +43,7 @@ All end-to-end testing work has been successfully completed.
 
 ### 4. Test Execution Status ✅
 
-```
+```txt
 Test Suite: End-to-End App Workflows
 Total Tests: 8
 Passed: 8 ✅
@@ -140,7 +140,7 @@ All tests use:
 
 ### Test Hierarchy
 
-```
+```txt
 Test Suite Structure:
 ├── Integration Tests (test/integration/)
 │   ├── widget_smoke_tests.dart (13 tests)
@@ -181,7 +181,7 @@ Test Suite Structure:
 
 ## File Structure
 
-```
+```txt
 test/e2e/
 ├── app_e2e_tests.dart       ← 8 E2E test scenarios (600+ lines)
 └── README.md                 ← Comprehensive documentation (400+ lines)

@@ -149,12 +149,10 @@ void main() {
                         ),
                       ),
                     ),
-                    ...categoryTxs
-                        .map((tx) => ListTile(
-                              title: Text(tx.title),
-                              subtitle: Text('\$${tx.amount}'),
-                            ))
-                        .toList(),
+                    ...categoryTxs.map((tx) => ListTile(
+                          title: Text(tx.title),
+                          subtitle: Text('\$${tx.amount}'),
+                        )),
                   ],
                 );
               },
@@ -515,7 +513,7 @@ void main() {
                         title: Text(cat.title),
                         trailing: Text('\$${spent.toStringAsFixed(2)}'),
                       );
-                    }).toList(),
+                    }),
                     const SizedBox(height: 16),
                     Card(
                       child: Padding(
@@ -1027,13 +1025,11 @@ void main() {
                             children: [
                               const Text('Added Transactions:'),
                               const SizedBox(height: 8),
-                              ...transactions
-                                  .map((tx) => ListTile(
-                                        title: Text(tx.title),
-                                        subtitle: Text(
-                                            '\$${tx.amount.toStringAsFixed(2)}'),
-                                      ))
-                                  .toList(),
+                              ...transactions.map((tx) => ListTile(
+                                    title: Text(tx.title),
+                                    subtitle: Text(
+                                        '\$${tx.amount.toStringAsFixed(2)}'),
+                                  )),
                             ],
                           ),
                       ],

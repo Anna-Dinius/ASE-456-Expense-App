@@ -363,7 +363,7 @@ expect(foodTransactions.length, equals(2));
 
 Unlike widget tests that verify UI rendering, these acceptance tests focus on **business logic and calculations** that users care about:
 
-### ✅ TESTED:
+### ✅ TESTED
 
 - Data accuracy and calculations
 - Business rule enforcement
@@ -372,7 +372,7 @@ Unlike widget tests that verify UI rendering, these acceptance tests focus on **
 - Filtering and grouping logic
 - Date handling and organization
 
-### ❌ NOT TESTED HERE:
+### ❌ NOT TESTED HERE
 
 - UI widget rendering (covered by E2E tests)
 - Form validation
@@ -625,7 +625,7 @@ final total = transactions.fold<double>(0, (sum, tx) => sum + tx.amount);
 
 ### 1. Identify User Goal
 
-```
+```txt
 "As a user, I want to [action] so that [benefit]"
 ```
 
@@ -727,7 +727,7 @@ jobs:
 
 ## File Structure
 
-```
+```txt
 root/test/acceptance/
 ├── README.md (this file)
 └── user_acceptance_test.dart (10 UAT scenarios)
@@ -1391,7 +1391,7 @@ expect(average, equals(16.583333...));
 
 ### 1. Identify User Goal
 
-```
+```txt
 "As a user, I want to [action] so that [benefit]"
 ```
 
@@ -1490,7 +1490,7 @@ jobs:
 
 ## File Structure
 
-```
+```txt
 root/test/acceptance/
 ├── README.md (this file)
 └── user_acceptance_test.dart (10 UAT scenarios)

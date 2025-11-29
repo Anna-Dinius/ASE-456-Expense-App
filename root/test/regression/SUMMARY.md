@@ -127,7 +127,7 @@ flutter test test/regression/ --coverage
 
 Regression tests work alongside other test categories:
 
-```
+```txt
 Test Suite Hierarchy
 ├── Unit Tests (pure Dart logic)
 │   ├── Acceptance Tests (user workflows)
@@ -155,7 +155,7 @@ For detailed information about regression tests, see:
 
 ## Test Execution
 
-```
+```txt
 ✅ RGN-1.1: Create transaction with all required fields
 ✅ RGN-1.2: Read transaction from list
 ✅ RGN-1.3: Update transaction data
