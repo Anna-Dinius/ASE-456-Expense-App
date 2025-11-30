@@ -19,7 +19,6 @@ _A comprehensive guide for software engineers_
 
 - **Purpose:** Technical architecture and design patterns for the Expense App
 - **Audience:** Software Engineers, Architects, Developers
-- **Version:** 1.0
 - **Last Updated:** November 2025
 
 ---
@@ -51,7 +50,8 @@ _A comprehensive guide for software engineers_
 - Visualize spending patterns with charts
 - Manage budgets and savings goals
 - Generate financial reports
-- Support recurring transactions
+
+---
 
 **Technology Stack:**
 
@@ -69,7 +69,6 @@ _A comprehensive guide for software engineers_
 | Transaction Management | ✅ Complete | Critical |
 | Category Management    | ✅ Complete | Critical |
 | Budget Tracking        | ✅ Complete | High     |
-| Spending Analytics     | ✅ Complete | High     |
 | Recurring Transactions | ✅ Complete | High     |
 | Financial Reports      | ✅ Complete | Medium   |
 | Savings Goals          | ✅ Complete | Medium   |
@@ -113,7 +112,7 @@ _A comprehensive guide for software engineers_
 │  │      Firebase (Cloud Backend)                │   │
 │  │  - Firestore (NoSQL Database)                │   │
 │  │  - Authentication (Email/Password)           │   │
-│  │  - Cloud Storage (PDF Reports)               │   │
+│  │  - Cloud Storage                             │   │
 │  └──────────────────────────────────────────────┘   │
 │                                                     │
 └─────────────────────────────────────────────────────┘
@@ -137,6 +136,8 @@ lib/
 └── theme/              ← Theming & Constants
 ```
 
+---
+
 ### Layer Responsibilities
 
 **Model Layer:**
@@ -145,6 +146,8 @@ lib/
 - Serialization/deserialization (fromMap, toMap)
 - Immutability where possible
 - Examples: `Transaction`, `Category`, `Budget`
+
+---
 
 **Service Layer:**
 
@@ -163,74 +166,6 @@ lib/
 
 ---
 
-## MVC Pattern in Practice
-
-```dart
-// Model: Pure data representation
-class Transaction {
-  final String id;
-  final String title;
-  final double amount;
-  final DateTime date;
-  final String categoryId;
-  final bool recurring;
-  final String interval;
-
-  Transaction({
-    required this.id,
-    required this.title,
-    required this.amount,
-    required this.date,
-    required this.categoryId,
-    required this.recurring,
-    required this.interval,
-  });
-
-  // Serialization
-  Map<String, dynamic> toMap() { ... }
-  factory Transaction.fromMap(Map<String, dynamic> map, String id) { ... }
-}
-```
-
-```dart
-// Service: Business logic
-class CategoryService {
-  static Future<void> seedDefaultCategories(String userId) async {
-    // Initialize default categories for new users
-  }
-
-  static Future<List<Category>> getAllCategories(String userId) async {
-    // Fetch and return all user categories
-  }
-
-  static Future<void> addCategory(String userId, Category category) async {
-    // Persist category to Firestore
-  }
-}
-```
-
-```dart
-// View: UI & State Management
-class BudgetsListScreen extends StatefulWidget {
-  final List<Category> categories;
-
-  @override
-  State<BudgetsListScreen> createState() => _BudgetsListScreenState();
-}
-
-class _BudgetsListScreenState extends State<BudgetsListScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Budgets')),
-      body: ListView.builder(...),
-    );
-  }
-}
-```
-
----
-
 ## Dependency Flow
 
 **Unidirectional Dependency Flow:**
@@ -244,6 +179,8 @@ Model Layer
     ↓ (depends on)
 Firebase SDK
 ```
+
+---
 
 **Benefits:**
 
@@ -279,6 +216,8 @@ class Transaction {
   // futurePayments: scheduled occurrences
 }
 ```
+
+---
 
 **Responsibilities:**
 
@@ -317,15 +256,16 @@ class Category {
 }
 ```
 
+---
+
 **Default Categories:**
 
-- Food & Dining
-- Transportation
+- Food
+- Transport
 - Entertainment
-- Utilities
-- Healthcare
+- Bills
+- Health
 - Shopping
-- Education
 - Other
 
 ---
@@ -404,6 +344,8 @@ firestore/
 │   │   └── reports/           (Generated reports)
 │   │       └── {reportId}
 ```
+
+---
 
 **Collection Structure Benefits:**
 
@@ -664,115 +606,6 @@ MyApp (Root)
 
 ---
 
-## Key Widget Patterns
-
-### Stateless Widget Example
-
-```dart
-class ChartBar extends StatelessWidget {
-  final String label;
-  final double spendingAmount;
-  final double spendingPctOfTotal;
-
-  ChartBar(this.label, this.spendingAmount,
-    this.spendingPctOfTotal);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(spendingAmount.toStringAsFixed(0)),
-        FractionallySizedBox(
-          heightFactor: spendingPctOfTotal,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-        ),
-        Text(label),
-      ],
-    );
-  }
-}
-```
-
----
-
-### Stateful Widget Example
-
-```dart
-class NewTransaction extends StatefulWidget {
-  final Function addTx;
-  final List<Category> categories;
-
-  NewTransaction(this.addTx, this.categories);
-
-  @override
-  _NewTransactionState createState() => _NewTransactionState();
-}
-
-class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  String? _selectedCategoryId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            decoration: InputDecoration(labelText: 'Title'),
-            controller: _titleController,
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: 'Amount'),
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-          ),
-          DropdownButtonFormField(
-            items: widget.categories.map((cat) =>
-              DropdownMenuItem(value: cat.id, child: Text(cat.title))
-            ).toList(),
-            onChanged: (value) => _selectedCategoryId = value,
-          ),
-          ElevatedButton(
-            onPressed: _submitData,
-            child: Text('Add Transaction'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _submitData() {
-    if (_titleController.text.isEmpty ||
-        _amountController.text.isEmpty ||
-        _selectedCategoryId == null) return;
-
-    widget.addTx(
-      _titleController.text,
-      double.parse(_amountController.text),
-      _selectedDate,
-      _selectedCategoryId,
-      false, // recurring
-      '', // interval
-      [], // pastPayments
-      [], // futurePayments
-    );
-
-    Navigator.of(context).pop();
-  }
-}
-```
-
----
-
 ## Material Design Implementation
 
 **Theme Definition:**
@@ -794,6 +627,8 @@ ThemeData get mainTheme {
 }
 ```
 
+---
+
 **Features:**
 
 - Material 3 design system
@@ -813,7 +648,7 @@ ThemeData get mainTheme {
 
 - Firestore Database (NoSQL)
 - Authentication (Email/Password)
-- Cloud Storage (PDF reports)
+- Cloud Storage
 
 **Firebase Initialization:**
 
@@ -855,14 +690,10 @@ AuthGate Checks Auth State
 **Creating/Adding Data:**
 
 ```dart
-Future<void> addTransaction(
-  String userId, Transaction transaction) async {
-
+Future<void> addTransaction(String userId, Transaction transaction) async {
   await FirebaseFirestore.instance
-    .collection('users')
-    .doc(userId)
-    .collection('transactions')
-    .doc(transaction.id)
+    .collection('users').doc(userId)
+    .collection('transactions').doc(transaction.id)
     .set({
       'title': transaction.title,
       'amount': transaction.amount,
@@ -875,6 +706,8 @@ Future<void> addTransaction(
     });
 }
 ```
+
+---
 
 **Reading Data:**
 
@@ -894,6 +727,8 @@ Future<List<Transaction>> getAllTransactions(
 }
 ```
 
+---
+
 **Updating Data:**
 
 ```dart
@@ -908,6 +743,8 @@ Future<void> updateTransaction(
     .update(transaction.toMap());
 }
 ```
+
+---
 
 **Deleting Data:**
 
@@ -940,11 +777,6 @@ service cloud.firestore {
 
       // Transactions subcollection
       match /transactions/{transaction=**} {
-        allow read, write: if request.auth.uid == userId;
-      }
-
-      // Categories subcollection
-      match /categories/{category=**} {
         allow read, write: if request.auth.uid == userId;
       }
 
@@ -1050,8 +882,7 @@ test('CategoryService stores and retrieves categories', () async {
   await CategoryService.addCategory(testUserId, category);
 
   // Retrieve category
-  final categories =
-    await CategoryService.getAllCategories(testUserId);
+  final categories = await CategoryService.getAllCategories(testUserId);
 
   expect(categories.length, equals(1));
   expect(categories.first.title, equals('Food'));
@@ -1159,6 +990,8 @@ dependencies:
   android:name="android.permission.READ_EXTERNAL_STORAGE" />
 ```
 
+---
+
 ### iOS Configuration
 
 ```yaml
@@ -1188,6 +1021,8 @@ flutter build apk --release
 # or
 flutter build appbundle --release
 ```
+
+---
 
 **Release Build (iOS):**
 
@@ -1222,37 +1057,6 @@ const FirebaseOptions currentPlatform =
 
 ---
 
-## Continuous Integration
-
-**GitHub Actions Workflow Example:**
-
-```yaml
-name: Flutter Build & Test
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.10.0'
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Run tests
-        run: flutter test
-
-      - name: Build APK
-        run: flutter build apk --release
-```
-
----
-
 ## Performance Optimization
 
 **Key Areas:**
@@ -1262,21 +1066,6 @@ jobs:
 3. **List Rendering** - Use ListView.builder for large lists
 4. **State Management** - Minimize rebuilds with setState
 5. **Memory** - Dispose controllers and streams
-
-**Example Optimization:**
-
-```dart
-// Before: Loads all transactions at once
-List<Transaction> allTransactions =
-  await getAllTransactions(userId);
-
-// After: Load with pagination
-List<Transaction> recentTransactions =
-  await getAllTransactions(userId)
-    .limit(20)
-    .orderBy('date', descending: true)
-    .get();
-```
 
 ---
 
@@ -1336,6 +1125,8 @@ print('Print to console');
    - Verify all tests pass
    - Create pull request
 
+---
+
 2. **Code Review**
 
    - Check for architecture violations
@@ -1349,6 +1140,8 @@ print('Print to console');
    - Check code coverage
    - Test edge cases
    - Performance testing
+
+---
 
 4. **Deployment**
    - Build release version
@@ -1376,6 +1169,8 @@ static Future<T> methodName(
   }
 }
 ```
+
+---
 
 **Widget State Pattern:**
 
@@ -1416,6 +1211,8 @@ Future<void> _loadData() async {
 - Consult design patterns
 - Run tests for examples
 
+---
+
 **Development Setup:**
 
 ```bash
@@ -1434,14 +1231,6 @@ flutter run
 # Run tests
 flutter test
 ```
-
----
-
-## Version History
-
-| Version | Date     | Changes                       |
-| ------- | -------- | ----------------------------- |
-| 1.0     | Nov 2025 | Initial architecture document |
 
 ---
 
