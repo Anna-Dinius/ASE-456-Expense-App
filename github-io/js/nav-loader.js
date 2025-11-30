@@ -4,13 +4,14 @@ function loadNav() {
 	const isIndexPage =
 		location.pathname.endsWith('index.html') || location.pathname === '/';
 
-	// Choose correct path to nav.html
-	const navPath = isIndexPage
-		? 'github-io/components/nav.html' // from root
-		: '../github-io/components/nav.html'; // from inside github-io/
+	// ✅ Use root-relative path so it works on GitHub Pages
+	const navPath = '/github-io/components/nav.html';
 
 	fetch(navPath)
-		.then((response) => response.text())
+		.then((response) => {
+			if (!response.ok) throw new Error('Nav fetch failed');
+			return response.text();
+		})
 		.then((data) => {
 			const parser = new DOMParser();
 			const doc = parser.parseFromString(data, 'text/html');
@@ -19,15 +20,18 @@ function loadNav() {
 			links.forEach((link) => {
 				const href = link.getAttribute('href');
 				if (isIndexPage && href !== 'index.html') {
-					// On index page, prepend github-io/
 					link.setAttribute('href', 'github-io/' + href);
 				} else if (!isIndexPage && href === 'index.html') {
-					// On subpages, index should point back up
 					link.setAttribute('href', '../index.html');
 				}
 			});
 
 			document.getElementById('nav-placeholder').innerHTML = doc.body.innerHTML;
+		})
+		.catch((err) => {
+			console.error('Nav load error:', err);
+			document.getElementById('nav-placeholder').innerHTML =
+				"<div class='alert alert-danger'>Navigation failed to load.</div>";
 		});
 }
 
