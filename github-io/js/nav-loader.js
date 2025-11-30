@@ -1,10 +1,8 @@
-// github-io/js/nav-loader.js
-
 function loadNav() {
 	const isIndexPage =
 		location.pathname.endsWith('index.html') || location.pathname === '/';
 
-	// ✅ Use root-relative path so it works on GitHub Pages
+	// ✅ Root-relative path works on GitHub Pages
 	const navPath = '/github-io/components/nav.html';
 
 	fetch(navPath)
@@ -19,10 +17,18 @@ function loadNav() {
 
 			links.forEach((link) => {
 				const href = link.getAttribute('href');
+
+				// Rewrite paths
 				if (isIndexPage && href !== 'index.html') {
 					link.setAttribute('href', 'github-io/' + href);
 				} else if (!isIndexPage && href === 'index.html') {
 					link.setAttribute('href', '../index.html');
+				}
+
+				// Highlight active link
+				const currentPage = location.pathname.split('/').pop();
+				if (href === currentPage || (href === 'index.html' && isIndexPage)) {
+					link.classList.add('active');
 				}
 			});
 
