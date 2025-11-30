@@ -11,9 +11,6 @@ ASE 456 Team Project Repo/
 │   │   ├── week7_jeff_progress.marp.md
 │   │   ├── week8_jeff_progress.marp.md
 │   │   └── week9_jeff_progress.marp.md
-│   ├── preliminary/
-│   │   ├── P5. Expense.md
-│   │   └── P5. Expense.pdf
 │   ├── Progress Reports/
 │   │   ├── Sprint 1/
 │   │   │   ├── report-template.md
@@ -45,10 +42,14 @@ ASE 456 Team Project Repo/
 │   │   ├── Week 8/
 │   │   │   ├── week-8.md
 │   │   │   └── week-8.pdf
-│   │   └── Week 9/
-│   │       ├── week-9.md
-│   │       └── week-9.pdf
-│   └── file-structure.txt
+│   │   ├── Week 9/
+│   │   │   ├── week-9.md
+│   │   │   └── week-9.pdf
+│   │   ├── final-presentation.md
+│   │   └── final-presentation.pdf
+│   ├── ARCHITECTURE_DESIGN.md
+│   ├── file-structure.txt
+│   └── USER_MANUAL.md
 ├── root/
 │   ├── lib/
 │   │   ├── model/
@@ -155,4 +156,5 @@ ASE 456 Team Project Repo/
 │   ├── compare_tree.py
 │   ├── loc_counter.py
 │   └── update_file_tree.py
+├── .markdownlint.yaml
 └── README.md
