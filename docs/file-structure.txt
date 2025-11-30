@@ -26,7 +26,8 @@ ASE 456 Team Project Repo/
 │   │   │   ├── sprint1_team_presentation.md
 │   │   │   └── sprint1_team_presentation.pdf
 │   │   ├── Sprint 2/
-│   │   │   └── report-template-sprint2.md
+│   │   │   ├── report-template-sprint2.md
+│   │   │   └── report-template-sprint2.pdf
 │   │   ├── Week 1/
 │   │   │   ├── week-1.md
 │   │   │   └── week-1.pdf
@@ -56,6 +57,17 @@ ASE 456 Team Project Repo/
 │   │       └── week-9.pdf
 │   ├── file-structure.txt
 │   └── README.md
+├── github-io/
+│   ├── components/
+│   │   └── nav.html
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   └── nav-loader.js
+│   ├── architecture.html
+│   ├── final-presentation.html
+│   ├── manual.html
+│   └── progress.html
 ├── root/
 │   ├── lib/
 │   │   ├── model/
@@ -163,4 +175,5 @@ ASE 456 Team Project Repo/
 │   ├── loc_counter.py
 │   └── update_file_tree.py
 ├── .markdownlint.yaml
+├── index.html
 └── README.md
