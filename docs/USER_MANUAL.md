@@ -19,7 +19,6 @@ _A practical guide for managing your personal finances_
 
 - **Purpose:** Help you get the most out of the Expense App
 - **Audience:** Users, Clients, Anyone managing personal finances
-- **Version:** 1.0
 - **Last Updated:** November 2025
 
 ---
@@ -34,8 +33,7 @@ _A practical guide for managing your personal finances_
 6. Savings Goals
 7. Financial Reports
 8. Advanced Features
-9. Tips & Best Practices
-10. Troubleshooting
+9. Troubleshooting
 
 ---
 
@@ -48,7 +46,6 @@ _A practical guide for managing your personal finances_
 **Expense App** is your personal finance companion that helps you:
 
 ✅ Track every dollar you spend  
-✅ Understand where your money goes  
 ✅ Set and monitor budgets  
 ✅ Reach your savings goals  
 ✅ Make informed financial decisions
@@ -57,37 +54,10 @@ _A practical guide for managing your personal finances_
 
 ---
 
-## System Requirements
-
-**Mobile Devices:**
-
-- iPhone 11 or newer (iOS 13+)
-- Android 8.0 or newer
-
-**Other Requirements:**
+## Requirements
 
 - Active internet connection
 - Valid email address
-- Google or Apple account (optional, for sign-in)
-
----
-
-## Downloading the App
-
-### iPhone Users
-
-1. Open the **App Store**
-2. Search for **"Expense App"**
-3. Tap **Get** → Authenticate with Face ID or Touch ID
-4. Wait for installation to complete
-5. Tap **Open** to launch the app
-
-### Android Users
-
-1. Open **Google Play Store**
-2. Search for **"Expense App"**
-3. Tap **Install**
-4. Tap **Open** to launch the app
 
 ---
 
@@ -95,23 +65,16 @@ _A practical guide for managing your personal finances_
 
 **Step 1: Launch the App**
 
-When you first open Expense App, you'll see the welcome screen.
+When you first open Expense App, you'll see the Create Profile screen.
 
 **Step 2: Sign Up**
 
-1. Tap **Create New Account**
-2. Enter your name
-3. Enter your email address
-4. Create a secure password (8+ characters recommended)
-5. Tap **Sign Up**
+1. Enter your name
+2. Enter your email address
+3. Create a secure password (minimum 6 characters)
+4. Tap **Create Account**
 
-**Step 3: Complete Your Profile**
-
-1. Add your name (if not already entered)
-2. Add your email (if not already entered)
-3. Tap **Complete Profile**
-
-**Step 4: Start Using the App**
+**Step 3: Start Using the App**
 
 You're all set! You'll now see your dashboard with an empty transaction list.
 
@@ -119,17 +82,14 @@ You're all set! You'll now see your dashboard with an empty transaction list.
 
 ## First Time Setup
 
-### Set Up Categories
+### Default Categories
 
-The app comes with default categories:
-
-- 🍔 Food & Dining
-- 🚗 Transportation
+- 🍔 Food
+- 🚗 Transport
 - 🎬 Entertainment
-- 💡 Utilities
-- 🏥 Healthcare
+- 🧾 Bills
+- 🏥 Health
 - 🛍️ Shopping
-- 📚 Education
 - 📌 Other
 
 You can customize these categories to fit your needs (more on this later).
@@ -145,14 +105,16 @@ When you log in, you'll see your **Dashboard** with:
 │  📊 Spending Chart              │ ← Visual overview
 │  (Last 7 days breakdown)        │
 ├─────────────────────────────────┤
-│  💰 Recent Transactions         │ ← Latest expenses
-│  [List of your latest spending] │
-├─────────────────────────────────┤
 │  🔍 Search & Filter             │ ← Find transactions
+├─────────────────────────────────┤
+│  💰 Transactions                │ ← All expenses
+│  [List of your spending]        │
 └─────────────────────────────────┘
 ```
 
-**Navigation Menu:**
+---
+
+**Navigation Bar:**
 
 At the top of the dashboard, you'll find quick access to:
 
@@ -175,7 +137,9 @@ Adding an expense is quick and easy!
 
 **Step 1: Tap the "+" Button**
 
-Look for the floating action button (usually at the bottom right) or the "+ Add Expense" option.
+Look for the floating "+" button (centered at the bottom) or the "+ Add Expense" option.
+
+---
 
 **Step 2: Fill in the Details**
 
@@ -184,7 +148,7 @@ Look for the floating action button (usually at the bottom right) or the "+ Add 
 | **Title**    | "Lunch at Café" | What did you spend on?        |
 | **Amount**   | 15.50           | Enter the cost (numbers only) |
 | **Date**     | Today           | When did you spend it?        |
-| **Category** | Food & Dining   | What type of expense?         |
+| **Category** | Food            | What type of expense?         |
 
 **Step 3: Submit**
 
@@ -202,22 +166,10 @@ Tap **Add Transaction** to save.
 2. Enter **Title:** "Lunch at Café"
 3. Enter **Amount:** 12.50
 4. Select **Date:** (Today is selected by default)
-5. Select **Category:** Food & Dining
+5. Select **Category:** Food
 6. Tap **Add Transaction**
 
 **Result:** Your first expense is recorded!
-
----
-
-## Editing a Transaction
-
-Made a mistake? No problem!
-
-1. Find the transaction in your list
-2. Tap on the transaction
-3. Choose **Edit**
-4. Update any details
-5. Tap **Save**
 
 ---
 
@@ -226,9 +178,7 @@ Made a mistake? No problem!
 **To delete a transaction:**
 
 1. Find the transaction in your list
-2. Tap on the transaction
-3. Choose **Delete**
-4. Confirm deletion
+2. Tap on the red trashcan icon
 
 ⚠️ **Note:** Deleted transactions cannot be recovered. Be careful!
 
@@ -236,18 +186,11 @@ Made a mistake? No problem!
 
 ## Transaction History
 
-**View your transaction history:**
-
-1. Go to **Dashboard**
-2. Scroll through the **Recent Transactions** list
-3. Tap any transaction to see full details
-
 **Searching for a Transaction:**
 
-1. Use the **Search** function at the top
-2. Enter a keyword (e.g., "coffee", "gas")
+1. Use the **Search** function at the top of the transaction list
+2. Enter a keyword to search by title (e.g., "coffee", "gas")
 3. Results appear as you type
-4. Tap a result to view details
 
 ---
 
@@ -255,7 +198,7 @@ Made a mistake? No problem!
 
 Tired of entering the same transaction every month?
 
-**Adding a Recurring Expense:**
+**Add a Recurring Expense:**
 
 1. Tap **"+" to add a transaction**
 2. Fill in the details as normal
@@ -264,8 +207,9 @@ Tired of entering the same transaction every month?
    - Daily
    - Weekly
    - Monthly
-   - Yearly
 5. Tap **Add Transaction**
+
+---
 
 **Example:** Netflix subscription ($15.99/month)
 
@@ -276,28 +220,6 @@ Tired of entering the same transaction every month?
 - Frequency: Monthly
 
 **Result:** Netflix will automatically appear as a transaction every month!
-
----
-
-## Managing Recurring Transactions
-
-**View recurring transactions:**
-
-1. Go to **Dashboard**
-2. Look for 🔄 icon next to recurring transactions
-
-**Update a recurring transaction:**
-
-1. Find the recurring transaction
-2. Tap to open
-3. Edit details as needed
-4. Changes apply to future occurrences
-
-**Stop a recurring transaction:**
-
-1. Find the recurring transaction
-2. Tap to open
-3. Choose **Stop Recurring** or **Delete**
 
 ---
 
@@ -320,7 +242,7 @@ Categories help you:
 
 **To see your categories:**
 
-1. Tap **Categories** in the menu
+1. Tap **Categories** in the navigation bar at the top
 2. You'll see all your expense categories
 3. Each shows a color and icon
 
@@ -328,15 +250,13 @@ Categories help you:
 
 ## Creating a Custom Category
 
-Want to track something not covered by defaults?
+Want to track something not covered by default categories?
 
 **Step 1: Go to Categories**
 
-Tap **Categories** in the navigation menu.
-
 **Step 2: Create New**
 
-1. Tap the **"+" button** or **"Add Category"**
+1. Tap the **"+" button**
 2. Enter the category name (e.g., "Pet Supplies")
 3. Choose a color (visual organization)
 4. Select an icon (helps with recognition)
@@ -351,10 +271,10 @@ Tap **Categories** in the navigation menu.
 **To rename or change a category:**
 
 1. Go to **Categories**
-2. Tap on the category you want to change
-3. Choose **Edit**
+2. Find the category you want to change
+3. Tap the **pencil** icon to edit
 4. Update the name, color, or icon
-5. Tap **Save**
+5. Tap **Update**
 
 ---
 
@@ -363,34 +283,10 @@ Tap **Categories** in the navigation menu.
 **To remove a category:**
 
 1. Go to **Categories**
-2. Tap on the category
-3. Choose **Delete**
-
-⚠️ **Important:**
-
-- Cannot delete default categories
-- Transactions in the category will move to "Other"
-
----
-
-## Category Tips
-
-**Organization Ideas:**
-
-- Use **consistent naming** (avoid "Stuff", use "Shopping")
-- Choose **memorable colors** for quick recognition
-- Create **specific categories** for better tracking
-- Keep categories **manageable** (5-10 main categories)
-
-**Example Category Setup:**
-
-| Category       | Color  | Icon | Use                            |
-| -------------- | ------ | ---- | ------------------------------ |
-| Food & Dining  | Orange | 🍔   | Restaurants, groceries, coffee |
-| Transportation | Blue   | 🚗   | Gas, parking, public transit   |
-| Entertainment  | Purple | 🎬   | Movies, games, hobbies         |
-| Utilities      | Yellow | 💡   | Electricity, water, internet   |
-| Healthcare     | Red    | 🏥   | Doctor, medicine, gym          |
+2. Find the category you want to delete
+3. Tap the **trashcan** icon
+4. Select a replacement category for transactions assigned to the one you're deleting
+5. Tap **Delete & Reassign**
 
 ---
 
@@ -404,7 +300,7 @@ A **budget** is a spending limit for a category.
 
 **Why set budgets?**
 
-✅ Control overspending  
+✅ Prevent overspending  
 ✅ Achieve financial goals  
 ✅ Get alerts when approaching limits  
 ✅ Plan monthly spending
@@ -415,32 +311,21 @@ A **budget** is a spending limit for a category.
 
 **Step 1: Go to Budgets**
 
-Tap **Budgets** in the navigation menu.
+Tap **Budgets** in the navigation bar.
+
+---
 
 **Step 2: Create New Budget**
 
 1. Tap **"+" or "Add Budget"**
-2. Select a **category** (e.g., Food & Dining)
+2. Create a **name**
 3. Enter your **spending limit** (e.g., $500)
-4. Tap **Create Budget**
+4. Select a **type** (overall spending or category-specific)
+5. Select a **frequency** (weekly, monthly, quarterly, yearly, custom)
+6. Select **start** and **end dates**
+7. Tap **Create Budget**
 
 ✅ Your budget is now active!
-
----
-
-## Budget Example
-
-**Food & Dining Budget:**
-
-- Monthly limit: $400
-- Current spending: $245 (61%)
-- Remaining: $155
-
-**Visual indicator:**
-
-```txt
-[████████░░] 61% of budget used
-```
 
 ---
 
@@ -453,13 +338,15 @@ Tap **Budgets** in the navigation menu.
    - Budget limit
    - Current spending
    - Percentage used
-   - Days remaining (if monthly)
+   - Days remaining
+
+---
 
 **Color coding:**
 
 - 🟢 Green: 0-50% of budget used (Good!)
-- 🟡 Yellow: 50-80% of budget used (Careful)
-- 🔴 Red: 80%+ of budget used (Over or nearly over)
+- 🟡 Yellow: 50-99% of budget used (Careful)
+- 🔴 Red: 100%+ of budget used (Over)
 
 ---
 
@@ -467,9 +354,9 @@ Tap **Budgets** in the navigation menu.
 
 **You'll receive alerts when:**
 
-1. You reach 80% of your budget
-2. You exceed your budget limit
-3. You have 2 days left in the month
+1. You reach 50% of your budget
+2. You reach 75% of your budget
+3. You reach 90% of your budget
 
 **Staying on Track:**
 
@@ -482,13 +369,12 @@ Tap **Budgets** in the navigation menu.
 
 ## Updating a Budget
 
-**To change your budget limit:**
+**To change your budget:**
 
 1. Go to **Budgets**
-2. Tap on a budget
-3. Choose **Edit**
-4. Update the limit amount
-5. Tap **Save**
+2. Tap on the **pencil icon** on the budget
+3. Update the desired field(s)
+4. Tap **Save Changes**
 
 ---
 
@@ -497,7 +383,7 @@ Tap **Budgets** in the navigation menu.
 **To stop tracking a budget:**
 
 1. Go to **Budgets**
-2. Tap on the budget
+2. Tap on the **trashcan icon** of the budget you want to delete
 3. Choose **Delete**
 
 The category will remain; you just won't have spending limits.
@@ -516,54 +402,19 @@ The category will remain; you just won't have spending limits.
 
 ## Pie Chart (Category Breakdown)
 
-Shows where your money went this week.
+Shows where your money went over a specified period of time.
 
 **What it shows:**
 
-- Each category as a slice
-- Percentage of total spending
+- Each category as a slice showing percentage of total spending
 - Color-coded for easy recognition
 
-**How to use it:**
+**How to find it:**
 
 1. Go to **Charts**
-2. Look for the **Pie Chart**
-3. Tap a slice to see details
-4. Scroll to change time period
-
-**Example:**
-
-```txt
-Food & Dining: 35% (largest slice)
-Transportation: 25%
-Entertainment: 20%
-Other: 20%
-```
-
----
-
-## Bar Chart (Daily/Weekly Spending)
-
-Shows spending trends over time.
-
-**What it shows:**
-
-- Spending for each day or week
-- Comparison across time periods
-- Identifies high-spending days
-
-**How to use it:**
-
-1. Go to **Charts**
-2. Look for the **Bar Chart**
-3. Tap bars to see transaction details
-4. Swipe to view different weeks
-
-**Use for:**
-
-- Finding high-spending days
-- Identifying spending spikes
-- Comparing week-to-week
+2. Select a date range
+3. Filter by budgets if desired
+4. Look for the **Pie Chart** (Category Breakdown)
 
 ---
 
@@ -573,7 +424,7 @@ Shows spending trends over time.
 
 1. Go to **Charts**
 2. Look for **Spending Trends**
-3. See your spending over the last 3/6/12 months
+3. See your spending over the last 7 days, 30 days, 3 months, or custom time period
 4. Identify patterns and changes
 
 **What to look for:**
@@ -584,23 +435,14 @@ Shows spending trends over time.
 
 ---
 
-## Category Breakdown Report
+## Budget Performance Report
 
 **See exactly how much you spent per category:**
 
 1. Go to **Charts**
-2. Look for **Category Breakdown**
-3. See all categories ranked by spending
-4. Compare against budgets
-
-**Table example:**
-
-| Category       | Amount   | Budget    | % Used  |
-| -------------- | -------- | --------- | ------- |
-| Food & Dining  | $450     | $500      | 90%     |
-| Transportation | $280     | $300      | 93%     |
-| Entertainment  | $120     | $200      | 60%     |
-| **Total**      | **$850** | **$1000** | **85%** |
+2. Look for **Budget Performance**
+3. See overall budget
+4. See which budgets have been exceeded, met or are on track
 
 ---
 
@@ -608,13 +450,12 @@ Shows spending trends over time.
 
 **View data for different periods:**
 
-1. At the top of any chart
+1. At the top of the charts page
 2. Select your time period:
    - Last 7 days
    - Last 30 days
-   - Last 90 days
    - This month
-   - This year
+   - Last 3 months
    - Custom date range
 
 ---
@@ -640,7 +481,7 @@ Shows spending trends over time.
 
 **Step 1: Go to Savings Goals**
 
-Tap **Savings Goals** in the menu.
+Tap **Savings Goals** in the navigation bar.
 
 **Step 2: Create Goal**
 
@@ -648,7 +489,7 @@ Tap **Savings Goals** in the menu.
 2. Enter **goal name** (e.g., "Summer Vacation")
 3. Enter **target amount** (e.g., $2,500)
 4. Set **target date** (optional, when you want it by)
-5. Tap **Create**
+5. Tap **Save goal**
 
 ✅ Your goal is now active!
 
@@ -666,13 +507,6 @@ Tap **Savings Goals** in the menu.
    - Progress percentage (34%)
    - Visual progress bar
 
-**Progress indicator:**
-
-```txt
-Summer Vacation: $850 / $2,500 (34%)
-[████░░░░░░░░░░░░░░░░░░░░░░] 34% complete
-```
-
 ---
 
 ## Adding to a Goal
@@ -680,12 +514,9 @@ Summer Vacation: $850 / $2,500 (34%)
 **To add money to a savings goal:**
 
 1. Go to **Savings Goals**
-2. Tap on the goal
-3. Choose **Add Funds**
-4. Enter amount (e.g., $100)
-5. Tap **Add**
-
-**Tip:** Track savings as separate "income" transactions for accuracy.
+2. Tap on the "+" (Contribute) button
+3. Enter amount (e.g., $100)
+4. Tap **Add**
 
 ---
 
@@ -694,13 +525,14 @@ Summer Vacation: $850 / $2,500 (34%)
 **To change a goal:**
 
 1. Go to **Savings Goals**
-2. Tap on the goal
-3. Choose **Edit**
-4. Update:
+2. Tap on the **pencil icon** of the goal you want to edit
+3. Update:
    - Goal name
    - Target amount
+   - Current amount
+   - Description
    - Target date
-5. Tap **Save**
+4. Tap **Save changes**
 
 ---
 
@@ -710,26 +542,6 @@ Summer Vacation: $850 / $2,500 (34%)
 
 1. The goal shows as 100% complete
 2. You'll see a congratulations message
-3. Mark goal as **Achieved**
-4. Keep it for history or **Archive** it
-
----
-
-## Goal Tips
-
-**Setting achievable goals:**
-
-✅ Be **realistic** with amounts and timelines  
-✅ Break large goals into smaller ones  
-✅ Use **specific names** (not "Save more")  
-✅ Review progress **monthly**  
-✅ Celebrate when you reach 50% and 100%
-
-**Goal Examples:**
-
-- **Short-term:** Emergency fund ($500) - 3 months
-- **Medium-term:** Vacation ($2,000) - 6 months
-- **Long-term:** Car down payment ($5,000) - 1 year
 
 ---
 
@@ -755,14 +567,13 @@ Summer Vacation: $850 / $2,500 (34%)
 
 **Step 1: Go to Reports**
 
-Tap **Reports** in the menu.
+Tap **Reports** in the top navigation bar.
 
 **Step 2: Create New Report**
 
 1. Tap **"+" or "Generate Report"**
-2. Select **start date** (e.g., Jan 1)
-3. Select **end date** (e.g., Jan 31)
-4. Tap **Generate**
+2. Select **date range** (last 7 days, last 30 days, this month, last 3 months, or custom)
+3. Tap **Generate Report**
 
 Your report will be created in seconds!
 
@@ -775,85 +586,44 @@ Your report will be created in seconds!
 **Summary Section:**
 
 - Total spending
-- Average daily spending
+- Spending averages
 - Highest spending category
 - Number of transactions
+
+---
 
 **Category Breakdown:**
 
 - Each category with amount
 - Percentage of total
-- Comparison to previous period
-
-**Transactions List:**
-
-- All transactions in date range
-- Organized by category
-- With dates and amounts
 
 **Insights:**
 
-- Notable patterns
 - Budget performance
 - Spending trends
 
 ---
 
-## Using Reports
-
-**Sample Report:**
-
-```txt
-EXPENSE REPORT
-January 2024
-
-Total Spending: $2,450
-Average Daily: $79
-
-Category Breakdown:
-├─ Food & Dining: $850 (35%)
-├─ Transportation: $600 (24%)
-├─ Entertainment: $500 (20%)
-├─ Utilities: $300 (12%)
-└─ Other: $200 (8%)
-
-Highest Category: Food & Dining
-Most Expensive Day: Jan 15 ($250)
-Number of Transactions: 85
-```
-
----
-
 ## Exporting Your Report
 
-**Save as PDF:**
+**Save as PDF or CSV:**
 
 1. Go to **Reports**
 2. Tap on a report
-3. Choose **Export as PDF**
-4. File saves to your device
-5. Share, print, or email as needed
+3. Tap the 3 vertical dots in the upper right corner
+4. Choose **Export as PDF** or **Export as CSV**
+5. File saves to your device
+6. Share, print, or email as needed
+
+---
 
 **Sharing a report:**
 
 1. Create your report
-2. Choose **Share**
-3. Select app to share via:
-   - Email
-   - Messages
-   - Cloud storage (Google Drive, OneDrive)
-   - Print
-
----
-
-## Viewing Past Reports
-
-**Access previously generated reports:**
-
-1. Go to **Reports**
-2. Scroll through your report history
-3. Tap any report to view
-4. Edit dates to regenerate for different period
+2. Tap the report to view it
+3. Tap the 3 vertical dots in the upper right corner
+4. Choose **Print/Share PDF**
+5. Print or save to your device
 
 ---
 
@@ -866,19 +636,15 @@ Number of Transactions: 85
 **Find any transaction quickly:**
 
 1. Tap the **Search** button
-2. Enter keyword:
-   - Transaction name: "coffee"
-   - Amount: "25"
-   - Category: "food"
+2. Enter keyword to search by transaction name
 3. Results appear in real-time
-4. Tap to view details
 
 **Search tips:**
 
-- Searches are **case-insensitive**
+- Searches are **not case-insensitive**
 - Partial matches work ("cof" finds "coffee")
 - Search across all categories
-- Results sorted by date (newest first)
+- Results automatically sorted by date (oldest first)
 
 ---
 
@@ -886,18 +652,15 @@ Number of Transactions: 85
 
 **Narrow down your transactions:**
 
-1. On the transaction list
-2. Tap **Filter** button
-3. Choose filter criteria:
+1. On the transaction list (home page)
+2. Choose filter criteria:
    - **By Category:** Food, Transport, etc.
-   - **By Date Range:** Last 7 days, this month
-   - **By Amount:** Less than $50, etc.
-   - **By Type:** All, recurring, one-time
+3. Choose sorting criteria:
+   - **By Date**
+   - **By Amount**
+   - **Ascending** order
+   - **Descending** order
 4. Results update instantly
-
-**Filter combination example:**
-
-Show all Food & Dining transactions over $20 from this month.
 
 ---
 
@@ -916,36 +679,25 @@ Show all Food & Dining transactions over $20 from this month.
 
 ---
 
-## Data Export
-
-**Export all your financial data:**
-
-1. Go to **Profile** (top menu)
-2. Choose **Export Data**
-3. Select format:
-   - **CSV** (for spreadsheets)
-   - **PDF** (for printing/sharing)
-   - **JSON** (for backup)
-4. File downloads to device
-
----
-
 ## Profile Management
 
 **View and edit your profile:**
 
-1. Go to **Profile** in menu
+1. Tap on the **profile icon** in top navigation bar
 2. See your:
    - Name
    - Email
-   - Account creation date
-   - Total spending (all-time)
+   - Phone
+   - Profile picture
+
+---
 
 **Update profile:**
 
-1. Choose **Edit Profile**
-2. Update name or email
-3. Tap **Save**
+1. Go to your profile
+2. Choose **Edit Profile**
+3. Update name, phone number, or profile picture
+4. Tap **Save**
 
 ---
 
@@ -975,192 +727,9 @@ Show all Food & Dining transactions over $20 from this month.
 - No action needed from you
 - Accessible from any device with your login
 
-**Manual backup:**
-
-1. Go to **Profile**
-2. Choose **Export Data**
-3. Download backup file
-4. Store securely
-
 ---
 
-# 9. Tips & Best Practices
-
----
-
-## Daily Habits for Success
-
-**1. Log Expenses Immediately**
-
-Don't wait until end of week. Record within a few hours while you remember.
-
-✅ Do: Log at end of day  
-❌ Don't: Wait until end of month
-
----
-
-**2. Review Budget Weekly**
-
-Check every Monday how you're tracking against your budget.
-
-**Quick weekly review:**
-
-1. Open app
-2. Check **Budgets** tab (2 minutes)
-3. Identify over-budget categories
-4. Plan adjustments for coming week
-
----
-
-**3. Categorize Correctly**
-
-Use the right category for each transaction.
-
-**For unclear transactions:**
-
-- "Lunch at Target": Food & Dining (not Shopping)
-- "Gas station snacks": Food & Dining (not Transportation)
-- "Streaming service": Entertainment
-- "Internet bill": Utilities
-
----
-
-**4. Set Realistic Budgets**
-
-Don't set budgets so low that you'll exceed them constantly.
-
-**How to set budgets:**
-
-1. Track spending for 1-2 months
-2. See your actual averages
-3. Set budgets based on these averages
-4. Allow 10% buffer for flexibility
-5. Adjust as you improve
-
----
-
-## Money-Saving Tips
-
-**1. Identify Spending Patterns**
-
-Use charts to find where you overspend.
-
-Example: "I spend too much on food. Let me pack lunch 3x/week."
-
-**2. Set Category Goals**
-
-Create ambitious but achievable targets:
-
-- "Reduce entertainment from $400 to $250/month"
-- "Food budget: max $350 (down from $450)"
-
-**3. Track Recurring Expenses**
-
-Look at your recurring transactions. Each one adds up:
-
-- $15/month Netflix × 12 = $180/year
-- $5 coffee × 22 work days = $110/month
-
----
-
-**4. Use Budget Alerts**
-
-Don't ignore yellow/red budget warnings. They're early warning signs.
-
-**5. Review Quarterly**
-
-Every 3 months:
-
-- Review total spending trends
-- Check goal progress
-- Adjust budgets if needed
-- Celebrate wins!
-
----
-
-## Achieving Your Goals
-
-**Goal-setting formula:**
-
-**SMART Goals:**
-
-- **S**pecific: "Save $2,500" (not "save money")
-- **M**easurable: Specific dollar amount
-- **A**chievable: Realistic for your income
-- **R**elevant: Something you actually want
-- **T**imed: By a specific date
-
-**Example SMART Goal:**
-
-❌ "Save more for vacation"  
-✅ "Save $2,000 for Italy vacation by August 1"
-
----
-
-## Troubleshooting Common Issues
-
-**"I overspend every month"**
-
-1. Review past 3 months of spending
-2. Identify highest categories
-3. Set aggressive but realistic budgets
-4. Use alerts to stay on track
-5. Plan major purchases in advance
-
-**"I can't find a transaction"**
-
-1. Use search function
-2. Try different search terms
-3. Filter by date range or category
-4. Check if it's in recurring transactions
-
-**"Budget limit seems wrong"**
-
-1. Review past 3 months average
-2. Add 10% buffer for flexibility
-3. Adjust monthly as spending habits change
-
----
-
-# 10. Troubleshooting
-
----
-
-## Common Questions
-
-**Q: Can I edit a transaction from a previous month?**
-
-A: Yes! Find the transaction, tap it, choose Edit, make changes, and save. The app will update automatically.
-
----
-
-**Q: What if I delete a transaction by mistake?**
-
-A: Unfortunately, deleted transactions cannot be recovered. To prevent this, double-check before confirming deletion.
-
----
-
-**Q: Can I have the same transaction on different dates?**
-
-A: Yes! Create separate transactions for each date. Or use recurring transactions for regular expenses.
-
----
-
-**Q: How far back does my transaction history go?**
-
-A: All transactions are stored. You can view from any date you've used the app.
-
----
-
-**Q: Can I change my email address?**
-
-A: Go to Profile → Edit Profile to update your email. Confirm your new email address.
-
----
-
-**Q: Is my data secure?**
-
-A: Yes! Your data is encrypted and stored on secure Firebase servers. No one else can access your financial information.
+# 9. Troubleshooting
 
 ---
 
@@ -1184,77 +753,11 @@ A: Yes! Your data is encrypted and stored on secure Firebase servers. No one els
 
 ---
 
-**Forgot Password**
-
-1. On login screen, tap **Forgot Password**
-2. Enter your email
-3. Check your email for reset link
-4. Click link and create new password
-5. Log in with new password
-
----
-
 **Can't Log In**
 
 1. Verify email address is correct
 2. Check CAPS LOCK is off
-3. Reset password if forgotten
-4. Check internet connection
-5. Contact support if still having issues
-
----
-
-## Performance Tips
-
-**App Running Slow?**
-
-1. Close other apps
-2. Restart your phone
-3. Check available storage (need 500MB+ free)
-4. Update app to latest version
-
-**Charts Taking Time to Load?**
-
-- Large data sets may take a few seconds
-- This is normal
-- Wait for load to complete
-
----
-
-## Contacting Support
-
-**If you need additional help:**
-
-**In-App Support:**
-
-1. Go to **Profile**
-2. Tap **Help & Support**
-3. Choose your issue category
-4. Get instant solutions
-
-**Email Support:**
-
-- Email: support@expenseapp.com
-- Response time: 24-48 hours
-
-**Social Media:**
-
-- Twitter: @ExpenseApp
-- Facebook: @ExpenseApp
-- Include "Expense App" in your message
-
----
-
-## Feedback & Suggestions
-
-**Have an idea to improve the app?**
-
-1. Go to **Profile**
-2. Choose **Send Feedback**
-3. Describe your suggestion
-4. Submit
-
-**We read all feedback and use it to improve the app!**
+3. Check internet connection
 
 ---
 
@@ -1262,68 +765,40 @@ A: Yes! Your data is encrypted and stored on secure Firebase servers. No one els
 
 ---
 
-## Menu Map
+## Navigation Bar Map
 
 ```txt
 Dashboard (Home)
 │
 ├─ Categories
 │  ├─ View all categories
-│  ├─ Create new category
-│  └─ Edit/delete categories
+│  └─ Create/edit/delete categories
 │
 ├─ Budgets
 │  ├─ View all budgets
-│  ├─ Create new budget
-│  └─ Edit/delete budgets
+│  └─ Create/edit/delete budgets
 │
 ├─ Charts
 │  ├─ Pie chart (spending by category)
-│  ├─ Bar chart (daily/weekly trends)
-│  └─ Spending trends (monthly/yearly)
+│  ├─ Spending trends
+│  └─ Budget performance
 │
 ├─ Reports
-│  ├─ Generate new report
-│  ├─ View past reports
-│  └─ Export as PDF
+│  ├─ View all reports
+│  ├─ Generate/delete reports
+│  ├─ Share or print reports
+│  └─ Export as PDF or CSV
 │
 ├─ Savings Goals
 │  ├─ View all goals
-│  ├─ Create new goal
-│  └─ Track progress
+│  ├─ Create/edit/delete goals
+│  └─ Contribute toward goals
 │
 └─ Profile
    ├─ View profile
-   ├─ Edit profile
-   ├─ Export data
-   ├─ Settings
+   ├─ Edit/delete profile
    └─ Logout
 ```
-
----
-
-## Keyboard Shortcuts (Mobile)
-
-**Most phones support these:**
-
-- **Swipe down:** Refresh data
-- **Swipe left:** Delete transaction
-- **Tap and hold:** Open context menu
-- **Double tap:** Open category details
-
----
-
-## Icons Reference
-
-| Icon | Meaning                 |
-| ---- | ----------------------- |
-| 🟢   | Budget on track (0-50%) |
-| 🟡   | Budget caution (50-80%) |
-| 🔴   | Budget exceeded (80%+)  |
-| 🔄   | Recurring transaction   |
-| 📌   | Pinned/favorite         |
-| 🔒   | Locked/archived         |
-| ✅   | Goal completed          |
 
 ---
 
@@ -1341,139 +816,12 @@ Dashboard (Home)
 - Or type in format: MM/DD/YYYY
 - Future dates allowed for planned expenses
 
+---
+
 **Entering Categories:**
 
 - Tap dropdown to select
-- Search by typing category name
 - Can only select one per transaction
-
----
-
-## Money-Saving Quick Wins
-
-**Do these today:**
-
-✅ Set budget for highest spending category  
-✅ Add one savings goal  
-✅ Search for "coffee" (see how much you spend!)  
-✅ Set 2-3 recurring transactions  
-✅ Review this month's spending
-
-**Results:**
-
-- More awareness of spending habits
-- Better control of money
-- Progress toward savings goals
-- Reduced financial stress
-
----
-
-# Getting the Most from Your App
-
----
-
-## First Month Checklist
-
-- [ ] Create account and profile
-- [ ] Set up 3-5 main categories
-- [ ] Log all daily expenses
-- [ ] Set budgets for top 3 categories
-- [ ] Create 1-2 savings goals
-- [ ] Review spending weekly
-- [ ] Generate first monthly report
-- [ ] Celebrate progress!
-
----
-
-## Monthly Routine
-
-**Every Month:**
-
-1. **Start of month (5 min)**
-
-   - Review last month's report
-   - Adjust budgets if needed
-   - Set new savings goals
-
-2. **Weekly (10 min)**
-
-   - Log week's expenses
-   - Check budget status
-   - Adjust if overspending
-
-3. **End of month (15 min)**
-   - Generate monthly report
-   - Analyze spending patterns
-   - Plan next month
-
----
-
-## Quarterly Review
-
-**Every 3 months (30 min):**
-
-1. Generate 3-month report
-2. Review total spending trends
-3. Check progress on all goals
-4. Celebrate wins
-5. Set new targets for next quarter
-
----
-
-## Annual Review
-
-**Once a year (1 hour):**
-
-1. Generate full-year report
-2. Review spending trends
-3. Compare to previous year
-4. Identify major changes
-5. Plan next year's goals
-
----
-
-## Success Stories
-
-**"I cut my food spending 30% in 3 months"**
-
-> "Using the Food & Dining budget, I saw I was spending $450/month. I set a target of $350, tracked weekly, and packed lunch 3x/week. Now I'm averaging $315!"
-
----
-
-**"I saved $5,000 for my vacation"**
-
-> "I created a savings goal and added to it each month. In 6 months, I had saved $5,000 for my dream vacation. The progress tracker kept me motivated!"
-
----
-
-**"Finally understand where my money goes"**
-
-> "The charts show exactly what I spend on. I realized entertainment was my biggest category. Now I'm more intentional about purchases."
-
----
-
-# Final Tips
-
----
-
-## Remember
-
-✅ **Small changes compound.** Saving $10/month = $120/year  
-✅ **Tracking is powerful.** Awareness leads to change  
-✅ **Be realistic.** Budgets should challenge but not frustrate you  
-✅ **Celebrate wins.** Every milestone is progress  
-✅ **Start small.** Track one category before all  
-✅ **Stay consistent.** Apps work when you use them regularly
-
----
-
-## Your Financial Journey
-
-**Week 1:** Get familiar with the app  
-**Week 2:** Set up budgets and goals  
-**Week 3:** Establish daily logging habit  
-**Week 4:** Review and adjust  
-**Month 2+:** See real results and progress
 
 ---
 
@@ -1499,10 +847,8 @@ Your financial health starts now! 🎉
 
 **Resources available:**
 
-📱 **In-app Help:** Profile → Help & Support  
-📧 **Email Support:** support@expenseapp.com  
-🌐 **Online Guides:** www.expenseapp.com/help  
-💬 **Community:** forums.expenseapp.com
+📧 **Email Support:** diniusa1@mymail.nku.edu  
+🌐 **Online Guides:** [https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main/docs](https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main/docs)
 
 ---
 
@@ -1517,12 +863,6 @@ You now have the knowledge to:
 ✅ Make informed financial decisions
 
 **Start using Expense App today and take control of your finances!**
-
----
-
-_Expense App User Manual - Version 1.0_  
-_Last Updated: November 2025_  
-_Questions? Contact diniusa1@mymail.nku.edu_
 
 ---
 
