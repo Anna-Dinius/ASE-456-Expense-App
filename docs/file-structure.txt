@@ -1,5 +1,8 @@
 ASE 456 Team Project Repo/
 ├── docs/
+│   ├── design/
+│   │   ├── architecture_design.md
+│   │   └── architecture_design.pdf
 │   ├── jeff_weekly_reports/
 │   │   ├── jeff_sprint2_plan.md
 │   │   ├── week10_jeff_progress.marp.md
@@ -11,9 +14,15 @@ ASE 456 Team Project Repo/
 │   │   ├── week7_jeff_progress.marp.md
 │   │   ├── week8_jeff_progress.marp.md
 │   │   └── week9_jeff_progress.marp.md
+│   ├── manuals/
+│   │   ├── user_manual.md
+│   │   └── user_manual.pdf
 │   ├── Progress Reports/
+│   │   ├── Final Report/
+│   │   │   ├── final-presentation.md
+│   │   │   └── final-presentation.pdf
 │   │   ├── Sprint 1/
-│   │   │   ├── report-template.md
+│   │   │   ├── report-template-sprint1.md
 │   │   │   ├── sprint1_team_presentation.md
 │   │   │   └── sprint1_team_presentation.pdf
 │   │   ├── Sprint 2/
@@ -42,14 +51,11 @@ ASE 456 Team Project Repo/
 │   │   ├── Week 8/
 │   │   │   ├── week-8.md
 │   │   │   └── week-8.pdf
-│   │   ├── Week 9/
-│   │   │   ├── week-9.md
-│   │   │   └── week-9.pdf
-│   │   ├── final-presentation.md
-│   │   └── final-presentation.pdf
-│   ├── ARCHITECTURE_DESIGN.md
+│   │   └── Week 9/
+│   │       ├── week-9.md
+│   │       └── week-9.pdf
 │   ├── file-structure.txt
-│   └── USER_MANUAL.md
+│   └── README.md
 ├── root/
 │   ├── lib/
 │   │   ├── model/

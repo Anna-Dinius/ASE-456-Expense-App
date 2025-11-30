@@ -4,7 +4,7 @@ html: true
 theme: default
 size: 16:9
 paginate: true
-footer: 'ASE 456 Team Project - Expense App Architecture & Design'
+footer: 'Expense App - Expense App Architecture & Design'
 ---
 
 # Expense App
