@@ -2,8 +2,9 @@ function loadNav() {
 	const isIndexPage =
 		location.pathname.endsWith('index.html') || location.pathname === '/';
 
-	// ✅ Root-relative path works on GitHub Pages
-	const navPath = '/github-io/components/nav.html';
+	// ✅ Dynamically detect repo name from URL
+	const repoRoot = '/' + window.location.pathname.split('/')[1];
+	const navPath = `${repoRoot}/github-io/components/nav.html`;
 
 	fetch(navPath)
 		.then((response) => {
@@ -17,18 +18,10 @@ function loadNav() {
 
 			links.forEach((link) => {
 				const href = link.getAttribute('href');
-
-				// Rewrite paths
 				if (isIndexPage && href !== 'index.html') {
 					link.setAttribute('href', 'github-io/' + href);
 				} else if (!isIndexPage && href === 'index.html') {
 					link.setAttribute('href', '../index.html');
-				}
-
-				// Highlight active link
-				const currentPage = location.pathname.split('/').pop();
-				if (href === currentPage || (href === 'index.html' && isIndexPage)) {
-					link.classList.add('active');
 				}
 			});
 
