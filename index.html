@@ -2,26 +2,108 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>ASE 456 Project Documentation</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				margin: 2rem;
-			}
-			nav a {
-				display: block;
-				margin: 0.5rem 0;
-				font-size: 1.2rem;
-			}
-		</style>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1"
+		/>
+		<title>Expense App Documentation</title>
+		<!-- Bootstrap & Icons -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+		/>
+
+		<!-- Google Fonts -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Quicksand:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Custom Theme -->
+		<link
+			rel="stylesheet"
+			href="github-io/css/style.css"
+		/>
 	</head>
 	<body>
-		<h1>ASE 456 Team Project Documentation</h1>
-		<nav>
-			<a href="github-io/final-presentation.html">Final Presentation</a>
-			<a href="github-io/architecture.html">Architecture Document</a>
-			<a href="github-io/manual.html">User Guide / Manual</a>
-			<a href="github-io/progress.html">Progress Reports</a>
-		</nav>
+		<!-- Header -->
+		<div id="nav-placeholder"></div>
+		<script>
+			fetch('github-io/components/nav.html')
+				.then((response) => response.text())
+				.then((data) => {
+					document.getElementById('nav-placeholder').innerHTML = data;
+				});
+		</script>
+
+		<!-- Body -->
+		<div class="container my-5">
+			<div class="d-flex justify-content-end mb-3">
+				<a
+					href="https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main/docs"
+					target="_blank"
+					class="btn btn-primary"
+				>
+					View in GitHub Repository &nbsp;<i
+						class="bi bi-box-arrow-up-right"
+					></i>
+				</a>
+			</div>
+
+			<h1 class="mb-4">Welcome to Expense App Documentation</h1>
+			<p class="lead">
+				Expense App is a Flutter/Dart expense tracking application. This site
+				hosts the final presentation, architecture design, user manual, and
+				progress reports.
+			</p>
+
+			<!-- Two-column layout with headers -->
+			<div class="row">
+				<!-- Column 1: Reports -->
+				<div class="col-md-6">
+					<h3 class="mb-3">Reports</h3>
+					<div class="list-group">
+						<a
+							href="github-io/progress.html"
+							class="list-group-item list-group-item-action"
+						>
+							📝 Progress Reports
+						</a>
+						<a
+							href="github-io/final-presentation.html"
+							class="list-group-item list-group-item-action"
+						>
+							📊 Final Presentation
+						</a>
+					</div>
+				</div>
+
+				<!-- Column 2: Documents -->
+				<div class="col-md-6">
+					<h3 class="mb-3">Documents</h3>
+					<div class="list-group">
+						<a
+							href="github-io/manual.html"
+							class="list-group-item list-group-item-action"
+						>
+							📖 User Guide / Manual
+						</a>
+						<a
+							href="github-io/architecture.html"
+							class="list-group-item list-group-item-action"
+						>
+							🏗 &nbsp;Architecture Document
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Custom Nav Loader -->
+		<script src="github-io/js/nav-loader.js"></script>
 	</body>
 </html>

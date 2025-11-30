@@ -2,36 +2,179 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>Progress Reports</title>
-		<style>
-			body {
-				font-family: Arial, sans-serif;
-				margin: 2rem;
-			}
-			ul {
-				line-height: 1.8;
-			}
-		</style>
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1"
+		/>
+		<title>Progress Reports - Expense App</title>
+		<!-- Bootstrap & Icons -->
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+		/>
+
+		<!-- Google Fonts -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Quicksand:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Custom Theme -->
+		<link
+			rel="stylesheet"
+			href="css/style.css"
+		/>
 	</head>
 	<body>
-		<h1>Progress Reports</h1>
-		<ul>
-			<li>
-				<a href="../docs/Progress Reports/Week 1/week-1.pdf">Week 1 Report</a>
-			</li>
-			<li>
-				<a href="../docs/Progress Reports/Week 2/week-2.pdf">Week 2 Report</a>
-			</li>
-			<li>
-				<a href="../docs/Progress Reports/Week 3/week-3.pdf">Week 3 Report</a>
-			</li>
-			<!-- Add more weeks/sprints as needed -->
-			<li>
-				<a href="../docs/Progress Reports/Final Report/final-presentation.pdf"
-					>Final Presentation</a
+		<!-- Navbar -->
+		<div id="nav-placeholder"></div>
+		<script>
+			fetch('github-io/components/nav.html')
+				.then((response) => response.text())
+				.then((data) => {
+					document.getElementById('nav-placeholder').innerHTML = data;
+				});
+		</script>
+
+		<!-- Body -->
+		<div class="container my-4">
+			<div class="d-flex justify-content-between mb-3">
+				<a
+					href="../index.html"
+					class="btn btn-outline-purple"
 				>
-			</li>
-		</ul>
-		<p><a href="../index.html">← Back to Home</a></p>
+					← Back to Home
+				</a>
+				<a
+					href="https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main/docs/Progress%20Reports"
+					target="_blank"
+					class="btn btn-primary"
+				>
+					View in GitHub Repository &nbsp;<i
+						class="bi bi-box-arrow-up-right"
+					></i>
+				</a>
+			</div>
+
+			<h1 class="mb-3">Progress Reports</h1>
+			<p class="lead">
+				Access weekly and sprint progress reports for the Expense App project.
+				Each link opens the PDF directly from the repository.
+			</p>
+
+			<div class="row">
+				<!-- Column 1: Weeks 1-4 -->
+				<div class="col-md-4">
+					<h3>Weeks 1-4</h3>
+					<div class="list-group">
+						<a
+							href="../docs/Progress Reports/Week 1/week-1.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 1 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 2/week-2.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 2 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 3/week-3.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 3 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 4/week-4.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 4 Report
+						</a>
+					</div>
+				</div>
+
+				<!-- Column 2: Weeks 6-10 -->
+				<div class="col-md-4">
+					<h3>Weeks 6-10</h3>
+					<div class="list-group">
+						<a
+							href="../docs/Progress Reports/Week 6/week-6.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 6 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 7/week-7.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 7 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 8/week-8.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 8 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 9/week-9.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 9 Report
+						</a>
+						<a
+							href="../docs/Progress Reports/Week 10/week-10.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Week 10 Report
+						</a>
+					</div>
+				</div>
+
+				<!-- Column 3: Sprint reports & Final -->
+				<div class="col-md-4">
+					<h3>Other Reports</h3>
+					<div class="list-group">
+						<a
+							href="../docs/Progress Reports/Sprint 1/sprint1_team_presentation.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Sprint 1 Team Presentation
+						</a>
+						<a
+							href="../docs/Progress Reports/Sprint 2/report-template-sprint2.md"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Sprint 2 Report Template (Markdown)
+						</a>
+						<a
+							href="../docs/Progress Reports/Final Report/final-presentation.pdf"
+							target="_blank"
+							class="list-group-item list-group-item-action"
+						>
+							Final Presentation
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- Custom Nav Loader -->
+		<script src="../github-io/js/nav-loader.js"></script>
 	</body>
 </html>

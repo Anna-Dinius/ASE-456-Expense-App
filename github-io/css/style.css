@@ -1,0 +1,77 @@
+/* Define a custom purple variable for reuse */
+:root {
+	--theme-purple: #6750a4; /* main brand purple */
+	--theme-purple-light: #7f67be; /* lighter variant for buttons */
+	--theme-purple-dark: #4a3b82; /* darker variant for hover/nav */
+}
+
+/* Fonts */
+body {
+	font-family: 'Quicksand', sans-serif;
+}
+h1,
+h2,
+h3,
+.navbar-brand,
+.nav-link {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+}
+
+/* Navbar */
+.navbar {
+	background-color: var(--theme-purple);
+}
+.navbar .nav-link {
+	color: #fff !important;
+}
+.navbar .nav-link:hover {
+	text-decoration: underline;
+}
+
+/* Body */
+body {
+	padding-top: 65px; /* Adjust based on navbar height */
+}
+
+/* Primary buttons */
+.btn-primary {
+	background-color: var(--theme-purple-light);
+	border-color: var(--theme-purple-light);
+}
+.btn-primary:hover {
+	background-color: var(--theme-purple);
+	border-color: var(--theme-purple);
+}
+
+/* Outline buttons */
+.btn-outline-purple {
+	color: var(--theme-purple);
+	border-color: var(--theme-purple);
+}
+.btn-outline-purple:hover {
+	color: #fff;
+	background-color: var(--theme-purple);
+	border-color: var(--theme-purple);
+}
+
+/* Section headers */
+h3 {
+	font-size: 1.4rem;
+	margin-bottom: 1rem;
+	color: var(--theme-purple);
+}
+
+/* List group spacing */
+.list-group-item {
+	font-size: 1rem;
+	padding: 0.75rem 1rem;
+}
+
+/* Links */
+a {
+	color: var(--theme-purple);
+}
+a:hover {
+	color: var(--theme-purple-dark);
+}
