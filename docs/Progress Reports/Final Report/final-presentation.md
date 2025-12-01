@@ -2,140 +2,221 @@
 marp: true
 size: 4:3
 paginate: true
-title: Pocket Protectors Final Presentation
+theme: default
+footer: ASE 456 - Pocket Protectors Final Progress Report
 ---
 
-# Expense App: Final Progress Report
+# Expense App Development Project
 
-## (#/#/2025 - #/#/2025)
+## Final Progress Report
 
-**Team: Pocket Protectors**
+### Pocket Protectors
 
-> **Team Leader:**
->
-> - Anna Dinius
->
-> **Team Members:**
->
-> - Jeff Perdue
-> - Cody King
-> - Dillon Carpenter
+> **Team Leader:** Anna Dinius
+> **Team Members:** Dillon Carpenter, Cody King, Jeff Perdue  
+> **Project Duration:** September 8 – November 23, 2025  
+> **Sprints:** 2 (Sprint 1: 5 weeks, Sprint 2: 5 weeks)
 
 ---
 
-## Milestones Completed - Jeff
+## Project Overview
 
-✅
-✅
-✅
+### 🎯 Mission Statement
 
-- _Fulfills # requirements_
+Empower users to take control of their finances through a simple and secure expense tracking.
 
----
+### 📍 Repository
 
-## Milestones Completed - Cody
-
-✅
-✅
-✅
-
-- _Fulfills # requirements_
+**GitHub:** [https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main](https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main)
 
 ---
 
-## Milestones Completed - Dillon
+## The Problem
 
-✅
-✅
-✅
+### ‼️ Why This Application Matters
 
-- _Fulfills # requirements_
+**Challenge:** disorganized personal finance tracking
 
----
+### 💡 Why It's Important
 
-## LoC Summary
-
-### Individual Contributions:
-
-- Jeff: ~#
-- Cody: ~#
-- Dillon: ~#
-
-### Codebase LoC Summary After Integration:
-
-- **Total**: #
-- **Counting rules**: Excludes empty lines and comment-only lines. Inline comments on code lines are still counted.
-- **Files scanned**: All files under `lib` and `test` and their subdirectories.
+- Empowers better financial decisions by providing users with a clear, intuitive platform to log, categorize, and visualize their spending
 
 ---
 
-### Codebase LoC Breakdown:
+## How We Solved It
 
-High-level source files, models, and widgets:
+### 🔄 Development Process
 
----
+**Agile Sprint Methodology:**
 
-Services and theme:
+- **Sprint 1:** MVP foundation, refactoring, & feature additions
+- **Sprint 2:** Higher emphasis on feature additions
 
----
+**Team Coordination:**
 
-Views:
-
----
-
-Views (cont.):
-
----
-
-Tests:
+- Clear feature ownership
+- Regular progress updates
+- Regular integration
 
 ---
 
-Tests (cont.):
+## Individual Contributions - Dillon Carpenter
+
+### Sprint 1 Achievements
+
+- **Features:** 1
+  - Scheduled & recurring transactions
+- **Requirements:** 7
 
 ---
 
-## Tests
+### Sprint 2 Achievements
 
-- **Total number of test files**: 30
-- **Total number of tests**: 437
-- **Total LoC**: 8,837
+- **Features:** 3
+  - Search expenses
+  - Filter expenses
+  - Sort expenses
+- **Requirements:** 19
 
----
+### Total Contribution
 
-## 🔥 Sprint 1 Burndown rate
-
-- 18/18 Sprint 1 requirements completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
-- 3/3 Sprint 1 features completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
+- **Features:** 4 total
+- **Requirements:** 26 total
 
 ---
 
-## 🔥 Sprint 2 Burndown rate
+## Individual Contributions - Cody King
 
-- 35/35 Sprint 2 requirements completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
-- 8/8 Sprint 2 features completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
+### Sprint 1 Achievements
+
+- **Features:** 1
+  - User profiles
+- **Requirements:** 6
 
 ---
 
-## 🔥 Total Burndown rate
+### Sprint 2 Achievements
 
-- 53/53 requirements completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
-- 11/11 features completed
-  - 100% total
-  - 20% per week
-  - ~3% per day
+- **Features:** 2
+  - Track savings
+  - Create savings goals
+- **Requirements:** 9
+
+### Total Contribution
+
+- **Features:** 3 total
+- **Requirements:** 15 total
+
+---
+
+## Individual Contributions - Jeff Perdue
+
+### Sprint 1 Achievements
+
+- **Features:** 1
+  - Categories
+- **Requirements:** 5
+
+---
+
+### Sprint 2 Achievements
+
+- **Features:** 3
+  - Create budgets
+  - View charts summarizing expenses
+  - View & export periodic reports
+- **Requirements:** 7
+
+### Total Contribution
+
+- **Features:** 4 total
+- **Requirements:** 12 total
+
+---
+
+## Code Quality Metrics
+
+### ✅ Quality Indicators
+
+- **Test Coverage:** 437 comprehensive test cases
+- **Code Organization:** Clear module separation
+- **Documentation:** Comprehensive user manual & architecture design docs
+- **Error Handling:** Robust validation and exceptions
+- **Maintainability:** DRY principles, reusable components
+
+---
+
+### 📈 Quality Assurance - Test Distribution:
+
+- **Unit Tests:** Core logic validation
+- **Integration Tests:** Feature interaction
+- **Acceptance Tests:** User scenarios
+- **Regression Tests:** Cross-sprint validation
+- **End-to-End Tests:** Workflow validation
+
+---
+
+## Sprint Achievements Summary
+
+### 🎯 Sprint 1 (MVP)
+
+- ✅ Working Expense App
+- ✅ Scheduled & recurring transactions
+- ✅ Categories
+- ✅ User profiles
+- 🔥 **Burndown:** 100%
+
+---
+
+### 🎯 Sprint 2 (Enhancement)
+
+- ✅ Track savings
+- ✅ Create savings goals
+- ✅ Create budgets
+- ✅ View charts summarizing expenses
+- ✅ View & export periodic reports
+- ✅ Search, filter, & sort expenses
+- 🔥 **Burndown:** 100%
+
+---
+
+## Key Numbers - Total Project
+
+### 📊 Overall Statistics
+
+- **Total Lines of Code:** ~19,746
+  - Source Code: ~10,909 lines
+  - Test Code: ~8,837 lines
+- **Total Features:** 11
+  - Sprint 1: 3 features
+  - Sprint 2: 8 features
+- **Total Requirements:** 53
+  - Sprint 1: 18 requirements
+  - Sprint 2: 35 requirements
+
+---
+
+- **Total Tests:** 437 test cases
+- **🔥 Burndown Rate:**
+  - Sprint 1: 100% (18/18 requirements)
+  - Sprint 2: 100% (35/35 requirements)
+
+---
+
+## Conclusion
+
+### 🎉 Project Success
+
+**Delivered:** A fully functional, well-tested expense tracking app
+
+### 🎥 Demo Video
+
+**YouTube:** [https://www.youtube.com/watch?v=DHhRNxxmHgY](https://www.youtube.com/watch?v=DHhRNxxmHgY)
+
+---
+
+## Thank You
+
+### Questions?
+
+**Repository:** [https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main](https://github.com/Anna-Dinius/ASE-456-Expense-App/tree/main)
